@@ -458,13 +458,13 @@ abstract class Db_Adapter_Abstract {
 	 * @param string |int $col : a coluna de projeção, caso $fetchMode == Db::FETCH_COL
 	 * @return array|string
 	 */
-	public function fetchRow($sql, $boundParams = array(), $fetchMode = null, $col = null) {
+	public function fetchOne($sql, $boundParams = array(), $fetchMode = null, $col = null) {
 		if($fetchMode === null) {
 			$fetchMode = $this->_fetchMode;
 		}
 
 		$stmt = $this->query($sql, $boundParams);
-		return $stmt->fetchRow($fetchMode, $col);
+		return $stmt->fetchOne($fetchMode, $col);
 	}
 	
 	/**
@@ -486,7 +486,7 @@ abstract class Db_Adapter_Abstract {
 	 * @return array|string
 	 */
 	public function fetchColumn($sql, $column, $boundParams = array()) {
-		return $this->fetchRow($sql, $boundParams, Db::FETCH_COLUMN, $column);
+		return $this->fetchOne($sql, $boundParams, Db::FETCH_COLUMN, $column);
 	}
 	
 

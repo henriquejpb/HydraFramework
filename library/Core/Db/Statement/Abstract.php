@@ -189,9 +189,9 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see Db_Statement_Interface::fetchRow()
+	 * @see Db_Statement_Interface::fetchOne()
 	 */
-	public function fetchRow($mode = null, $col = null) {
+	public function fetchOne($mode = null, $col = null) {
 		if($mode == Db::FETCH_COLUMN && $col === null) {
 			$col = 0;
 		}

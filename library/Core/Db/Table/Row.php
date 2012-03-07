@@ -615,7 +615,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	 */
 	public function refresh() {
 		$where = $this->_getWhereQuery();
-		$row = $this->_getRequiredTable()->fetchRow($where);
+		$row = $this->_getRequiredTable()->fetchOne($where);
 		
 		if($row === null) {
 			throw new Db_Table_Row_Exception('Não foi possível atualizar a linha da tabela. 
@@ -796,7 +796,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 			}
 		}
 		
-		return $parentTable->fetchRow($select);
+		return $parentTable->fetchOne($select);
 	}
 	
 	/**

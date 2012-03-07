@@ -1,9 +1,21 @@
 <?php
 /**
  * Interface com uma tabela do banco de dados.
+ * 
+ * Modificado em: 07/03/2012
+ * <h2>Modificações</h2>
+ * <ul>
+ * 	<li>Implementação da inteface DataAccessLayer_Interface
+ * 		<ul>
+ * 			<li>Adição do método <em>fetchOne</em></li>
+ * 			<li>Adição do método <em>createEntry</em></li>
+ * 		</ul>
+ * 	</li>
+ * </ul>
+ * 
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-class Db_Table {
+class Db_Table implements DataAccessLayer_Interface {
 	const ADAPTER			= 'db';
 	const SCHEMA			= 'schema';
 	const NAME				= 'name';
@@ -1100,7 +1112,7 @@ class Db_Table {
 		}
 
 		$cond = join(' AND ', $condList);
-		return $this->fetchRow($cond);
+		return $this->fetchOne($cond);
 	}
 
 	/**
@@ -1154,7 +1166,7 @@ class Db_Table {
 	 * @param int $offset
 	 * @return Db_Table_Row|null : retorna a linha da tabela ou null caso não haja nenhuma.
 	 */
-	public function fetchRow($where = null, $order = null, $offset = null) {
+	public function fetchOne($where = null, $order = null, $offset = null) {
 		if($where instanceof Db_Select) {
 			$select = $where->limit(1, $where->getPart(Db_Select::LIMIT_OFFSET));
 		} else {
@@ -1188,12 +1200,21 @@ class Db_Table {
 	}
 	
 	/**
+	 * Alias para fetchOne.
+	 * 
+	 * @see Db_Table::fetchOne()
+	 */
+	public function fetchRow($where = null, $order = null, $offset = null) {
+		return $this->fetchOne($where, $order, $offset);
+	}
+	
+	/**
 	 * Cria uma nova linha para a tabela.
 	 *  
 	 * @param array $data : os dados para popular a nova linha
 	 * @param string $defaultSource : fonte dos valores padrão para as colunas
 	 */
-	public function createRow(array $data = array(), $defaultSource = null) {
+	public function createEntry(array $data = array(), $defaultSource = null) {
 		$cols = $this->_getCols();
 		$defaults = array_combine($cols, array_fill(0, count($cols), null));
 		
@@ -1229,6 +1250,15 @@ class Db_Table {
 		$row->setFromArray($data);
 		
 		return $row;
+	}
+	
+	/**
+	 * Alias para createEntry.
+	 * 
+	 * @see Db_Table::createEntry()
+	 */
+	public function createRow(array $data = array(), $defaultSource = null) {
+		return $this->createEntry($data, $defaultSource);
 	}
 	
 	/**

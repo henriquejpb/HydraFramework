@@ -85,7 +85,7 @@ interface Db_Statement_Interface {
 	 * @return mixed : array, objeto ou escalar, dependendo de $mode
 	 * @throws Db_Statement_Exception
 	 */
-	public function fetchRow($mode = null, $col = null);
+	public function fetchOne($mode = null, $col = null);
 	
 	/**
 	 * Retorna todas as linhas do conjunto de resultados da execução

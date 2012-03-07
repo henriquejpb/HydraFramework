@@ -21,12 +21,12 @@ require_once 'config/bootstrap.php';
 
 
 
-// $table = new Db_Table('users');
-// print_r($table->getById(1)->findDependentRowset('comments')->toArray());
+$table = new Db_Table('users');
+print_r($table->getById(1)->findDependentRowset('comments')->toArray());
 
-$res = new Controller_Response();
+// $res = new Controller_Response();
 
-$res->appendBody('foo');
-$res->insert('bla', 'baz', 'default', true);
+// $res->appendBody('foo');
+// $res->insert('bla', 'baz', 'default', true);
 
-echo $res;
+// echo $res;
