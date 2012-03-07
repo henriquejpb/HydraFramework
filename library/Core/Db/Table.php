@@ -1,7 +1,7 @@
 <?php
 /**
  * Interface com uma tabela do banco de dados.
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Db_Table {
 	const ADAPTER			= 'db';

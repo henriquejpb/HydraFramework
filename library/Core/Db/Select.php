@@ -1,7 +1,7 @@
 <?php
 /**
  * Geração de SQL SELECTS
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Db_Select {
 	const DISTINCT 		 = 'distinct';

@@ -1,7 +1,7 @@
 <?php
 /**
  * Classe para manipulação de um SQL SELECT para Db_Table
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Db_Table_Select extends Db_Select {
 	

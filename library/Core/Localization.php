@@ -2,7 +2,7 @@
 /**
  * Protótipo de uma classe de localização
  * @package Core
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Localization {
 	/**

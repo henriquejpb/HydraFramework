@@ -1,5 +1,5 @@
 <?php
-require_once 'config/init.php';
+require_once 'config/bootstrap.php';
 
 // $db = Db::factory('Mysqli', array('host' => 'localhost',
 // 									'username' => 'root',

@@ -1,7 +1,7 @@
 <?php
 /**
  * Representa uma requisição.
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Controller_Request {
 	/**

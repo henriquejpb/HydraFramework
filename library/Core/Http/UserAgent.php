@@ -1,7 +1,7 @@
 <?php
 /**
  * Armazena informações sobre o USER AGENT da requisição.
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Http_UserAgent {
 	/**

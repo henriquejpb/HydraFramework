@@ -1,7 +1,7 @@
 <?php
 /**
  * Controlador simples de cache
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 abstract class Cache {
 	const FILE_APPEND = FILE_APPEND;

@@ -1,7 +1,7 @@
 <?php
 /**
  * Emula SQL Statements para Adapters que não possuem suporte a eles
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 interface Db_Statement_Interface {
 	

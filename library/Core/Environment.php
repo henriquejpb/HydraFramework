@@ -1,7 +1,7 @@
 <?php
 /**
  * Representação do ambiente do servidor.
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 abstract class Environment {
 	/**

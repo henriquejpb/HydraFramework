@@ -1,7 +1,7 @@
 <?php
 /**
  * Conexão com SGBD's
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 abstract class Db {
 	const INT_TYPE    = 0;

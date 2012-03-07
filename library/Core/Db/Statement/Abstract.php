@@ -1,7 +1,7 @@
 <?php
 /**
  * Representa um statement SQL
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	

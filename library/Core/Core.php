@@ -3,7 +3,7 @@
  * Representa o núcleo do sistema.
  * 
  * @package Core
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 
 //Dependências diretas de Core.

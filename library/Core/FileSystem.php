@@ -1,7 +1,7 @@
 <?php
 /**
  * Representação abstrata de uma entidade (arquivo ou diretório) no Sistema de Arquivos
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 abstract class FileSystem {
 	/**

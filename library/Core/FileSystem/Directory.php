@@ -1,7 +1,7 @@
 <?php
 /**
  * Representa um diretório no sistema de arquivos
- * @author henrique
+ * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class FileSystem_Directory extends FileSystem {
 	/**
