@@ -30,5 +30,3 @@ $res->appendBody('foo');
 $res->insert('bla', 'baz', 'default', true);
 
 echo $res;
-
-$bar = 'foo';
