@@ -135,7 +135,7 @@ class FileSystem_Directory extends FileSystem {
 		}
 
 		$scan = array();
-		$result = glob($this->_path.$pattern, $flags);
+		$result = glob($this->_path . $pattern, $flags);
 		foreach($result as $key => $each) {
 			$baseName = basename($each);
 			if(!self::isDir($each)) {

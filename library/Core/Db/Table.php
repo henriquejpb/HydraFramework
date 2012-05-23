@@ -1238,16 +1238,17 @@ class Db_Table implements DataAccessLayer_Interface {
 			}
 		}
 		
+		$rowData = array_intersect_key(array_replace($defaults, $data), $defaults);
+		
 		$config = array(
 			'table'		=>	$this,
-			'data'		=>	$defaults,
+			'data'		=>	$rowData,
 			'readOnly'	=>	false,
 			'stored'	=>	false
 		);
 		
 		$rowClass = $this->getRowClass();
 		$row = new $rowClass($config);
-		$row->setFromArray($data);
 		
 		return $row;
 	}
