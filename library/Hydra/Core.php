@@ -120,7 +120,7 @@ class Core {
 	 * Armazena o nome da biblioteca principal da aplicação
 	 * @var string
 	 */
-	private $_coreLib = 'Core';
+	private $_coreLib = 'Hydra';
 	
 	/**
 	 * Armazena as configurações de localização da aplicação

@@ -1,6 +1,6 @@
 <?php
-require_once 'library/Core/Core.php';
-require_once 'library/Core/Loader.php';
+require_once 'library/Hydra/Core.php';
+require_once 'library/Hydra/Loader.php';
 
 Loader::setCoreInstance(Core::getInstance(
 							array(
