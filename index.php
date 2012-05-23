@@ -1,11 +1,6 @@
 <?php
 require_once 'config/bootstrap.php';
 
-// $db = Db::factory('Mysqli', array('host' => 'localhost',
-// 									'username' => 'root',
-// 									'password' => '1234',
-// 									'dbname' => 'test'));
-
 // $select = new Db_Select($db);
 // $select->from('comments AS c');
 

@@ -1,35 +1,22 @@
 <?php
-require_once 'config/defines.php';
-require_once 'config/autoload.php';
-require_once 'config/error_handling.php';
+require_once 'defines.php';
+require_once 'autoload.php';
+require_once 'error_handling.php';
 
 Core::getInstance()
 	->setLocalization(new Localization('America/Campo_Grande', array('pt_BR', 'pt_BR.iso-8859-1', 'pt_BR.utf-8', 'portuguese')));
 
+$dbConf = require_once INIT_DIR . 'db_config.php';
 Db_Table::setDefaultAdapter(
 	Db::factory(
 		'Mysqli', 
-		array (
-			'host' => 'localhost',
-			'username' => 'root',
-			'password' => '1234',
-			'dbname' => 'test'
-		)
+		$dbConf['mysqli']
 	)
 );
 
+$defConf = require_once INIT_DIR . 'table_definition.php';
 $definition = new Db_Table_Definition(
-	array(
-		'comments' => array(
-			'referenceMap' => array(
-				'ownerUser' => array(
-					Db_Table::COLUMNS => 'user_id',
-					Db_Table::REF_COLUMNS => 'id',
-					Db_Table::REF_TABLE => 'users'
-				)
-			)
-		)
-	)
+	$defConf
 );
 
 Db_Table::setDefaultDefinition($definition);
