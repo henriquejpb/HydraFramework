@@ -6,6 +6,17 @@ require_once 'error_handling.php';
 Core::getInstance()
 	->setLocalization(new Localization('America/Campo_Grande', array('pt_BR', 'pt_BR.iso-8859-1', 'pt_BR.utf-8', 'portuguese')));
 
+/* O arquivo db_config.php deve ser um array da forma:
+ * 
+ * return array (
+ *	'mysqli' => array(
+ *		'host' => 'HOST',
+ *		'username' => 'USER',
+ *		'password' => 'SENHA',
+ *		'dbname' => 'DB'
+ *	)
+ *); 
+ */
 $dbConf = require_once INIT_DIR . 'db_config.php';
 Db_Table::setDefaultAdapter(
 	Db::factory(
