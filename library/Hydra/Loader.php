@@ -54,7 +54,5 @@ class Loader {
 			require $path;
 			return;
 		}
-
-		throw new Loader_Exception(sprintf('Classe %s não encontrada!', $className));
 	}
 }

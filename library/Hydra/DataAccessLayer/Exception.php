@@ -1,2 +1,2 @@
 <?php
-class DataAcessLayer_Exception extends Exception { }
+class DataAccessLayer_Exception extends Exception { }

@@ -74,7 +74,7 @@ interface DataAccessLayer_Interface {
 	 * 
 	 * @param string $identifier : o nome do identificador
 	 * @return boolean
-	 * @throws DataAcessLayer_Exception : caso o identificador não exista na estrutura de
+	 * @throws DataAccessLayer_Exception : caso o identificador não exista na estrutura de
 	 * 									   armazenamento.
 	 */
 	public function isIdentity($identifier);

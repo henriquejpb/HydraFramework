@@ -706,10 +706,10 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	 */
 	public function findDependentRowset($dependentTable, $ruleKey = null, Db_Select $select = null) {
 		$adapter = $this->_getRequiredTable()->getAdapter();
-		
 		if(is_string($dependentTable)) {
 			$dependentTable = $this->_getTableFromString($dependentTable);
-		} 
+		}
+
 		
 		if(!$dependentTable instanceof Db_Table) {
 			$type = gettype($dependentTable);
@@ -905,20 +905,26 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	 * a partir de uma string contendo o nome da tabela ou classe.
 	 * @param string $tableName
 	 * @return Db_Table
+	 * @throws Db_Table_Row_Exception
 	 */
 	protected function _getTableFromString($tableName) {
 		try {
-			if(class_exists($tableName)){
+			// Caso a classe não exista, irá lançar uma exceção do tipo ReflectionException
+			$ref = new ReflectionClass($tableName);
+			if($ref->isSubclassOf('Db_Table')) {
 				return new $tableName($options);
+			} else {
+				throw new Db_Table_Row_Exception('A classe ' . $tableName . ' não é subclasse de Db_Table');
 			}
-		} catch (Exception $e) {
+		} catch (ReflectionException $e) {
 			$options = array();
 			if($table = $this->getTable()) {
 				$options['db'] = $table->getAdapter();
 			}
 			$options['name'] = $tableName;
 			
-			return new Db_Table($options);
+			$tb = new Db_Table($options);
+			return $tb;
 		}
 	}
 }
