@@ -3,7 +3,10 @@ require_once 'defines.php';
 require_once 'autoload.php';
 require_once 'error_handling.php';
 
-Core::getInstance()
+Core::getInstance(Core::getInstance(
+		array(
+			Core::APP_ROOT => dirname(dirname(__FILE__)))
+		))
 	->setLocalization(new Localization('America/Campo_Grande', array('pt_BR', 'pt_BR.iso-8859-1', 'pt_BR.utf-8', 'portuguese')));
 
 /* O arquivo db_config.php deve ser um array da forma:

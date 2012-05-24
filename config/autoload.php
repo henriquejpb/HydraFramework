@@ -1,13 +1,9 @@
 <?php
-require_once 'library/Hydra/Core.php';
-require_once 'library/Hydra/Loader.php';
+set_include_path(get_include_path() . PATH_SEPARATOR . ROOT);
+spl_autoload_extensions('.php,.inc,.log,.cache');
 
-Loader::setCoreInstance(Core::getInstance(
-							array(
-								Core::APP_ROOT => dirname(dirname(__FILE__)))
-							)
-						);
+include_once('library/Hydra/autoload.php');
 
 function __autoload($className) {
-	Loader::autoload($className);
+	spl_autoload($className);
 }
