@@ -94,7 +94,8 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 		 * 		[3] => :campo2
 		 * 	)
 		 */
-		$this->_sqlSplit = preg_split('#(\?|\:[A-Za-z0-9_]+)#', $sql, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+		$this->_sqlSplit = preg_split('#(\?|\:[A-Za-z0-9_]+)#', $sql, -1, 
+								PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 		
 		//Limpa os parâmetros, se houver algum
 		$this->_sqlParams = array();
@@ -143,8 +144,8 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::bindColumn()
 	 */
-	public function bindColumn($column, $param, $type = null) {
-		$this->_boundColumns[(string) $column] = $param;
+	public function bindColumn($column, &$param, $type = null) {
+		$this->_boundColumns[(string) $column] = &$param;
 		return $this;
 	}
 	
@@ -152,7 +153,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::bindParam()
 	 */
-	public function bindParam($parameter, $variable, $type = null, $length = null) {
+	public function bindParam($parameter, &$variable, $type = null, $length = null) {
 		if(!is_int($parameter) || !is_string($parameter)) {
 			throw new Db_Statement_Exception(sprintf('Posição de associação "%s" inválida', $parameter));
 		}
@@ -175,7 +176,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 			throw new Db_Statement_Exception(sprintf('Posição de associação "%s" inválida', $parameter));
 		}
 		
-		$this->_boundParams[$position] = $variable;
+		$this->_boundParams[$position] =& $variable;
 		return $this;
 	}
 	

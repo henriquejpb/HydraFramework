@@ -20,10 +20,9 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	private $_metaData = null;
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Abstract::_prepare()
 	 */
-	public function _prepare($sql) {
+	protected function _prepare($sql) {
 		$conn = $this->_adapter->getConnection();
 		$this->_stmt = $conn->prepare($sql);
 		if($this->_stmt === false || $conn->errno) {
@@ -44,7 +43,6 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::closeCursor()
 	 */
 	public function closeCursor() {
@@ -60,7 +58,6 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::columnCount()
 	 */
 	public function columnCount() {
@@ -71,7 +68,6 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::errorCode()
 	 */
 	public function errorCode() {
@@ -82,7 +78,6 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::errorInfo()
 	 */
 	public function errorInfo() {
@@ -98,7 +93,6 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::execute()
 	 */
 	public function execute(array $params = array()) {
@@ -168,7 +162,6 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Abstract::_doFetch()
 	 */
 	public function _doFetch($mode = null) {
@@ -214,7 +207,6 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::nextRowset()
 	 */
 	public function nextRowset() {
@@ -222,7 +214,6 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::rowCount()
 	 */
 	public function rowCount() {

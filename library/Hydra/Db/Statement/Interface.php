@@ -14,7 +14,7 @@ interface Db_Statement_Interface {
 	 * @return Db_Statement_Interface : Fluent Interface
 	 * @throws Db_Statement_Exception
 	 */
-	public function bindColumn($column, $param, $type = null);
+	public function bindColumn($column, &$param, $type = null);
 	
 	/**
 	 * Associa um valor a um parâmetro
@@ -26,7 +26,7 @@ interface Db_Statement_Interface {
 	 * @return Db_Statement_Interfacae : Fluent Interface
 	 * @throws Db_Statement_Exception
 	 */
-	public function bindParam($parameter, $variable, $type = null, $length = null);
+	public function bindParam($parameter, &$variable, $type = null, $length = null);
 	
 	/**
 	 * Associa um valor a um parâmetro

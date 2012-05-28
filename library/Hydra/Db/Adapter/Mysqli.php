@@ -33,6 +33,9 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	 */
 	protected $_statementClass = 'Db_Statement_Mysqli';
 	
+	/**
+	 * @see Db_Adapter_Abstract::_connect()
+	 */
 	protected function _connect(){
 		if($this->isConnected()){
 			return;
@@ -67,7 +70,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::isConnected()
 	 */
 	public function isConnected() {
@@ -75,7 +77,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::disconnect()
 	 */
 	public function disconnect() {
@@ -86,7 +87,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::prepare()
 	 */
 	public function prepare($sql) {
@@ -105,7 +105,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::lastInsertId()
 	 */
 	public function lastInsertId($table = null, $pk = null) {
@@ -113,7 +112,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::beginTransaction()
 	 */
 	public function beginTransaction() {
@@ -122,7 +120,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::commitTransaction()
 	 */
 	public function commitTransaction() {
@@ -132,7 +129,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::rollBackTransaction()
 	 */
 	public function rollBackTransaction() {
@@ -142,7 +138,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::limit()
 	 */
 	public function limit($sql, $count, $offset = 0) {
@@ -165,7 +160,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::supportsParameters()
 	 */
 	public function supportsParameters($type) {
@@ -173,7 +167,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::listTables()
 	 */
 	public function listTables() {
@@ -185,14 +178,13 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 			}
 			$query->close();
 		} else {
-			throw new Db_Adapter_Exception($this->getConnection()->error);
+			throw new Db_Adapter_Mysqli_Exception($this->getConnection()->error);
 		}
 
 		return $results;
 	}
 
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::describeTable()
 	 */
 	public function describeTable($tableName, $schemaName = null) {
@@ -200,15 +192,7 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 				? $this->quoteIdentifier($tableName)
 				: $this->quoteIdentifier($schemaName . '.' . $tableName));
 
-		$results = array();
-		if($query = $this->getConnection()->query($sql)) {
-			while($row = $query->fetch_assoc()) {
-				$results[] = $row;
-			}
-			$query->close();
-		} else {
-			throw new Db_Adapter_Exception($this->getConnection()->error);
-		}
+		$results = $this->fetchAll($sql);
 
 		$desc = array();
 
@@ -256,24 +240,23 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 			}
 			
 			$desc[$row['Field']] = array(
-			                'SCHEMA_NAME'      => $schemaName, 
-			                'TABLE_NAME'       => $tableName,
-			                'COLUMN_NAME'      => $row['Field'],
-			                'COLUMN_POSITION'  => $i,
-			                'DATA_TYPE'        => $row['Type'],
-			                'DEFAULT'          => $row['Default'],
-			                'NULLABLE'         => (bool) ($row['Null'] == 'YES'),
-			                'LENGHT'           => $row['Lenght'],
-			                'SCALE'            => $row['Scale'],
-			                'PRECISION'        => $row['Precision'],
-			                'UNSIGNED'         => $row['Unsigned'],
-			                'PRIMARY'          => $row['Primary'],
-			                'PRIMARY_POSITION' => $row['PrimaryPosition'],
-			                'IDENTITY'         => $row['Identity']
+			                self::SCHEMA_NAME		=> $schemaName, 
+			                self::TABLE_NAME		=> $tableName,
+			                self::COLUMN_NAME		=> $row['Field'],
+			                self::COLUMN_POSITION	=> $i,
+			                self::DATA_TYPE			=> strtoupper($row['Type']),
+			                self::DEFAULT_VALUE		=> $row['Default'],
+			                self::NULLABLE			=> (bool) ($row['Null'] == 'YES'),
+			                self::LENGHT			=> $row['Lenght'],
+			                self::SCALE				=> $row['Scale'],
+			                self::PRECISION			=> $row['Precision'],
+			                self::UNSIGNED			=> $row['Unsigned'],
+			                self::PRIMARY			=> $row['Primary'],
+			                self::PRIMARY_POSITION	=> $row['PrimaryPosition'],
+			                self::IDENTITY			=> $row['Identity']
 			);
 			++$i;
 		}
-		
 		return $desc;
 	}
 
@@ -291,7 +274,6 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Adapter_Abstract::getQuoteIdentifierSymbol()
 	 */
 	public function getQuoteIdentifierSymbol() {

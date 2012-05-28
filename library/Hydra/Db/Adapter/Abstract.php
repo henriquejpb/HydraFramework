@@ -9,6 +9,35 @@ abstract class Db_Adapter_Abstract {
 	 * @var string
 	 */
 	const NAMED_PARAMETERS 		= 'named';
+	
+	
+	const SCHEMA_NAME 		= 'SCHEMA_NAME';
+	
+	const TABLE_NAME		= 'TABLE_NAME';
+	
+	const COLUMN_NAME 		= 'COLUMN_NAME';
+	
+	const COLUMN_POSITION 	= 'COLUMN_POSITION';
+	
+	const DATA_TYPE			= 'DATA_TYPE';
+	
+	const DEFAULT_VALUE		= 'DEFAULT';
+	
+	const NULLABLE			= 'NULLABLE';
+	
+	const LENGHT			= 'LENGHT';
+
+	const SCALE				= 'SCALE';
+	
+	const PRECISION			= 'PRECISION';
+	
+	const UNSIGNED			= 'UNSIGNED';
+	
+	const PRIMARY			= 'PRIMARY';
+	
+	const PRIMARY_POSITION 	= 'PRIMARY_POSITION';
+	
+	const IDENTITY			= 'IDENTITY';
 
 	/**
 	 * Informa de os identificadores SQL (nomes de campos, tabelas, etc...) devem ser quotados.
@@ -36,10 +65,10 @@ abstract class Db_Adapter_Abstract {
 	protected $_fetchMode = Db::FETCH_ASSOC;
 
 	/**
-	 * Enter description here ...
+	 * A classe de statement.
 	 * @var string
 	 */
-	protected $_statementClass = 'Db_Statement';
+	protected $_statementClass = 'Db_Statement_Abstract';
 
 	/**
 	 * Tipos de dados numéricos, que não precisam ser quotados
@@ -258,9 +287,9 @@ abstract class Db_Adapter_Abstract {
 	 * 
 	 * Isto é suportado apenas por alguns SGBDs,
 	 * como Oracle, PostgreSQL, DB2, etc.
-	 * Outros SGBDs retornal null
+	 * Outros SGBDs retornam null
 	 * @param string $sequenceName
-	 * @return string|null
+	 * @return int|null
 	 */
 	public function nextSequenceId($sequenceName) {
 		return null;
@@ -599,7 +628,7 @@ abstract class Db_Adapter_Abstract {
 		if(is_int($value)) {
 			return $value;
 		} else if(is_float($value)) {
-			return sprintf('%F', $value);
+			return sprintf('%f', $value);
 		} else {
 			return "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
 		}

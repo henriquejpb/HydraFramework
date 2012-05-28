@@ -231,7 +231,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		foreach($options as $key => $value) {
 			switch($key) {
 				case self::ADAPTER:
-					$this->_setAdapter($value);
+					$this->setAdapter($value);
 					break;
 				case self::SCHEMA:
 					$this->_schema = (string) $value;
@@ -509,7 +509,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * @param mixed $adapter : string ou Db_AdapterAbstract
 	 * @return Db_Table : fluent interface
 	 */
-	private function _setAdapter(Db_Adapter_Abstract $adapter) {
+	public function setAdapter(Db_Adapter_Abstract $adapter) {
 		$this->_adapter = $adapter;
 		return $this;
 	}
