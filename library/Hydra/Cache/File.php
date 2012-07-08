@@ -36,13 +36,6 @@ class Cache_File extends FileSystem_File {
 	 */
 	public function __construct($path, $permissionMode = 0777){
 		parent::__construct($path, $permissionMode);
-
-		try {
-			$exp = parent::read(0, self::METADATA_SIZE);
-			$this->setExpiration((int) $exp);
-		} catch (FileSystem_File_Exception $e) {
-			$this->setExpiration(self::DEFAULT_EXPIRATION);
-		}
 	}
 	
 	/**
@@ -125,6 +118,14 @@ class Cache_File extends FileSystem_File {
 	 * @return integer
 	 */
 	public function getExpiration() {
+		if($this->_expires === null) {
+			try {
+				$exp = parent::read(0, self::METADATA_SIZE);
+				$this->setExpiration((int) $exp);
+			} catch (FileSystem_File_Exception $e) {
+				$this->setExpiration(self::DEFAULT_EXPIRATION);
+			}
+		}
 		return $this->_expires;
 	}
 	
@@ -134,6 +135,6 @@ class Cache_File extends FileSystem_File {
 	 * @return boolean
 	 */
 	public function isExpired(){
-		return $this->getExpiration() >= time();
+		return $this->getExpiration() <= time();
 	}
 }

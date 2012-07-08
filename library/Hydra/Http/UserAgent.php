@@ -22,7 +22,7 @@ class Http_UserAgent {
 	public function __construct() {
 		try {
 			if(empty(self::$data)) {
-				self::$data = Core::getInstance()->getConfigFile('user_agents');
+				self::$data = include Core::getInstance()->getDefFile('user_agents');
 			}
 		} catch (Exception $e) {
 				
@@ -43,7 +43,7 @@ class Http_UserAgent {
 	 * Se nenhum valor for informado, serão retornados todos os possíveis.
 	 *
 	 * @return string|array
-	 * @uses Core::getConfigFile
+	 * @uses Core::getDefFile
 	 */
 	public function getInfo($value = null) {
 		$userAgent = Environment::getVar('HTTP_USER_AGENT');

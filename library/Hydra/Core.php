@@ -29,6 +29,8 @@ class Core {
 	const SYSTEM_DIR	= 'systemDir';
 	const LIBRARY_DIR	= 'libraryDir';
 	const CONFIG_DIR	= 'configDir';
+	const INIT_DIR		= 'initDir';
+	const DEF_DIR		= 'defDir';
 	
 	const LOCALIZATION		= 'localization';
 	const LIBRARIES			= 'libraries';
@@ -60,7 +62,7 @@ class Core {
 	 * Armazena o subdiretório das bibliotecas
 	 * @var unknown_type
 	 */
-	private $_libraryDir = 'library/';
+	private $_libraryDir = 'library/Hydra';
 	
 	/**
 	 * Armazena o diretório de log.
@@ -97,6 +99,18 @@ class Core {
 	 * @var string
 	 */
 	private $_configDir = 'system/config/';
+	
+	/**
+	 * O diretório que contém as inicializações do sistema.
+	 * @var string
+	 */
+	private $_initDir = 'system/init/';
+	
+	/**
+	 * O diretório que contém as definições do sistema.
+	 * @var string
+	 */
+	private $_defDir = 'system/def/';
 	
 	/**
 	 * O charset da aplicação.
@@ -198,6 +212,12 @@ class Core {
 				case self::LIBRARY_DIR:
 					$this->_libraryDir = (string) $value;
 					break;
+				case self::INIT_DIR:
+						$this->_initDir = (string) $value;
+						break;
+				case self::DEF_DIR:
+						$this->_defDir = (string) $value;
+						break;
 				case self::CORE_LIB:
 					$this->setCoreLib($value);
 					break;
@@ -207,9 +227,24 @@ class Core {
 			}
 		}
 		
+		$this->_init();
+	}
+	
+	/**
+	 * Inicializa a aplicação.
+	 * 
+	 * @return void
+	 */
+	private function _init() {
 		$this->_setupApplicationDirectories();
 		$this->_setupLocalization();
 		$this->_setupEnvironment();
+		$this->_setupAutoload();		
+	}
+	
+	private function _setupAutoload() {
+		require_once 'Loader.php';
+		spl_autoload_register(array(new Loader($this->_libraryDir), 'autoload'));
 	}
 	
 	/**
@@ -409,7 +444,40 @@ class Core {
 		return $this;
 	}
 	
+	/**
+	 * @return string
+	 */
 	public function getConfigDir() {
+		return $this->_configDir;
+	}
+	
+	/**
+	 * @param string
+	 */
+	public function setInitDir($dir) {
+		$this->_setPropertyDir('_initDir', $dir);
+		return $this;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getInitDir() {
+		return $this->_initDir;
+	}
+	
+	/**
+	 * @param string
+	 */
+	public function setDefDir($dir) {
+		$this->_setPropertyDir('_defDir', $dir);
+		return $this;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getDefDir() {
 		return $this->_configDir;
 	}
 	
@@ -423,6 +491,7 @@ class Core {
 	 */
 	private function _setPropertyDir($property, $dir) {
 		$fullPath = $this->_appRoot . self::DS . $dir;
+		echo PHP_EOL;
 		if(!is_dir($fullPath)) {
 			if(!mkdir($fullPath, 0777, true)) {
 				throw new Exception(sprintf('O diretório informado %s não é um diretório válido e não pôde ser criado.', $fullPath));
@@ -500,8 +569,24 @@ class Core {
 	}
 	
 	/**
-	 * Retorna o conteúdo de um arquivo de configuração.
-	 *  
+	 * Retorna um arquivo de inicialização.
+	 *
+	 * @param string $fileName
+	 * @param string $ext
+	 * @throws Exception
+	 */
+	public function getInitFile($fileName, $ext = 'php') {
+		$filePath = $this->_initDir . $fileName . '.' . preg_replace('/^\./', '', $ext);
+		if(!is_file($filePath)) {
+			throw new Exception(sprintf('Arquivo de inicialização "%s" inexistente.', $filePath));
+		}
+	
+		return realpath($filePath);
+	}
+	
+	/**
+	 * Retorna um arquivo de configuração.
+	 *
 	 * @param string $fileName
 	 * @param string $ext
 	 * @throws Exception
@@ -512,6 +597,22 @@ class Core {
 			throw new Exception(sprintf('Arquivo de configuração "%s" inexistente.', $filePath));
 		}
 		
-		return include realpath($filePath);
+		return realpath($filePath);
+	}
+	
+	/**
+	 * Retorna um arquivo de definições.
+	 *  
+	 * @param string $fileName
+	 * @param string $ext
+	 * @throws Exception
+	 */
+	public function getDefFile($fileName, $ext = 'php') {
+		$filePath = $this->_defDir . $fileName . '.' . preg_replace('/^\./', '', $ext);
+		if(!is_file($filePath)) {
+			throw new Exception(sprintf('Arquivo de definição "%s" inexistente.', $filePath));
+		}
+		
+		return realpath($filePath);
 	}
 }

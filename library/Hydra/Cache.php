@@ -49,7 +49,7 @@ abstract class Cache {
 		} else {
 			$contents = serialize($contents);
 		}
-		
+
 		try {
 			$mode = $flag == self::FILE_OVERWRITE ? Cache_File::LOCK_EX : Cache_File::LOCK_EX | Cache_File::APPEND;
 			$cacheFile = new Cache_File($path);
@@ -111,7 +111,7 @@ abstract class Cache {
 		}
 		
 		$file = self::_getFile($directory, $fileName);
-		if(!$file->isExpired()) {
+		if($file->isExpired()) {
 			return null;
 		}
 		

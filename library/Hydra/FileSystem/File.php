@@ -164,9 +164,10 @@ class FileSystem_File extends FileSystem {
 	 */
 	public function delete() {
 		$ret = unlink($this->_path);
-		if($ret) {
-			$this->_valid = false;
+		if(!$ret) {
+			throw new Exception(sprintf('Impossível remover o arquivo "%s"', $this->_path));
 		}
+		$this->_valid = false;
 		return $ret;
 	}
 	

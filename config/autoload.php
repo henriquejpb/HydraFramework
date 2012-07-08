@@ -1,5 +1,3 @@
 <?php
-set_include_path(get_include_path() . PATH_SEPARATOR . ROOT);
+set_include_path(get_include_path() . PS . ROOT);
 spl_autoload_extensions('.php,.inc,.log,.cache');
-
-include_once('library/Hydra/autoload.php');
