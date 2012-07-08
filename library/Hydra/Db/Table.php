@@ -685,15 +685,13 @@ class Db_Table implements DataAccessLayer_Interface {
 	private function _getCacheName() {
 		$dbConfig = $this->_adapter->getConfig();
 
-		$port = isset($dbConfig['port']) ? ':'.$dbConfig['port'] : null;
-
-		$host = isset($dbConfig['host']) ? ':'.$dbConfig['host'] : null;
-
-		// port:host/dbname:schema.table
-		$cacheName = md5(
-			$port . $host . '/'. $dbConfig['dbname'] . ':'
-			. $this->_schema. '.' . $this->_name
-		);
+		// dbname:schema.table@host
+		$cacheName = $dbConfig['dbname'] . '.'
+			. $this->_getTableSpec()
+			. '@' . $dbConfig['host'];
+		if(isset($dbConfig['port'])) {
+			$cacheName .= '-' . $dbConfig['port'];
+		}
 
 		return $cacheName;
 	}
