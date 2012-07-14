@@ -222,6 +222,11 @@ abstract class View_Abstract {
 		}
 	}
 	
+	/**
+	 * Verifica se a variável de template com nome $var existe.
+	 * 
+	 * @param string $var
+	 */
 	public function hasVar($var) {
 		return isset($this->_vars[(string) $var]);
 	}
