@@ -9,6 +9,7 @@
 //Dependências diretas de Core.
 
 require_once 'Localization.php';
+require_once 'Loader.php';
 
 class Core {
 	const VERSION = '1.0';
@@ -16,7 +17,7 @@ class Core {
 	const DS = DIRECTORY_SEPARATOR;
 	const PS = PATH_SEPARATOR;
 	
-	const ENVIRONMENT = 'environment';
+	const ENVIRONMENT 	= 'environment';
 	const PRODUCTION 	= 1;
 	const DEVELOPMENT 	= 0;
 	
@@ -32,8 +33,8 @@ class Core {
 	const INIT_DIR		= 'initDir';
 	const DEF_DIR		= 'defDir';
 	
-	const LOCALIZATION		= 'localization';
-	const LIBRARIES			= 'libraries';
+	const LOCALIZATION	= 'localization';
+	const LIBRARIES		= 'libraries';
 
 	const LOGGING		= 'logging';
 	const LOG_DIR		= 'logDir';
@@ -45,6 +46,13 @@ class Core {
 	const CHARSET		= 'charset';
 	const CONTENT_TYPE	= 'contentType';
 	const INDEX_FILE	= 'indexFile';
+	
+	/**
+	 * Armazena o objeto responsável por carregar as classes da aplicação.
+	 * 
+	 * @var Loader
+	 */
+	private $_loader;
 	
 	/**
 	 * O ambiente em que a aplicação está rodando (DEVELOPMENT ou PRODUCTION).
@@ -125,10 +133,16 @@ class Core {
 	private $_libraries = array();
 	
 	/**
-	 * O diretório raíz da aplicação.
+	 * O diretório raiz de toda a aplicação
 	 * @var string
 	 */
-	private $_appRoot;
+	private $_root;
+	
+	/**
+	 * O diretório raíz específico da aplicação.
+	 * @var string
+	 */
+	private $_appRoot = 'app/';
 	
 	/**
 	 * Armazena o nome da biblioteca principal da aplicação
@@ -179,6 +193,9 @@ class Core {
 		
 		foreach($options as $key => $value) {
 			switch($key) {
+				case self::ROOT:
+					$this->_root = (string) $value;
+					break;
 				case self::SYSTEM_DIR:
 					$this->_systemDir = (string) $value;
 					break;
@@ -243,8 +260,7 @@ class Core {
 	}
 	
 	private function _setupAutoload() {
-		require_once 'Loader.php';
-		spl_autoload_register(array(new Loader($this->_libraryDir), 'autoload'));
+		$this->_loader = new Loader($this->_libraryDir);
 	}
 	
 	/**
@@ -252,6 +268,7 @@ class Core {
 	 * @return void
 	 */
 	private function _setupApplicationDirectories() {
+		$this->setRoot($this->_root);
 		$this->setSystemDir($this->_systemDir);
 		$this->setLibraryDir($this->_libraryDir);
 		$this->setCacheDir($this->_cacheDir);
@@ -289,7 +306,7 @@ class Core {
 	 * @throws Exception
 	 */
 	private function _verifyConfig(array &$config) {
-		if(!isset($config[self::APP_ROOT])) {
+		if(!isset($config[self::ROOT])) {
 			throw new Exception('O diretório raiz da aplicação não foi definido!');
 		}
 
@@ -325,20 +342,47 @@ class Core {
 	}
 	
 	/**
+	 * Seta o diretório raiz de toda a aplicação.
+	 * (É o diretório que contém a aplicação, a library, os diretórios do sitema, etc.)
+	 * 
+	 * @param string $dir
+	 * @throws Exception
+	 */
+	public function setRoot($dir) {
+		if(!is_dir($dir)) {
+			throw new Exception(sprintf('O diretório raiz informado %s não é um diretório válido.', $dir));
+		}
+		
+		$this->_root = realpath($dir) . self::DS;
+		return $this;
+	}
+	
+	/**
+	 * Retorna o diretório raiz de toda a aplicação.
+	 * 
+	 * @return string
+	 */
+	public function getRoot() {
+		return $this->_root;
+	}
+	
+	/**
+	 * Seta o diretório raiz específico da aplicação.
+	 * (Aqui ficam os diretórios para Controllers, Views, Models, 
+	 *  scripts, imagens, etc., específicos da 
+	 * 
 	 * @param string $dir
 	 * @return Core : fluent interface
 	 * @throws Exception : caso o diretório não seja válido
 	 */
 	public function setAppRoot($dir) {
-		if(!is_dir($dir)) {
-			throw new Exception(sprintf('O diretório raiz informado %s não é um diretório válido.', $dir));
-		}
-		
-		$this->_appRoot = realpath($dir) . self::DS;
+		$this->_setPropertyDir('_appRoot', $dir);
 		return $this;
 	}
 	
 	/**
+	 * Retorna o diretório raiz específico da aplicação
+	 * 
 	 * @return string
 	 */
 	public function getAppRoot() {
@@ -490,8 +534,7 @@ class Core {
 	 * @throws Exception : caso o diretório não seja válido
 	 */
 	private function _setPropertyDir($property, $dir) {
-		$fullPath = $this->_appRoot . self::DS . $dir;
-		echo PHP_EOL;
+		$fullPath = $this->_root . self::DS . $dir;
 		if(!is_dir($fullPath)) {
 			if(!mkdir($fullPath, 0777, true)) {
 				throw new Exception(sprintf('O diretório informado %s não é um diretório válido e não pôde ser criado.', $fullPath));
