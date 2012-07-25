@@ -1,5 +1,11 @@
 <?php
 class View extends View_Abstract {
+	
+	
+	public static function factory($spec, array $vars = array(), array $opt = array()) {
+		return new self($spec, $vars, $opt);
+	}
+	
 	/**
 	 * @see View_Abstract::_run()
 	 */
