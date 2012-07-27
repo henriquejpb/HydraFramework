@@ -128,7 +128,9 @@ abstract class View_Abstract {
 		$this->_template = (string) $spec;
 		$tplPath = $this->_path . $this->_normalizeTemplateName($spec) . '.' . $this->_templateExtension;
 		if(!FileSystem_File::isFile($tplPath)) {
-			throw new View_Exception(sprintf('O template %s não é um arquivo válido!', $tplPath));
+			$e = new View_Exception(sprintf('O template %s não é um arquivo válido!', $tplPath));
+			$e->setView($this);
+			throw $e;
 		}
 		
 		$this->_templatePath = $tplPath;
@@ -159,7 +161,7 @@ abstract class View_Abstract {
 	 * 
 	 * @param string $path
 	 * @return View_Abstract : fluent interface
-	 * @throw View_Exception : caso $path não aponte para um diretório
+	 * @throws View_Exception : caso $path não aponte para um diretório
 	 */
 	public function setPath($path) {
 		self::_verifyPath($path);
@@ -299,7 +301,9 @@ abstract class View_Abstract {
 	 */
 	protected static function _verifyPath($path) {
 		if(!FileSystem_Directory::isDir($path)) {
-			throw new View_Exception('O diretório para de templates não é válido');
+			$e = new View_Exception('O diretório para de templates não é válido');
+			$e->setView($this);
+			throw $e;
 		}
 	}
 	
@@ -332,6 +336,11 @@ abstract class View_Abstract {
 		$this->_strictVars = (bool) $opt;
 	}
 	
+	/**
+	 * Renderiza a View.
+	 * 
+	 * @return string
+	 */
 	public function __toString() {
 		return $this->render();
 	}

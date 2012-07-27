@@ -1,7 +1,6 @@
 <?php
 require_once 'defines.php';
 require_once 'error_handling.php';
-require_once 'autoload.php';
 require_once ROOT.'library/Hydra/Core.php';
 
 $core = Core::getInstance(array(Core::ROOT => dirname(dirname(__FILE__))))
@@ -32,3 +31,5 @@ $definition = new Db_Table_Definition(
 );
 
 Db_Table::setDefaultDefinition($definition);
+
+View::setDefaultPath(Core::getInstance()->getAppRoot() . 'view/');
