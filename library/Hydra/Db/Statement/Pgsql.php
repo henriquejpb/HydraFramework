@@ -21,26 +21,32 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 		parent::__construct($adapter, $sql);
 	}
 	
+	/**
+	 * @see Db_Statement_Abstract::_prepare()
+	 */
 	protected function _prepare($sql) {
 		$conn = $this->_adapter->getConnection();
 		// No PostgreSQL, os placeholders para parâmetros são da forma '$n', não '?'
-		preg_replace_callback('/\?/', 
+		$sql = preg_replace_callback('/\?/', 
 			create_function(
 				'$matches', 
 				'static $count = 0;
-				 return "$" . ++$count;'
+				 return "\$" . ++$count;'
 			), $sql, -1, $count);
 		
 		/* Infelizmente não há outro jeito de suprimir os warnings gerados pela 
 		 * função pg_prepare, se não o uso do '@'.
 		 */
-		$this->_stmt = pg_prepare($conn, $this->_name, $sql);
+		$this->_stmt = @pg_prepare($conn, $this->_name, $sql);
 		$error = pg_last_error($conn);
 		if($this->_stmt === false || $error) {
 			throw new Db_Statement_Pgsql_Exception('Erro PostgreSQL:' . $error);
 		}
 	}
 	
+	/**
+	 * @see Db_Statement_Interface::closeCursor()
+	 */
 	public function closeCursor() {
 		if($this->_lastResult !== null) {
 			pg_result_seek($this->_lastResult, 0);
@@ -48,11 +54,17 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 		return $this;
 	}
 	
+	/**
+	 * @see Db_Statement_Interface::columnCount()
+	 */
 	public function columnCount() {
 		// TODO: verificar como retornar o número de colunas retornadas de uma query
 		return null; 
 	}
 	
+	/**
+	 * @see Db_Statement_Interface::execute()
+	 */
 	public function execute(array $params = array()) {
 		if($this->_stmt === null) {
 			return null;
@@ -113,6 +125,9 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 		return pg_affected_rows($this->_lastResult);
 	}
 	
+	/**
+	 * @see Db_Statement_Interface::errorCode()
+	 */
 	public function errorCode() {
 		$info = $this->errorInfo();
 		if($info == null) {
@@ -124,6 +139,9 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 		}
 	}
 	
+	/**
+	 * @see Db_Statement_Interface::errorInfo()
+	 */
 	public function errorInfo() {
 		if($this->_lastResult) {
 			$error = pg_result_error($this->_lastResult);

@@ -409,7 +409,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 		// Se não há um objeto-linha nesta posição...
 		if(empty($this->_rows[$position])) {
 			// ... precisamos criá-lo
-			$this->_rows[$position] = $this->_rowClass(
+			$this->_rows[$position] = new $this->_rowClass(
 				array(
 					'table'		=>	$this->_table,
 					'data'		=>	$this->_data[$position],

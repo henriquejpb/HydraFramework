@@ -86,7 +86,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 			}
 			$this->_data = $config['data'];
 		}
-
+		
 		if(isset($config['stored']) && $config['stored'] === true) {
 			$this->_cleanData = $this->_data;
 		}
@@ -387,11 +387,11 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}	
 	
 	/**
-	 * Retorna uma instância do objeto Db_Table_Select
+	 * Retorna uma instância do objeto Db_Select
 	 * criado pelo objeto Db_Table pai deste objeto.
 	 * 
 	 * @param mixed $cols
-	 * @return Db_Table_Select
+	 * @return Db_Select
 	 * @throws Db_Table_Row_Exception
 	 */
 	public function select($cols = array()) {
@@ -561,20 +561,20 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 			throw new Db_Table_Row_Exception('A chave primária deve estar setada como um array.');
 		}
 		
-		$pk = array_flip($this->_primary);
+		$primary = array_flip($this->_primary);
 		if($useDirty) {
 			$array = array_intersect_key($this->_data, $primary);
 		} else {
 			$array = array_intersect_key($this->_cleanData, $primary);
 		}
 		
-		if(count($pk) != count($array)) {
+		if(count($primary) != count($array)) {
 			throw new Db_Table_Row_Exception(sprintf(
-												'A tabela especificada "%s" não possui a mesma chave primária (%s) que a linha (%s).',
-												$this->_tableName,
-												join(', ', $pk),
-												join(', ', $array)
-											));
+				'A tabela especificada "%s" não possui a mesma chave primária (%s) que a linha (%s).',
+				$this->_tableName,
+				join(', ', $primary),
+				join(', ', $array)
+			));
 		}
 		
 		return $array;
@@ -677,7 +677,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	 * 
 	 * @param Db_Table $dependent
 	 * @param Db_Table $parent
-	 * @param string|null $ruleKey
+	 * @param string|null $ruleKey : caso NULL, a primeira referência encontrada será retornada
 	 * @return array
 	 */
 	protected function _prepareReference(Db_Table $dependent, Db_Table $parent, $ruleKey = null) {
@@ -841,12 +841,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 			throw new Db_Table_Row_Exception('A tabela de comparação deve ser do tipo Db_Table, mas é do tipo ' . $type);
 		}
 		
-		if($select === null) {
-			$select = $matchTable->select();
-		} else {
-			$select->setTable($matchTable);
-		}
-		
+				
 		$interInfo = $intersectionTable->info();
 		$interAdapter = $intersectionTable->getAdapter();
 		$interName = $interInfo[Db_Table::NAME];
@@ -865,12 +860,11 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 		}
 		$joinCond = join(' AND ', $joinCond);
 		
-		$select->from(array('i' => $interName), array(), $interSchema)
-			   ->innerJoin(array('m' => $matchName), $joinCond, Db_Select::SQL_WILDCARD, $matchSchema);
-		
-		if($select instanceof Db_Table_Select) {
-			$select->setIntegrityCheck(false);
+		if($select === null) {
+			$select = new Db_Select($matchTable->getAdapter());
 		}
+		$select->from(array('m' => $matchName), $matchTable->info(Db_Table::COLS), $matchSchema)
+			->innerJoin(array('i' => $interName), $joinCond, array(), $interSchema);
 		
 		$callerMap = $this->_prepareReference($intersectionTable, $this->_getRequiredTable(), $callerRefRule);
 		for($i = 0; $i < count($callerMap[Db_Table::COLUMNS]); $i++) {
@@ -883,7 +877,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 			
 			$select->where($interAdapter->quoteInto($interCol . ' = ?', $value, $type));
 		}
-		
+
 		$stmt = $select->query();
 		$data = $stmt->fetchAll(Db::FETCH_ASSOC);
 		

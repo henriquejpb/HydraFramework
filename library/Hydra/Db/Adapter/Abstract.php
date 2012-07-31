@@ -204,7 +204,7 @@ abstract class Db_Adapter_Abstract {
 	/**
 	 * Prepara e executa um SQL statement com parâmetros associados
 	 * @param string|Db_Select $sql
-	 * @param mixed $bindedParams
+	 * @param mixed $boundParams
 	 * @return Db_Statement_Abstract
 	 */
 	public function query($sql, $boundParams = array()) {
@@ -343,7 +343,6 @@ abstract class Db_Adapter_Abstract {
 		if($this->supportsParameters(self::POSITIONAL_PARAMETERS)) {
 			$boundParams = array_values($boundParams);
 		}
-
 		$stmt = $this->query($sql, $boundParams);
 		return $stmt->rowCount();
 	}

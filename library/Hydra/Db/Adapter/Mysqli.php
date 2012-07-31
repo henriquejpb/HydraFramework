@@ -163,7 +163,7 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	 * @see Db_Adapter_Abstract::supportsParameters()
 	 */
 	public function supportsParameters($type) {
-		return true;
+		return $type === Db_Adapter_Abstract::POSITIONAL_PARAMETERS;
 	}
 
 	/**

@@ -121,24 +121,31 @@ class Controller_Request {
 	 * Construtor.
 	 * 
 	 * @param string $uri : URI da requisição
-	 * @param boolean $parseEnvironment : se os dados dos arrays globais _GET, _POST, _FILES devem ser processados
+	 * @param array|null $useSuperGlobals : quais variáveis super-globais 
+	 * 		que serão utilizadas na requisição:
+	 * 			- POST
+	 * 			- GET
+	 * 			- FILES
+	 * 			- COOKIES 
 	 */
-	public function __construct($uri = null, $parseEnvironment = true, $envToParse = array('get', 'post', 'files', 'cookies')) {
+	public function __construct($uri = null, $useSuperGlobals = array('get', 'post', 'files', 'cookies')) {
 		$this->setUri($uri);
 		$this->_userAgent = new Http_UserAgent();
 		
+		$parseEnvironment = is_array($useSuperGlobals) && !empty($useSuperGlobals);
+		
 		if($parseEnvironment) {
-			$envToParse = array_map('strtolower', $envToParse);
-			if(in_array('get', $envToParse)) {
+			$useSuperGlobals = array_map('strtolower', $useSuperGlobals);
+			if(in_array('get', $useSuperGlobals)) {
 				$this->_proccessGet();
 			}
-			if(in_array('post', $envToParse)) {
+			if(in_array('post', $useSuperGlobals)) {
 				$this->_proccessPost();
 			}
-			if(in_array('files', $envToParse)) {
+			if(in_array('files', $useSuperGlobals)) {
 				$this->_proccessFiles();
 			}
-			if(in_array('cookies', $envToParse)) {
+			if(in_array('cookies', $useSuperGlobals)) {
 				$this->_proccessCookies();
 			}
 		}
@@ -485,7 +492,7 @@ class Controller_Request {
 	 * @return array|mixed|null
 	 */
 	public function getQuery($key = null, $default = null) {
-		return $this->_getVar('_get', $key, $default);
+		return $this->_getVar('_query', $key, $default);
 	}
 	
 	/**

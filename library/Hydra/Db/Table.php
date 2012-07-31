@@ -55,7 +55,6 @@ class Db_Table implements DataAccessLayer_Interface {
 	 */
 	private static $_defaultAdapter;
 
-
 	/**
 	 * Armazena um Db_Adapter para o objeto
 	 * @var Db_Adapter_Abstract
@@ -657,11 +656,15 @@ class Db_Table implements DataAccessLayer_Interface {
 		} catch (Exception $e) {
 			$cacheContents = null;
 		}
-
+		
 		//Se o cache não existe...
 		if($cacheContents === null) {
 			$isMetadataFromCache = false;
 			$this->_metadata = $this->_adapter->describeTable($this->_name);
+			if(empty($this->_metadata)) {
+				throw new Db_Table_Exception('Impossível obter a descrição da tabela "' . $this->_name . '".
+						 Verifique se tal tabela existe.');				
+			}
 			try {
 				Cache::set(self::TABLE_CACHE_DIR, $cacheName, $this->_metadata, '+ 1 YEAR');
 			} catch(Cache_Exception $e) {
@@ -793,7 +796,7 @@ class Db_Table implements DataAccessLayer_Interface {
 					case self::COLUMNS:
 					case self::REF_COLUMNS:
 						if(!is_array($value)) {
-							$value = array($value);
+							$value = (array) $value;
 						}
 						break;
 				}
@@ -847,17 +850,17 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Cria e retorna uma instâncida de Db_Table_Select;
+	 * Cria e retorna uma instâncida de Db_Select
 	 * @param mixed $cols : array ou string
-	 * @return Db_Table_Select
+	 * @return Db_Select
 	 */
 	public function select($cols = array()) {
-		$select = new Db_Table_Select($this);
-		$cols = empty($cols) || is_array($cols) ? $cols : array($cols);
-		$select->setTable($this);
-		if(!empty($cols)) {
-			$select->columns($cols, $this->_name);
+		$select = new Db_Select($this->getAdapter());
+		$cols = is_array($cols) ? $cols : array($cols);
+		if(empty($cols)) {
+			$cols = $this->_getCols();
 		}
+		$select->from($this->getName(), $cols);
 		return $select;
 	}
 
@@ -900,7 +903,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 		//Se a chave primária não é composta, retorna o próprio valor
 		if(count($pkData) == 1) {
-			reset($pkData);
+			reset;($pkData);
 			return current($pkData);
 		}
 
@@ -933,7 +936,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		$tableSpec = $this->_getTableSpec();
 
 		if($this->_integrityCheck === true && !empty($this->_dependentTables)) {
-			$select = new Db_Table_Select($this);
+			$select = new Db_Select($this);
 			$oldData = (array) $this->_adapter->fetchAll($select);
 			$pk = $this->info('PRIMARY');
 				
@@ -950,9 +953,9 @@ class Db_Table implements DataAccessLayer_Interface {
 			}
 		}
 
-		$ret += $this->_adapter->update($tableSpec, $data, $cond);
+		$rowsAffected += $this->_adapter->update($tableSpec, $data, $cond);
 
-		return $ret;
+		return $rowsAffected;
 	}
 
 	/**
@@ -1009,7 +1012,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		$tableSpec = $this->_getTableSpec();
 
 		if($this->_integrityCheck === true && !empty($this->_dependentTables)) {
-			$select = new Db_Table_Select($this);
+			$select = new Db_Select($this);
 			$data = (array) $this->_adapter->fetchAll($select);
 			$pk = $this->info('PRIMARY');
 
@@ -1142,7 +1145,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		}
 		
 		$rows = $this->_fetch($select);
-		$readOnly = $select instanceof Db_Table_Select ? $select->isReadOnly() : false;
+		$readOnly = $this->_isReadOnly($select);
 		
 		$data = array(
 			'table'		=>	$this,
@@ -1186,15 +1189,43 @@ class Db_Table implements DataAccessLayer_Interface {
 			return null;
 		}
 		
-		$readOnly = $select instanceof Db_Table_Select ? $select->isReadOnly() : false;
+		$readOnly = $this->_isReadOnly($select);
 		$data = array(
 			'table'		=>	$this,
 			'data'		=>	reset($rows),
-			'readOnly'	=>	$readOnly
+			'readOnly'	=>	$readOnly,
+			'stored'	=>	true
 		);
 		
 		$rowClass = $this->getRowClass();
 		return new $rowClass($data);
+	}
+	
+	/**
+	 * Define se um Db_Select é somente-leitura.
+	 *
+	 * @param Db_Select $select
+	 * @return bool
+	 */
+	final protected function _isReadOnly(Db_Select $select) {
+		$cols = $select->getPart(Db_Table::COLUMNS);
+		$tableFields = $this->info(self::COLS);
+	
+		foreach($cols as $colEntry) {
+			$column = $colEntry['colName'];
+			$alias = $colEntry['colAlias'];
+				
+			if($alias !== null) {
+				$column = $alias;
+			}
+				
+			if(($column !== Db_Select::SQL_WILDCARD
+					&& !in_array($column, $tableFields))
+					|| $column instanceof Db_Expression) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**

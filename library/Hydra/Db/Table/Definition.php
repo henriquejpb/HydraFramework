@@ -19,7 +19,7 @@ class Db_Table_Definition {
 	 * @param array|null $definitions
 	 */
 	public function __construct($definitions = null) {
-		if(is_array($definitions)) {
+		if(is_array($definitions) || $definitions instanceof Traversable) {
 			foreach($definitions as $table => $def) {
 				$this->setTableDefinition($table, $def);
 			}

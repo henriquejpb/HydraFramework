@@ -88,16 +88,6 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Factory Method.
-	 * 
-	 * @param string $spec
-	 * @param array $vars
-	 * @param array $opt
-	 * @see View_Abstract::__construct
-	 */
-	abstract public static function factory($spec, array $vars = array(), array $opt = array());
-	
-	/**
 	 * @param string $var
 	 * @param mixed $value
 	 */

@@ -180,8 +180,10 @@ class Controller_Response {
 
 	/**
 	 * Se $headers é NULL, retorna os headers da resposta.
-	 * Se $headers é uma string, procura o valor do header dentro do atributo $_headers e o retorna se encontrar.
-	 * Se $headers é um array, returna um array com os valores encontrados.
+	 * Se $headers é uma string, procura o valor do header 
+	 * 		dentro do atributo $_headers e o retorna se encontrar.
+	 * Se $headers é um array, returna um array com os valores 
+	 * 		encontrados.
 	 *
 	 * @param array|string|NULL $headers
 	 * @return array|string|NULL
@@ -228,7 +230,7 @@ class Controller_Response {
 	 * @param string $name : o nome do header
 	 * @return Controller_Response : fluent interface
 	 */
-	public function clearHeader($name) {
+	public function removeHeader($name) {
 		$name = $this->_normalizeHeader($name);
 		if(isset($this->_headers[$name])) {
 			unset($this->_headers[$name]);
@@ -247,7 +249,7 @@ class Controller_Response {
 	public function setRedirect($url, $code = 301) {
 		$this->canSendHeaders(true);
 		$this->setHeader('Location', $url)
-		->setHttpResponseCode($code);
+			 ->setHttpResponseCode($code);
 
 		return $this;
 	}

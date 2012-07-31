@@ -337,7 +337,7 @@ class Db_Select {
 		if(!is_object($tableName) && strpos($tableName, '.') !== false) {
 			list($schema, $tableName) = explode('.', $preg_matchtableName);
 		}
-
+		
 		$lastFromAlias = null;
 		if(!empty($alias)) {
 			if(array_key_exists($alias, $this->_parts[self::FROM])) {
@@ -698,7 +698,7 @@ class Db_Select {
 	public function getAdapter() {
 		return $this->_adapter;
 	}
-
+	
 	/**
 	 * Gera um alias único para um identificador
 	 * @param mixed $tableName
@@ -725,6 +725,9 @@ class Db_Select {
 	 * @return void
 	 */
 	protected function _tableCols($tableAlias, $cols, $afterTableAlias = null) {
+		if($cols === null) {
+			return;
+		}
 		if(!is_array($cols)) {
 			$cols = array($cols);
 		}
@@ -732,7 +735,7 @@ class Db_Select {
 		if($tableAlias == null) {
 			$tableAlias = '';
 		}
-
+		
 		$columns = array();
 
 		foreach($cols as $alias => $col) {
@@ -819,6 +822,7 @@ class Db_Select {
 	 * @return string
 	 */
 	protected function _getQuotedTable($tableName, $alias = null) {
+		$alias = $alias == $tableName ? null : $alias;
 		return $this->_adapter->quoteTableAs($tableName, $alias);
 	}
 

@@ -21,6 +21,14 @@
  * 
  */
 class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializable {
+	
+	/**
+	 * Constante que armazena o separador para a notação mais curta.
+	 * 
+	 * @var string
+	 */
+	const SEPARATOR = '.';
+	
 	/**
 	 * Armazena os dados do array.
 	 * 
@@ -45,6 +53,8 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 
 	/**
 	 * Converte um array em notação com ponto para um array PHP.
+	 * Atua como um Factory Method.
+	 * 
 	 * Exemplo:
 	 * 		<code>
 	 * 			array('a.b.c' => 'foo', 'a.b.d' => 'bar')
@@ -96,7 +106,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	 * @see ArrayAccess::offsetSet
 	 */
 	public function offsetSet($offset, $newval) {
-		$this->_recursiveSet(explode('.', $offset), $newval);
+		$this->_recursiveSet($this->_data, explode(self::SEPARATOR, $offset), $newval);
 		$this->_countCache = null;
 		return $this;
 	} 
@@ -112,7 +122,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	 * 		Util_Array::_invalidOffsetThrowsException seja TRUE
 	 */
 	public function offsetGet($offset) {
-		return $this->_recursiveGet(explode('.', $offset));
+		return $this->_recursiveGet(explode(self::SEPARATOR, $offset));
 	}
 	
 	/**
@@ -126,7 +136,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	 * 		Util_Array::_invalidOffsetThrowsException seja TRUE
 	 */
 	public function offsetUnset($offset) {
-		$this->_recursiveUnset(explode('.', $offset));
+		$this->_recursiveUnset(explode(self::SEPARATOR, $offset));
 		$this->_countCache = null;
 		return $this;
 	}
@@ -153,7 +163,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	 * @return Iterator
 	 */
 	public function getIterator() {
-		return new RecursiveIteratorIterator(new RecursiveArrayIterator($this->_data));
+		return new ArrayIterator($this->_data);
 	}
 	
 	/**
@@ -205,17 +215,16 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	 * 		</code>
 	 * 		Fazemos:
 	 * 		<code>
-	 * 			Util_Array::_recursiveSet( 
+	 * 			Util_Array::_recursiveSet(array(),
 	 * 				array('foo', 'bar', 'baz'), 'bazzinga')
 	 * 		</code>  
 	 * 
-	 * @param array $keys
-	 * @param mixed $value
+	 * @param array &$data : referência para o array contendo os dados
+	 * @param array $keys : array de chaves para setar o valor $value 
+	 * @param mixed $value : o valor a setar
 	 * @return void
 	 */
-	protected function _recursiveSet(array $keys, $value) {
-		// Para operar sobre os dados, precisaremos utilizar suas referências...
-		$data =& $this->_data;
+	protected function _recursiveSet(array &$data, array $keys, $value) {
 		/*
 		 * O último elemento do array $keys é o nó-folha, 
 		 * ou seja, é ele que irá armazenar $value.
@@ -258,7 +267,21 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 		 * movendo o ponteiro corretamente, o nó-folha agora pode ser setado 
 		 * corretamente pois o valor de sua chave foi salvo anteriormente.
 		 */
-		$data[$last] = $value;
+		
+		
+		// Caso tenhamos um array em $value, é necessário repetir todo o processo.
+		if(is_array($value)) {
+			if(!isset($data[$last])) {
+				$data[$last] = array();
+			}
+			foreach($value as $key => $val) {
+				$this->_recursiveSet($data[$last], explode(self::SEPARATOR, $key), $val);
+			}
+		}
+		// Caso contrário, apenas setamos o valor 
+		else {
+			$data[$last] = $value;
+		}
 	}
 	
 	/**
@@ -352,12 +375,12 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 				 * tentando buscar é inválida.			
 				 */ 
 				else {
-					return $this->_invalidOffsetAccess(join('.', $keys));
+					return $this->_invalidOffsetAccess(join(self::SEPARATOR, $keys));
 				}
 			}
 			// Caso contrário, a chave é inválida. 
 			else {
-				return $this->_invalidOffsetAccess(join('.', $keys));
+				return $this->_invalidOffsetAccess(join(self::SEPARATOR, $keys));
 			}
 		} while(!empty($keysCopy));
 		// Retorno do caso 1.2
@@ -390,7 +413,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 			if(isset($data[$innerKey]) && is_array($data[$innerKey])) {
 				$data =& $data[$innerKey];
 			} else {
-				$this->_invalidOffsetAccess(join('.', $keys));
+				$this->_invalidOffsetAccess(join(self::SEPARATOR, $keys));
 			} 
 		}
 		unset($data[$last]);
@@ -410,7 +433,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	 * 
 	 * @see Util_Array::invalidOffsetThrowsException
 	 */
-	private function _invalidOffsetAccess($offset) {
+	protected function _invalidOffsetAccess($offset) {
 		if($this->_invalidOffsetThrowsException) {
 			throw new Exception('A chave "' . $offset . '" não existe no array.');
 		} else {

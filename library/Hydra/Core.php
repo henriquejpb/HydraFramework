@@ -10,6 +10,7 @@
 
 require_once 'Localization.php';
 require_once 'Loader.php';
+require_once 'Util/Array.php';
 
 class Core {
 	const VERSION = '1.0';
@@ -30,7 +31,7 @@ class Core {
 	const SYSTEM_DIR	= 'systemDir';
 	const LIBRARY_DIR	= 'libraryDir';
 	const CONFIG_DIR	= 'configDir';
-	const INIT_DIR		= 'initDir';
+	const INIT_DIR		= 'iniDir';
 	const DEF_DIR		= 'defDir';
 	
 	const LOCALIZATION	= 'localization';
@@ -112,7 +113,7 @@ class Core {
 	 * O diretório que contém as inicializações do sistema.
 	 * @var string
 	 */
-	private $_initDir = 'system/init/';
+	private $_iniDir = 'system/ini/';
 	
 	/**
 	 * O diretório que contém as definições do sistema.
@@ -230,7 +231,7 @@ class Core {
 					$this->_libraryDir = (string) $value;
 					break;
 				case self::INIT_DIR:
-						$this->_initDir = (string) $value;
+						$this->_iniDir = (string) $value;
 						break;
 				case self::DEF_DIR:
 						$this->_defDir = (string) $value;
@@ -499,7 +500,7 @@ class Core {
 	 * @param string
 	 */
 	public function setInitDir($dir) {
-		$this->_setPropertyDir('_initDir', $dir);
+		$this->_setPropertyDir('_iniDir', $dir);
 		return $this;
 	}
 	
@@ -507,7 +508,7 @@ class Core {
 	 * @return string
 	 */
 	public function getInitDir() {
-		return $this->_initDir;
+		return $this->_iniDir;
 	}
 	
 	/**
@@ -601,10 +602,10 @@ class Core {
 	 */
 	private function _setupEnvironment() {
 		if ($this->_environment == self::DEVELOPMENT) {
-			error_reporting(E_ALL);
+			error_reporting(E_ALL | E_STRICT);
 			ini_set('display_errors','On');
 		} else {
-			error_reporting(E_ALL);
+			error_reporting(E_ALL | E_STRICT);
 			ini_set('display_errors','Off');
 			ini_set('log_errors', 'On');
 			ini_set('error_log', $this->getLogDir().'error.log');
@@ -618,13 +619,15 @@ class Core {
 	 * @param string $ext
 	 * @throws Exception
 	 */
-	public function getInitFile($fileName, $ext = 'php') {
-		$filePath = $this->_initDir . $fileName . '.' . preg_replace('/^\./', '', $ext);
+	public function getIni($fileName, $ext = 'ini') {
+		$filePath = $this->_iniDir . $fileName . '.' . preg_replace('/^\./', '', $ext);
 		if(!is_file($filePath)) {
 			throw new Exception(sprintf('Arquivo de inicialização "%s" inexistente.', $filePath));
 		}
 	
-		return realpath($filePath);
+		$ini = parse_ini_file(realpath($filePath), true);
+		$array = Util_Array::fromArray($ini);
+		return $array;
 	}
 	
 	/**
