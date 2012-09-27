@@ -1,7 +1,7 @@
 <?php
 /**
  * Interface com uma tabela do banco de dados.
- * 
+ *
  * Modificado em: 07/03/2012
  * <h2>Modificações</h2>
  * <ul>
@@ -12,7 +12,7 @@
  * 		</ul>
  * 	</li>
  * </ul>
- * 
+ *
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Db_Table implements DataAccessLayer_Interface {
@@ -31,6 +31,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	const METADATA         		 	= 'metadata';
 	const METADATA_CACHE_IN_CLASS	= 'metadataCacheInClass';
 	const DEFINITION				= 'definition';
+	const CACHE_HANDLER 			= 'cacheHandler';
 
 	const COLUMNS			= 'columns';
 	const REF_TABLE			= 'refTable';
@@ -175,18 +176,32 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * @var array
 	 */
 	private $_defaultValues = array();
-	
+
 	/**
 	 * A definição da tabela.
 	 * @var Db_Table_Definition
 	 */
 	private $_definition;
-	
+
 	/**
 	 * A definição padrão para os objetos Db_Table
 	 * @var Db_Table_Definition
 	 */
 	private static $_defaultDefinition;
+
+	/**
+	 * O manipulador de cache que irá auxiliar o objeto Db_Table.
+
+	 * @var Cache_Facade_Abstract
+	 */
+	private $_cacheHandler;
+
+	/**
+	 * O manipulador padrão de cache que irá auxiliar o objeto Db_Table.
+	 *
+	 * @var Cache_Facade_Abstract
+	 */
+	private static $_defaultCacheHandler;
 
 	/**
 	 * Construtor.
@@ -216,7 +231,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		if($config) {
 			$this->setOptions($config);
 		}
-		
+
 		$this->_setup();
 		$this->init();
 	}
@@ -264,21 +279,26 @@ class Db_Table implements DataAccessLayer_Interface {
 					break;
 				case self::INTEGRITY_CHECK:
 					$this->setIntegrityCheck((bool) $value);
+					break;
 				case self::DEFINITION:
 					$this->setDefinition($value);
+					break;
+				case self::CACHE_HANDLER:
+					$this->setCacheHandler($value);
+					break;
 			}
 		}
 
 		return $this;
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getName() {
 		return $this->_name;
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -343,7 +363,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		if($onUpdate != null) {
 			$reference[self::ON_UPDATE] = $onUpdate;
 		}
-		
+
 		$this->_referenceMap[$ruleKey] = $reference;
 
 		return $this;
@@ -393,7 +413,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Adiciona uma tabela dependente desta.
-	 * 
+	 *
 	 * @param string $table : o nome da tabela dependente
 	 * @return Db_Table : fluent interface
 	 */
@@ -421,7 +441,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Seta a fonte de valores-padrão para as colunas da tabela.
-	 * 
+	 *
 	 * @param string $source
 	 * @return Db_Table : fluent interface
 	 */
@@ -441,7 +461,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Seta os valores-padrão para as colunas da tabela.
-	 * 
+	 *
 	 * @param array $defaultValues
 	 * @return Db_Table : fluent interface
 	 */
@@ -456,7 +476,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Retorna os valores-padrão para as colunas da tabela.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getDefaultValues() {
@@ -465,7 +485,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Seta a checagem de integridade de dependências.
-	 * 
+	 *
 	 * @param boolean $opt
 	 * @return Db_Table : fluent interface
 	 */
@@ -476,16 +496,16 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Retorna a configuração da checagem de integridade.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function getIntegrityCheck() {
 		return $this->_integrityCheck;
 	}
-	
+
 	/**
 	 * Seta um adapter padrão para todos os objetos Db_Table.
-	 * 
+	 *
 	 * @param Db_Adapter_Abstract $adapter : o adapter
 	 * @return void
 	 */
@@ -495,7 +515,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Retorna o adapter padrão para todos os objetos Db_Table.
-	 * 
+	 *
 	 * @return Db_Adapter_Abstract
 	 */
 	public static function getDefaultAdapter() {
@@ -504,7 +524,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Seta um adapter para este objeto.
-	 * 
+	 *
 	 * @param mixed $adapter : string ou Db_AdapterAbstract
 	 * @return Db_Table : fluent interface
 	 */
@@ -515,13 +535,13 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Retorna o adapter deste objeto.
-	 * 
+	 *
 	 * @return Db_Adapter_Abstract
 	 */
 	public function getAdapter() {
 		return $this->_adapter;
 	}
-	
+
 	/**
 	 * Seta a definição da tabela.
 	 *
@@ -532,7 +552,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		$this->_definition = $definition;
 		return $this;
 	}
-	
+
 	/**
 	 * Retorna a definição da tabela.
 	 *
@@ -541,21 +561,21 @@ class Db_Table implements DataAccessLayer_Interface {
 	public function getDefinition() {
 		return $this->_definition;
 	}
-	
+
 	/**
 	 * Seta uma definição padrão para todos os objetos Db_Table.
 	 * Cada objeto Db_Table_Definition pode armazenar definições de várias tabelas.
-	 * 
+	 *
 	 * @param Db_Table_Definition $definition
 	 * @return void
 	 */
 	public static function setDefaultDefinition(Db_Table_Definition $definition){
 		self::$_defaultDefinition = $definition;
 	}
-	
+
 	/**
 	 * Retorna a definição padrão dos objetos Db_Table.
-	 * 
+	 *
 	 * @return Db_Table_Definition
 	 */
 	public static function getDefaultDefinition() {
@@ -587,6 +607,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		$this->_setupDefinition();
 		$this->_setupDatabaseAdapter();
 		$this->_setupTableName();
+		$this->_setupCache();
 	}
 
 	/**
@@ -616,17 +637,17 @@ class Db_Table implements DataAccessLayer_Interface {
 			list($this->_schema, $this->_name) = explode('.', $this->_name);
 		}
 	}
-	
+
 	/**
 	 * Se nenhuma definição foi informada, utilizamos a definição padrão.
-	 * 
+	 *
 	 * @return void.
 	 */
 	private function _setupDefinition() {
 		if(!$this->_definition) {
 			$this->_definition = self::getDefaultDefinition();
 		}
-		
+
 		if($this->_definition instanceof Db_Table_Definition) {
 			$options = $this->_definition->getTableDefinition($this->_name);
 			if(is_array($options)) {
@@ -649,35 +670,46 @@ class Db_Table implements DataAccessLayer_Interface {
 		if($this->isMetadataCacheInClass() && (count($this->_metadata) > 0)) {
 			return true;
 		}
-		
+
 		$cacheName = $this->_getCacheName();
-		try {
-			$cacheContents = Cache::get(self::TABLE_CACHE_DIR, $cacheName);
-		} catch (Exception $e) {
-			$cacheContents = null;
+
+		$cacheContents = null;
+		if($this->_cacheHandler instanceof Cache_Facade_Abstract) {
+			try {
+				$cacheContents = $this->_cacheHandler->get(self::TABLE_CACHE_DIR, $cacheName);
+			} catch (Exception $e) {
+			}
 		}
-		
+
 		//Se o cache não existe...
 		if($cacheContents === null) {
 			$isMetadataFromCache = false;
 			$this->_metadata = $this->_adapter->describeTable($this->_name);
 			if(empty($this->_metadata)) {
 				throw new Db_Table_Exception('Impossível obter a descrição da tabela "' . $this->_name . '".
-						 Verifique se tal tabela existe.');				
+						 Verifique se tal tabela existe.');
 			}
-			try {
-				Cache::set(self::TABLE_CACHE_DIR, $cacheName, $this->_metadata, '+ 1 YEAR');
-			} catch(Cache_Exception $e) {
-				trigger_error(sprintf('Impossível salvar o arquivo de cache de metadados da tabela  "%s"', $this->_name), E_USER_NOTICE);
-			} catch (Exception $e) {
-				// Uma exceção do tipo Exception é lançada quando o cache está desabilitado.
+			if($this->_cacheHandler instanceof Cache_Facade_Abstract) {
+				try {
+					$this->_cacheHandler->set(self::TABLE_CACHE_DIR, $cacheName, $this->_metadata, '+ 1 YEAR');
+				} catch(Cache_WriteException $e) {
+					// Essa exceção será lançada quando o Cache estiver habilitado, mas não puder ser escrito
+					trigger_error(sprintf('Impossível salvar o arquivo de cache de metadados da tabela  "%s"',
+						$this->_name), E_USER_NOTICE);
+				} catch(Cache_DisabledException $e) {
+					// Essa exceção será lançada caso o Cache não esteja habilitado
+				}
 			}
 		} else {
 			$this->_metadata = $cacheContents;
 			$isMetadataFromCache = true;
 		}
+	}
 
-		return $isMetadataFromCache;
+	private function _setupCache() {
+		if($this->_cacheHandler === null) {
+			$this->_cacheHandler = self::$_defaultCacheHandler;
+		}
 	}
 
 	/**
@@ -688,8 +720,9 @@ class Db_Table implements DataAccessLayer_Interface {
 	private function _getCacheName() {
 		$dbConfig = $this->_adapter->getConfig();
 
-		// dbname:schema.table@host
-		$cacheName = $dbConfig['dbname'] . '.'
+		// schema.table@host-port
+		$class = get_class($this->_adapter);
+		$cacheName = str_replace('Db_Adapter_', '', $class) . '/' .$dbConfig['dbname'] . '.'
 			. $this->_getTableSpec()
 			. '@' . $dbConfig['host'];
 		if(isset($dbConfig['port'])) {
@@ -763,7 +796,7 @@ class Db_Table implements DataAccessLayer_Interface {
 			if(class_exists('Db_Adapter_Pdo_Pgsql')) {
 				$primary = (array) $this->_primary;
 				$pkIdentity = $primary[(int) $this->_identity];
-	
+
 				/**
 				 * Caso especial para PostgreSQL: uma chave SERIAL implícita usa
 				 * um objeto-sequência cujo nome é "<table>_<column>_seq".
@@ -776,7 +809,7 @@ class Db_Table implements DataAccessLayer_Interface {
 				}
 			}
 		} catch(Exception $e) {
-			
+
 		}
 	}
 
@@ -790,7 +823,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 		foreach($this->_referenceMap as $rule => $map) {
 			$refMapN[$rule] = array();
-				
+
 			foreach($map as $key => $value) {
 				switch($key) {
 					case self::COLUMNS:
@@ -939,10 +972,10 @@ class Db_Table implements DataAccessLayer_Interface {
 			$select = new Db_Select($this);
 			$oldData = (array) $this->_adapter->fetchAll($select);
 			$pk = $this->info('PRIMARY');
-				
+
 			$oldPkData = array_intersect($oldData, array_flip($pk));
 			$newPkData = array_intersect($data, array_flip($pk));
-				
+
 			foreach($this->_dependentTables as $depTable) {
 				$childTable = new self(array(
 					self::ADAPTER	=>	$this->_adapter,
@@ -978,11 +1011,11 @@ class Db_Table implements DataAccessLayer_Interface {
 						for($i = 0; $i < count($map[self::COLUMNS]); $i++) {
 							$col = $map[self::COLUMNS][$i];
 							$refCol = $map[self::REF_COLUMNS][$i];
-								
+
 							if(isset($newPrimaryKey[$refCol])) {
 								$newRefs[$col] = $newPrimaryKey[$refCol];
 							}
-								
+
 							$type = $this->_metadata[$col]['DATA_TYPE'];
 							$cond[] = $this->_adapter->quoteInto(
 								$this->_adapter->quoteIdentifier($col) . ' = ?',
@@ -1051,7 +1084,7 @@ class Db_Table implements DataAccessLayer_Interface {
 							$col = $map[self::COLUMNS][$i];
 							$refCol = $map[self::REF_COLUMNS][$i];
 							$type = $this->_metadata[$col]['DATA_TYPE'];
-								
+
 							$cond[] = $this->_adapter->quoteInto(
 								$this->_adapter->quoteIdentifier($col) . ' = ?',
 								$primaryKey[$refCol],
@@ -1098,7 +1131,7 @@ class Db_Table implements DataAccessLayer_Interface {
 			throw new Db_Table_Exception(sprintf('A chave primária da tabela "%s" é composta por %d colunas.
 														Foram passados %d valores para buscar.', $this->_name, $m, $n));
 		}
-		
+
 		$condList = array();
 		$numberTerms = 0;
 		foreach($pk as $val) {
@@ -1118,7 +1151,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Busca todas as linhas da tabela que satisfaçam os critérios.
-	 * 
+	 *
 	 * @param string|array|Db_Select $where
 	 * @param string|array $order
 	 * @param int $count
@@ -1130,23 +1163,23 @@ class Db_Table implements DataAccessLayer_Interface {
 			$select = $where;
 		} else {
 			$select = $this->select();
-				
+
 			if($where !== null) {
 				$this->_where($select, $where);
 			}
-				
+
 			if($order !== null) {
 				$this->_order($select, $order);
 			}
-				
+
 			if ($count !== null || $offset !== null) {
 				$select->limit($count, $offset);
-			}			
+			}
 		}
-		
+
 		$rows = $this->_fetch($select);
 		$readOnly = $this->_isReadOnly($select);
-		
+
 		$data = array(
 			'table'		=>	$this,
 			'data'		=>	$rows,
@@ -1154,14 +1187,14 @@ class Db_Table implements DataAccessLayer_Interface {
 			'rowClass'	=>	$this->getRowClass(),
 			'stored'	=>	true
 		);
-		
+
 		$rowsetClass = $this->getRowsetClass();
 		return new $rowsetClass($data);
 	}
-	
+
 	/**
 	 * Busca uma linha na tabela que satisfaçãm os critérios.
-	 *  
+	 *
 	 * @param string|array|Db_Select $where
 	 * @param string|array $order
 	 * @param int $offset
@@ -1172,23 +1205,23 @@ class Db_Table implements DataAccessLayer_Interface {
 			$select = $where->limit(1, $where->getPart(Db_Select::LIMIT_OFFSET));
 		} else {
 			$select = $this->select();
-				
+
 			if($where !== null) {
 				$this->_where($select, $where);
 			}
-				
+
 			if($order !== null) {
 				$this->_order($select, $order);
 			}
-				
+
 			$select->limit(1, (int) $offset);
 		}
-		
+
 		$rows = $this->_fetch($select);
 		if(empty($rows)) {
 			return null;
 		}
-		
+
 		$readOnly = $this->_isReadOnly($select);
 		$data = array(
 			'table'		=>	$this,
@@ -1196,11 +1229,11 @@ class Db_Table implements DataAccessLayer_Interface {
 			'readOnly'	=>	$readOnly,
 			'stored'	=>	true
 		);
-		
+
 		$rowClass = $this->getRowClass();
 		return new $rowClass($data);
 	}
-	
+
 	/**
 	 * Define se um Db_Select é somente-leitura.
 	 *
@@ -1210,15 +1243,15 @@ class Db_Table implements DataAccessLayer_Interface {
 	final protected function _isReadOnly(Db_Select $select) {
 		$cols = $select->getPart(Db_Table::COLUMNS);
 		$tableFields = $this->info(self::COLS);
-	
+
 		foreach($cols as $colEntry) {
 			$column = $colEntry['colName'];
 			$alias = $colEntry['colAlias'];
-				
+
 			if($alias !== null) {
 				$column = $alias;
 			}
-				
+
 			if(($column !== Db_Select::SQL_WILDCARD
 					&& !in_array($column, $tableFields))
 					|| $column instanceof Db_Expression) {
@@ -1227,30 +1260,30 @@ class Db_Table implements DataAccessLayer_Interface {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Alias para fetchOne.
-	 * 
+	 *
 	 * @see Db_Table::fetchOne()
 	 */
 	public function fetchRow($where = null, $order = null, $offset = null) {
 		return $this->fetchOne($where, $order, $offset);
 	}
-	
+
 	/**
 	 * Cria uma nova linha para a tabela.
-	 *  
+	 *
 	 * @param array $data : os dados para popular a nova linha
 	 * @param string $defaultSource : fonte dos valores padrão para as colunas
 	 */
 	public function createEntry(array $data = array(), $defaultSource = null) {
 		$cols = $this->_getCols();
 		$defaults = array_combine($cols, array_fill(0, count($cols), null));
-		
+
 		if($defaultSource === null) {
 			$defaultSource = $this->_defaultSource;
 		}
-		
+
 		//TODO: verificar
 		if($defaultSource == self::DEFAULT_ADAPTER) {
 			$this->_setupMetadata();
@@ -1266,41 +1299,41 @@ class Db_Table implements DataAccessLayer_Interface {
 				}
 			}
 		}
-		
+
 		$rowData = array_intersect_key(array_replace($defaults, $data), $defaults);
-		
+
 		$config = array(
 			'table'		=>	$this,
 			'data'		=>	$rowData,
 			'readOnly'	=>	false,
 			'stored'	=>	false
 		);
-		
+
 		$rowClass = $this->getRowClass();
 		$row = new $rowClass($config);
-		
+
 		return $row;
 	}
-	
+
 	/**
 	 * Alias para createEntry.
-	 * 
+	 *
 	 * @see Db_Table::createEntry()
 	 */
 	public function createRow(array $data = array(), $defaultSource = null) {
 		return $this->createEntry($data, $defaultSource);
 	}
-	
+
 	/**
 	 * Gera uma cláusula WHERE a partir de um array ou string.
-	 * 
+	 *
 	 * @param Db_Select $select
 	 * @param string|array $where
 	 * @return Db_Select
 	 */
 	private function _where(Db_Select $select, $where) {
 		$where = (array) $where;
-		
+
 		foreach($where as $key => $val) {
 			if(is_int($key)) {
 				// $val é a condição por si só...
@@ -1311,30 +1344,30 @@ class Db_Table implements DataAccessLayer_Interface {
 				$select->where($key, $val);
 			}
 		}
-		
+
 		return $select;
 	}
-	
+
 	/**
 	 * Gera uma cláusula ORDER a partir de um array ou string.
-	 * 
+	 *
 	 * @param Db_Select $select
 	 * @param array|string $order
 	 * @return Db_Select
 	 */
 	private function _order(Db_Select $select, $order) {
 		$order = (array) $order;
-		
+
 		foreach($order as $val) {
 			$select->order($val);
 		}
-		
+
 		return $select;
 	}
-	
+
 	/**
 	 * Método de apoio para busca de linhas.
-	 * 
+	 *
 	 * @param Db_Select $select
 	 * @return array
 	 */
@@ -1343,13 +1376,50 @@ class Db_Table implements DataAccessLayer_Interface {
 		$data = $stmt->fetchAll(Db::FETCH_ASSOC);
 		return $data;
 	}
-	
+
 	/**
 	 * Converte a tabela em uma string, retornando o seu nome.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function __toString() {
 		return $this->_name;
+	}
+
+	/**
+	 * Retorna o manipulador de cache da classe.
+	 *
+	 * @return Cache_Facade_Abstract
+	 */
+	public static function getdefaultCacheHandler()
+	{
+	    return self::$_defaultCacheHandler;
+	}
+
+	/**
+	 * Seta o manipulador de cache da classe.
+	 *
+	 * @param Cache_Facade_Abstract $_defaultCacheHandler
+	 */
+	public static function setDefaultCacheHandler(Cache_Facade_Abstract $defaultCacheHandler){
+	    self::$_defaultCacheHandler = $defaultCacheHandler;
+	}
+
+	/**
+	 * Retorna o manipulador de cache para o objeto Db_Table.
+	 *
+	 * @return Cache_Facade_Abstract
+	 */
+	public function getCacheHandler() {
+	    return $this->_cacheHandler;
+	}
+
+	/**
+	 * Seta o manipulador de cache para o objeto Db_Table.
+	 *
+	 * @param Cache_Facade_Abstract $cacheHandler
+	 */
+	public function setCacheHandler(Cache_Facade_Abstract $cacheHandler) {
+	    $this->_cacheHandler = $cacheHandler;
 	}
 }

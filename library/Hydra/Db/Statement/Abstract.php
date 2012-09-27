@@ -141,7 +141,6 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::bindColumn()
 	 */
 	public function bindColumn($column, &$param, $type = null) {
@@ -150,7 +149,6 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::bindParam()
 	 */
 	public function bindParam($parameter, &$variable, $type = null, $length = null) {
@@ -181,7 +179,6 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::bindValue()
 	 */
 	public function bindValue($paramter, $value, $type = null) {
@@ -189,7 +186,6 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::fetchOne()
 	 */
 	public function fetchOne($mode = null, $col = null) {
@@ -207,7 +203,6 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::fetchAll()
 	 */
 	public function fetchAll($mode = null, $col = null) {
@@ -229,7 +224,6 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::fetchColumn()
 	 */
 	public function fetchColumn($col = 0) {
@@ -250,7 +244,6 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::fetchObject()
 	 */
 	public function fetchObject($class = 'stdClass', array $config = array()) {
@@ -278,7 +271,6 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	abstract protected function _doFetch($mode = null);
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see Db_Statement_Interface::setFetchMode()
 	 */
 	public function setFetchMode($mode) {

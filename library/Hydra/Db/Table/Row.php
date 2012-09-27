@@ -218,7 +218,6 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see ArrayAccess::offsetGet()
 	 */
 	public function offsetGet($offset) {
@@ -226,7 +225,6 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see ArrayAccess::offsetSet()
 	 */
 	public function offsetSet($offset, $value) {
@@ -234,7 +232,6 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see ArrayAccess::offsetExists()
 	 */
 	public function offsetExists($offset) {
@@ -242,7 +239,6 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see ArrayAccess::offsetUnset()
 	 */
 	public function offsetUnset($offset) {
@@ -250,7 +246,6 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * (non-PHPdoc)
 	 * @see IteratorAggregate::getIterator()
 	 */
 	public function getIterator() {

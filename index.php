@@ -2,12 +2,17 @@
 require_once 'library/Hydra/Core.php';
 
 $core = Core::getInstance(array(Core::ROOT => dirname(__FILE__)))
-	->setLocalization(new Localization('America/Campo_Grande', array('pt_BR', 'pt_BR.iso-8859-1', 'pt_BR.utf-8', 'portuguese')));
+	->setLocalization(
+		new Localization(
+			'America/Campo_Grande',
+			array('pt_BR', 'pt_BR.iso-8859-1', 'pt_BR.utf-8', 'portuguese')
+	)
+);
 
 require $core->getConfigFile('error_handling');
 
 /* O arquivo db_config.php deve ser um array da forma:
- * 
+ *
  * return array (
  *	'mysqli' => array(
  *		'host' => 'HOST',
@@ -15,33 +20,28 @@ require $core->getConfigFile('error_handling');
  *		'password' => 'SENHA',
  *		'dbname' => 'DB'
  *	)
- *); 
+ *);
  */
 $dbConf = $core->getIni('db_config');
 Db_Table::setDefaultAdapter(
 	Db::factory(
-		'Mysqli', 
-		$dbConf['mysqli']
+		'Pgsql',
+		$dbConf['pgsql']
 	)
 );
 
-Db_Table::setDefaultDefinition(
-	new Db_Table_Definition(
-		$core->getIni('table_def')
-	)
-);
+Db_Table::setDefaultCacheHandler(new Cache_Facade());
 
-// $table = new Db_Table(
-// 			array(
-// 				Db_Table::NAME => 'mesa',
-// 				Db_Table::ADAPTER => new Db_Adapter_Pgsql($dbConf['pgsql'])
-// 			)
-// 		);
-$table = new Db_Table('comments');
+// Db_Table::setDefaultDefinition(
+// 	new Db_Table_Definition(
+// 		$core->getIni('table_def')
+// 	)
+// );
 
-$select = $table->select()->where('id = ?');
-$stmt = $select->query(array('n' => '1'));
-var_dump($stmt->fetchOne());
+$table = new Db_Table('mesa');
+// $table = new Db_Table('comments');
+
+print_r($table->fetchAll()->toArray());
 // $row = $table->fetchOne($select);
 // var_dump($row->isReadOnly());
 // $row['status'] = 0;
