@@ -970,7 +970,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 		if($this->_integrityCheck === true && !empty($this->_dependentTables)) {
 			$select = new Db_Select($this);
-			$oldData = (array) $this->_adapter->fetchAll($select);
+			$oldData = (array) $this->_adapter->fetchAll($select, array(), Db::FETCH_ASSOC);
 			$pk = $this->info('PRIMARY');
 
 			$oldPkData = array_intersect($oldData, array_flip($pk));
@@ -1046,7 +1046,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 		if($this->_integrityCheck === true && !empty($this->_dependentTables)) {
 			$select = new Db_Select($this);
-			$data = (array) $this->_adapter->fetchAll($select);
+			$data = (array) $this->_adapter->fetchAll($select, array(), Db::FETCH_ASSOC);
 			$pk = $this->info('PRIMARY');
 
 			$pkData = array_intersect($data, array_flip($pk));
