@@ -1,6 +1,6 @@
 # HydraFramework
 
-O Hydra é um framework desenvolvido por mim para fins de aprendizado.
+O Hydra é um framework EM FASE DE DESENVOLVIMENTO para fins de aprendizado.
 
 Ele possui design modular, o que permite a utilização de seus pacotes de forma independente.
 
