@@ -1,6 +1,4 @@
-/.settings
-/.project
-/.buildpath
-/system/cache
+/system/cache/
+/system/log/
 /conv.sh
 
