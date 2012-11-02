@@ -1,13 +1,13 @@
 <?php
 /**
- * Define a interface para classes que podem ser utilizadas com o mÈtodo
+ * Define a interface para classes que podem ser utilizadas com o m√©todo
  * Db_Statement_Interface::fetchObject.
  *
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 interface Db_Fetchable_Interface {
 	/**
-	 * Retorna um valor sob a chave $key ou NULL, caso n„o exista.
+	 * Retorna um valor sob a chave $key ou NULL, caso n√£o exista.
 	 *
 	 * @param string $key
 	 * @return mixed
@@ -20,7 +20,7 @@ interface Db_Fetchable_Interface {
 	 * @param string $key
 	 * @param mixed $newVal
 	 * @return Db_Fetchable_Interface : fluent interface
-	 * @throws Db_Fetchable_Exception caso n„o exista a chave $key
+	 * @throws Db_Fetchable_Exception caso n√£o exista a chave $key
 	 */
 	public function set($key, $newVal);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Camada básica se funções de segurança.
+ * Camada bÃ¡sica se funÃ§Ãµes de seguranÃ§a.
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 abstract class Security {

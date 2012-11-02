@@ -7,40 +7,40 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	protected $_data = array();
 
 	/**
-	 * Este atributo È setado como uma cÛpia dos dados
-	 * quando estes s„o buscados na tabela do banco de dados
+	 * Este atributo √© setado como uma c√≥pia dos dados
+	 * quando estes s√£o buscados na tabela do banco de dados
 	 * ou especificado como uma nova tupla no construtor ou
-	 * quando dados 'sujos' s„o enviados ao banco de dados.
+	 * quando dados 'sujos' s√£o enviados ao banco de dados.
 	 * @var array
 	 */
 	protected $_cleanData = array();
 	
 	/**
 	 * Rastreia as colunas onde os dados foram atualizados,
-	 * para permitir operaÁıes de INSERT e UPDATE mais especÌficas
+	 * para permitir opera√ß√µes de INSERT e UPDATE mais espec√≠ficas
 	 * @var array
 	 */
 	protected $_modifiedFields = array();
 
 	/**
-	 * Inst‚ncia do objeto Db_Table que criou este objeto
+	 * Inst√¢ncia do objeto Db_Table que criou este objeto
 	 * @var Db_Table
 	 */
 	protected $_table = null;
 
 	/**
-	 * Se TRUE, temos uma referÍncia a um objeto Db_Table.
-	 * Ser· FALSE apÛs a desserializaÁ„o.
+	 * Se TRUE, temos uma refer√™ncia a um objeto Db_Table.
+	 * Ser√° FALSE ap√≥s a desserializa√ß√£o.
 	 * @var boolean
 	 */
 	protected $_connected = true;
 
 	/**
-	 * Uma linha pode ser marcada como somente leitura se ela contÈm
-	 * colunas que n„o s„o fisicamente representadas no schema da tabela
+	 * Uma linha pode ser marcada como somente leitura se ela cont√©m
+	 * colunas que n√£o s√£o fisicamente representadas no schema da tabela
 	 * (ex.: colunas avaliadas/Db_Expressions).
 	 *
-	 * Isso tambÈm pode ser configurado em tempo de execuÁ„o,
+	 * Isso tamb√©m pode ser configurado em tempo de execu√ß√£o,
 	 * para proteger os dados da linha.
 	 * @var boolean
 	 */
@@ -53,7 +53,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	protected $_tableName;
 
 	/**
-	 * As colunas que s„o chave prim·ria da linha
+	 * As colunas que s√£o chave prim√°ria da linha
 	 * @var array
 	 */
 	protected $_primary;
@@ -61,11 +61,11 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	/**
 	 * Construtor.
 	 *
-	 * Par‚metros de configuraÁ„o suportados:
-	 * - table		=>	(string) o nome da tabela ou a inst‚ncia de Db_Table
+	 * Par√¢metros de configura√ß√£o suportados:
+	 * - table		=>	(string) o nome da tabela ou a inst√¢ncia de Db_Table
 	 * - data		=>	(array) os dados das colunas nesta linha
-	 * - stored		=>	(boolean) se os dados s„o provindos do banco de dados ou n„o
-	 * - readOnly	=>	(boolean) se È permitido ou n„o alterar os dados desta linha
+	 * - stored		=>	(boolean) se os dados s√£o provindos do banco de dados ou n√£o
+	 * - readOnly	=>	(boolean) se √© permitido ou n√£o alterar os dados desta linha
 	 *
 	 * @param array $config
 	 * @throws Db_Table_Row_Exception
@@ -105,7 +105,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 
 	/**
 	 * Retorna o valor de um campo da tabela ou de um campo extra.
-	 * A precedÍncia È 
+	 * A preced√™ncia √© 
 	 * 	campo > campo extra
 	 *
 	 * @param string $columnName
@@ -114,7 +114,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	 */
 	public function get($columnName) {
 		if(!$this->exists($columnName)) {
-			throw new Db_Table_Row_Exception(sprintf('A coluna "%s" n„o existe na tabela "%s"', $columnName, $this->_tableName));
+			throw new Db_Table_Row_Exception(sprintf('A coluna "%s" n√£o existe na tabela "%s"', $columnName, $this->_tableName));
 		}
 		return $this->_data[$columnName];
 	}
@@ -129,7 +129,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	 */
 	public function set($columnName, $value) {
 		if(!$this->exists($columnName)) {
-			throw new Db_Table_Row_Exception(sprintf('A coluna "%s" n„o existe na tabela "%s"', $columnName, $this->_tableName));
+			throw new Db_Table_Row_Exception(sprintf('A coluna "%s" n√£o existe na tabela "%s"', $columnName, $this->_tableName));
 		}
 		
 		$this->_data[$columnName] = $value;
@@ -157,11 +157,11 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	 */
 	public function remove($columnName) {
 		if(!$this->exists($columnName)) {
-			throw new Db_Table_Row_Exception(sprintf('A coluna "%s" n„o existe na tabela "%s"', $columnName, $this->_tableName));
+			throw new Db_Table_Row_Exception(sprintf('A coluna "%s" n√£o existe na tabela "%s"', $columnName, $this->_tableName));
 		}
 
 		if($this->isConnected() && in_array($columnName, $this->_table->info(Db_Table::PRIMARY))) {
-			throw new Db_Table_Row_Exception(sprintf('A coluna "%s" È chave prim·ria na tabela "%s" e n„o pode ser removida', $columnName, $this->_tableName));
+			throw new Db_Table_Row_Exception(sprintf('A coluna "%s" √© chave prim√°ria na tabela "%s" e n√£o pode ser removida', $columnName, $this->_tableName));
 		}
 		
 		unset($this->_data[$columnName]);
@@ -199,7 +199,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * Retorna os dados para a serializaÁ„o.
+	 * Retorna os dados para a serializa√ß√£o.
 	 * 
 	 * @return array
 	 */
@@ -208,8 +208,8 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * N„o È esperado que uma linha desserializada tenha
-	 * acesso a uma conex„o ativa com o banco de dados
+	 * N√£o √© esperado que uma linha desserializada tenha
+	 * acesso a uma conex√£o ativa com o banco de dados
 	 * 
 	 * @return void
 	 */
@@ -279,14 +279,14 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	
 	/**
 	 * Inicializa o objeto.
-	 * … chamado no final do construtor {@link __construct()}
+	 * √â chamado no final do construtor {@link __construct()}
 	 */
 	public function init() {
 		
 	}
 	
 	/**
-	 * Retorna um objeto Db_Table ou null, se a linha est· 'desconectada'.
+	 * Retorna um objeto Db_Table ou null, se a linha est√° 'desconectada'.
 	 * 
 	 * @return Db_Table|null
 	 */
@@ -295,7 +295,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * Seta uma tabela para o objeto para restabelecer a conex„o
+	 * Seta uma tabela para o objeto para restabelecer a conex√£o
 	 * com o banco de dados para o objeto desserializado.
 	 * 
 	 * @param Db_Table $table
@@ -310,7 +310,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 		}
 		
 		if($table->getName() != $this->_tableName) {
-			throw new Db_Table_Row_Exception(sprintf('A tabela especificada "%s" n„o È a mesma configurada no objeto Db_Table_Row ("%s")', 
+			throw new Db_Table_Row_Exception(sprintf('A tabela especificada "%s" n√£o √© a mesma configurada no objeto Db_Table_Row ("%s")', 
 													$table->getName(), 
 													$this->_tableName
 											));
@@ -324,7 +324,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 		$rowCols = array_keys($this->_data);
 		 
 		if($tableCols != $rowCols) {
-			throw new Db_Table_Row_Exception(sprintf('As colunas da tabela (%s) n„o s„o as mesmas colunas da linha (%s)',
+			throw new Db_Table_Row_Exception(sprintf('As colunas da tabela (%s) n√£o s√£o as mesmas colunas da linha (%s)',
 													join(', ', $tableCols),
 													join(', ', $rowCols)
 											));
@@ -333,7 +333,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 		$tablePk = $info['primary'];
 		$rowPk = (array) $this->_primary;
 		if(!array_intersect($rowPk, $tablePk) == $rowPk) {
-			throw new Db_Table_Row_Exception(sprintf('A chave prim·ria da tabela (%s) n„o È a mesma da linha (%s)',
+			throw new Db_Table_Row_Exception(sprintf('A chave prim√°ria da tabela (%s) n√£o √© a mesma da linha (%s)',
 													join(', ', $tablePk),
 													join(', ', $rowPk)
 											));
@@ -344,7 +344,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * Retorna o nome da tabela ‡ qual o objeto est· vinculado.
+	 * Retorna o nome da tabela √† qual o objeto est√° vinculado.
 	 * 
 	 * @return string
 	 */
@@ -353,7 +353,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 
 	/**
-	 * Testa o status de conex„o do objeto.
+	 * Testa o status de conex√£o do objeto.
 	 * 
 	 * @return boolean
 	 */
@@ -362,7 +362,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * Testa se o objeto È somente-leitura.
+	 * Testa se o objeto √© somente-leitura.
 	 * 
 	 * @return boolean
 	 */
@@ -382,7 +382,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}	
 	
 	/**
-	 * Retorna uma inst‚ncia do objeto Db_Select
+	 * Retorna uma inst√¢ncia do objeto Db_Select
 	 * criado pelo objeto Db_Table pai deste objeto.
 	 * 
 	 * @param mixed $cols
@@ -397,19 +397,19 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	/**
 	 * Salva as propriedades no banco de dados.
 	 * 
-	 * Realiza inserÁıes e atualizaÁıes inteligentes e recarrega as 
+	 * Realiza inser√ß√µes e atualiza√ß√µes inteligentes e recarrega as 
 	 * propriedades com os valores atualizados da tabela em caso de sucesso.
 	 * 
-	 * @return mixed : a chave prim·ria do registro
+	 * @return mixed : a chave prim√°ria do registro
 	 * @throws Db_Table_Exception
 	 */
 	public function save() {
 		if($this->isReadOnly()) {
-			throw new Db_Table_Row_Exception('Este objeto Db_Table_Row est· marcado como somente-leitura.');
+			throw new Db_Table_Row_Exception('Este objeto Db_Table_Row est√° marcado como somente-leitura.');
 		}
-		/* Se _cleanData est· vazio,
-		 * temos uma operaÁ„o de inserÁ„o,
-		 * se n„o, temos uma atualizaÁ„o.
+		/* Se _cleanData est√° vazio,
+		 * temos uma opera√ß√£o de inser√ß√£o,
+		 * se n√£o, temos uma atualiza√ß√£o.
 		 */
 		if(empty($this->_cleanData)) {
 			return $this->_doInsert();
@@ -419,12 +419,12 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * Realiza a inserÁ„o dos dados da linha na tabela.
+	 * Realiza a inser√ß√£o dos dados da linha na tabela.
 	 * 
-	 * @return mixed : a chave-prim·ria da linha inserida
+	 * @return mixed : a chave-prim√°ria da linha inserida
 	 */
 	public function _doInsert() {
-		// LÛgica de prÈ-inserÁ„o
+		// L√≥gica de pr√©-inser√ß√£o
 		$this->_preInsert();
 		
 		$data = array_intersect_key($this->_data, $this->_modifiedFields);
@@ -439,7 +439,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 		
 		$this->_data = array_merge($this->_data, $newPk);
 		
-		// LÛgica de pÛs-inserÁ„o
+		// L√≥gica de p√≥s-inser√ß√£o
 		$this->_postInsert();
 		
 		// Atualiza _cleanData para refletir os dados que foram inseridos
@@ -451,16 +451,16 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	/**
 	 * Atualiza os dados da linha na tabela.
 	 * 
-	 * @return mixed: a chave prim·ria da linha alterada
+	 * @return mixed: a chave prim√°ria da linha alterada
 	 */
 	protected function _doUpdate() {
 		/* 
-		 * Cria uma express„o para a cl·usula WHERE
-		 * com base no valor da chave prim·ria
+		 * Cria uma express√£o para a cl√°usula WHERE
+		 * com base no valor da chave prim√°ria
 		 */
 		$where = $this->_getWhereQuery(false);
 
-		// LÛgica de prÈ-atualizaÁ„o
+		// L√≥gica de pr√©-atualiza√ß√£o
 		$this->_preUpdate();
 		
 		// Descobre quais colunas foram modificadas.
@@ -473,12 +473,12 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 			$table->update($diffData, $where);
 		}
 		
-		// LÛgica de pÛs-atualizaÁ„o
+		// L√≥gica de p√≥s-atualiza√ß√£o
 		$this->_postUpdate();
 		
 		/* Atualiza os dados caso triggers no SGBD 
 		 * tenham alterado o valor de qualquer coluna.
-		 * TambÈm reseta _cleanData 
+		 * Tamb√©m reseta _cleanData 
 		 */		
 		$this->refresh();
 		
@@ -494,28 +494,28 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	 * Remove a linha da tabela
 	 * 
 	 * @throws Db_Table_Row_Exception
-	 * @return int : o n˙mero de linhas removidas
+	 * @return int : o n√∫mero de linhas removidas
 	 */
 	public function delete() {
 		if($this->isReadOnly()) {
-			throw new Db_Table_Row_Exception('Este objeto Db_Table_Row est· marcado como somente-leitura.');
+			throw new Db_Table_Row_Exception('Este objeto Db_Table_Row est√° marcado como somente-leitura.');
 		}
 		
 		/* 
-		 * Cria uma express„o para a cl·usula WHERE
-		 * com base no valor da chave prim·ria
+		 * Cria uma express√£o para a cl√°usula WHERE
+		 * com base no valor da chave prim√°ria
 		 */
 		$where = $this->_getWhereQuery(false);
 		
-		// LÛgica de prÈ-remoÁ„o
+		// L√≥gica de pr√©-remo√ß√£o
 		$this->_preDelete();
 		
 		$table = $this->_getRequiredTable();
 		
-		// Executa a remoÁ„o
+		// Executa a remo√ß√£o
 		$result = $table->delete($where);
 		
-		// LÛgica de pÛs-remoÁ„o
+		// L√≥gica de p√≥s-remo√ß√£o
 		$this->_postDelete();
 		
 		/*
@@ -530,9 +530,9 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * Se o objeto Db_Table for necess·rio para executar uma operaÁ„o,
-	 * deve-se invocar este mÈtodo para busc·-lo.
-	 * Ele lanÁar· uma excess„o caso a tabela n„o seja encontrada.
+	 * Se o objeto Db_Table for necess√°rio para executar uma opera√ß√£o,
+	 * deve-se invocar este m√©todo para busc√°-lo.
+	 * Ele lan√ßar√° uma excess√£o caso a tabela n√£o seja encontrada.
 	 *
 	 * @return Db_Table
 	 * @throws Db_Table_Row_Exception
@@ -540,20 +540,20 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	protected function _getRequiredTable() {
 		$table = $this->getTable();
 		if(!$table instanceof Db_Table) {
-			throw new Db_Table_Row_Exception('O objeto Db_Table_Row n„o est· associado a um objeto Db_Table.');
+			throw new Db_Table_Row_Exception('O objeto Db_Table_Row n√£o est√° associado a um objeto Db_Table.');
 		}
 		return $table;
 	}
 	
 	/**
-	 * Retorna um array associativo contendo a chave prim·ria da linha
+	 * Retorna um array associativo contendo a chave prim√°ria da linha
 	 * 
 	 * @param boolean $useDirty
 	 * @throws Db_Table_Row_Exception
 	 */
 	protected function _getPrimaryKey($useDirty = false) {
 		if(!is_array($this->_primary)) {
-			throw new Db_Table_Row_Exception('A chave prim·ria deve estar setada como um array.');
+			throw new Db_Table_Row_Exception('A chave prim√°ria deve estar setada como um array.');
 		}
 		
 		$primary = array_flip($this->_primary);
@@ -565,7 +565,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 		
 		if(count($primary) != count($array)) {
 			throw new Db_Table_Row_Exception(sprintf(
-				'A tabela especificada "%s" n„o possui a mesma chave prim·ria (%s) que a linha (%s).',
+				'A tabela especificada "%s" n√£o possui a mesma chave prim√°ria (%s) que a linha (%s).',
 				$this->_tableName,
 				join(', ', $primary),
 				join(', ', $array)
@@ -576,10 +576,10 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * Gera uma cl·usula WHERE com base na chave prim·ria da linha.
+	 * Gera uma cl√°usula WHERE com base na chave prim√°ria da linha.
 	 * 
 	 * @param boolean $useDirty
-	 * @return array : array de cl·usulas WHERE
+	 * @return array : array de cl√°usulas WHERE
 	 */
 	protected function _getWhereQuery($useDirty = true) {
 		$where = array();
@@ -613,8 +613,8 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 		$row = $this->_getRequiredTable()->fetchOne($where);
 		
 		if($row === null) {
-			throw new Db_Table_Row_Exception('N„o foi possÌvel atualizar a linha da tabela. 
-											Erro ao busc·-la no banco de dados.');
+			throw new Db_Table_Row_Exception('N√£o foi poss√≠vel atualizar a linha da tabela. 
+											Erro ao busc√°-la no banco de dados.');
 		}
 		
 		$this->_data = $row->toArray();
@@ -623,56 +623,56 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * LÛgica de prÈ-inserÁ„o
+	 * L√≥gica de pr√©-inser√ß√£o
 	 */
 	protected function _preInsert() {
 		
 	}
 	
 	/**
-	 * LÛgica de pÛs-inserÁ„o
+	 * L√≥gica de p√≥s-inser√ß√£o
 	 */
 	protected function _postInsert() {
 	
 	}
 	
 	/**
-	 * LÛgica de prÈ-atualizaÁ„o
+	 * L√≥gica de pr√©-atualiza√ß√£o
 	 */
 	protected function _preUpdate() {
 	
 	}
 	
 	/**
-	 * LÛgica de pÛs-atualizaÁ„o
+	 * L√≥gica de p√≥s-atualiza√ß√£o
 	 */
 	protected function _postUpdate() {
 	
 	}
 	
 	/**
-	 * LÛgica de prÈ-remoÁ„o
+	 * L√≥gica de pr√©-remo√ß√£o
 	 */
 	protected function _preDelete() {
 	
 	}
 	
 	/**
-	 * LÛgica de pÛs-remoÁ„o
+	 * L√≥gica de p√≥s-remo√ß√£o
 	 */
 	protected function _postDelete() {
 	
 	}
 	
 	/**
-	 * Prepara uma referÍncia para uma tabela.
+	 * Prepara uma refer√™ncia para uma tabela.
 	 * 
-	 * Assegura que todas as referÍncias est„o setadas
+	 * Assegura que todas as refer√™ncias est√£o setadas
 	 * e devidamente formatadas.
 	 * 
 	 * @param Db_Table $dependent
 	 * @param Db_Table $parent
-	 * @param string|null $ruleKey : caso NULL, a primeira referÍncia encontrada ser· retornada
+	 * @param string|null $ruleKey : caso NULL, a primeira refer√™ncia encontrada ser√° retornada
 	 * @return array
 	 */
 	protected function _prepareReference(Db_Table $dependent, Db_Table $parent, $ruleKey = null) {
@@ -711,7 +711,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 			if ($type == 'object') {
 				$type = get_class($dependentTable);
 			}
-			throw new Db_Table_Row_Exception('A tabela dependente deve ser do tipo Db_Table, mas È do tipo ' . $type);			
+			throw new Db_Table_Row_Exception('A tabela dependente deve ser do tipo Db_Table, mas √© do tipo ' . $type);			
 		}
 		
 		if($select === null) {
@@ -758,7 +758,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 			if ($type == 'object') {
 				$type = get_class($parentTable);
 			}
-			throw new Db_Table_Row_Exception('A tabela pai deve ser do tipo Db_Table, mas È do tipo ' . $type);
+			throw new Db_Table_Row_Exception('A tabela pai deve ser do tipo Db_Table, mas √© do tipo ' . $type);
 		}
 		
 		if($select === null) {
@@ -799,11 +799,11 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	 * em um relacionamento N:N
 	 * 
 	 * @param Db_Table|string $matchTable : a tabela contendo os dados desejados
-	 * @param Db_Table|string $intersectionTable : a tabela de intersecÁ„o
-	 * @param string $callerRefRule : o nome da regra de referÍncia da tabela 
-	 * 								  atual para a tabela de intersecÁ„o
-	 * @param string $matchRefRule : o nome da regra de referÍncia da tabela
-	 * 								 de busca para a tabela de intersecÁ„o
+	 * @param Db_Table|string $intersectionTable : a tabela de intersec√ß√£o
+	 * @param string $callerRefRule : o nome da regra de refer√™ncia da tabela 
+	 * 								  atual para a tabela de intersec√ß√£o
+	 * @param string $matchRefRule : o nome da regra de refer√™ncia da tabela
+	 * 								 de busca para a tabela de intersec√ß√£o
 	 * @param Db_Select $select : um SQL SELECT statement personalizado 
 	 * @return Db_Table_Rowset
 	 * @throws Db_Table_Row_Exception
@@ -821,7 +821,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 			if ($type == 'object') {
 				$type = get_class($intersectionTable);
 			}
-			throw new Db_Table_Row_Exception('A tabela de intersecÁ„o deve ser do tipo Db_Table, mas È do tipo ' . $type);
+			throw new Db_Table_Row_Exception('A tabela de intersec√ß√£o deve ser do tipo Db_Table, mas √© do tipo ' . $type);
 		}
 		
 		if(is_string($matchTable)) {
@@ -833,7 +833,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 			if ($type == 'object') {
 				$type = get_class($matchTable);
 			}
-			throw new Db_Table_Row_Exception('A tabela de comparaÁ„o deve ser do tipo Db_Table, mas È do tipo ' . $type);
+			throw new Db_Table_Row_Exception('A tabela de compara√ß√£o deve ser do tipo Db_Table, mas √© do tipo ' . $type);
 		}
 		
 				
@@ -890,7 +890,7 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	}
 	
 	/**
-	 * Retorna uma inst‚ncia de Db_Table ou classe derivada
+	 * Retorna uma inst√¢ncia de Db_Table ou classe derivada
 	 * a partir de uma string contendo o nome da tabela ou classe.
 	 * @param string $tableName
 	 * @return Db_Table
@@ -898,12 +898,12 @@ class Db_Table_Row implements ArrayAccess, IteratorAggregate {
 	 */
 	protected function _getTableFromString($tableName) {
 		try {
-			// Caso a classe n„o exista, ir· lanÁar uma exceÁ„o do tipo ReflectionException
+			// Caso a classe n√£o exista, ir√° lan√ßar uma exce√ß√£o do tipo ReflectionException
 			$ref = new ReflectionClass($tableName);
 			if($ref->isSubclassOf('Db_Table')) {
 				return new $tableName($options);
 			} else {
-				throw new Db_Table_Row_Exception('A classe ' . $tableName . ' n„o È subclasse de Db_Table');
+				throw new Db_Table_Row_Exception('A classe ' . $tableName . ' n√£o √© subclasse de Db_Table');
 			}
 		} catch (ReflectionException $e) {
 			$options = array();

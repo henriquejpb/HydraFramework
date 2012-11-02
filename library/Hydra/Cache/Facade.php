@@ -20,7 +20,7 @@ class Cache_Facade extends Cache_Facade_Abstract {
 	const CACHE_EXTENSION = 'cache';
 
 	/**
-	 * Armazena o diretÛrio de cache.
+	 * Armazena o diret√≥rio de cache.
 	 * @var string
 	 */
 	private $_cacheDir;
@@ -28,7 +28,7 @@ class Cache_Facade extends Cache_Facade_Abstract {
 	/**
 	 * Construtor.
 	 *
-	 * @param string $cacheDir [OPTIONAL] : o diretÛrio-base para os arquivos de cache
+	 * @param string $cacheDir [OPTIONAL] : o diret√≥rio-base para os arquivos de cache
 	 */
 	public function __construct($cacheDir = null) {
 		if($cacheDir !== null) {
@@ -41,19 +41,19 @@ class Cache_Facade extends Cache_Facade_Abstract {
 	 */
 	public function set($directory, $fileName, $contents, $expires = null, $flag = null) {
 		if(!self::isCacheEnabled()) {
-			throw new Cache_DisabledException('O cache foi desabilitado nesta aplicaÁ„o!');
+			throw new Cache_DisabledException('O cache foi desabilitado nesta aplica√ß√£o!');
 		}
 
 		try {
 			$dir = new FileSystem_Directory($this->getCacheDir().$directory);
 		} catch (FileSystem_Directory_Exception $e) {
-			throw new Cache_WriteException(sprintf('Problemas ao criar do diterÛrio de cache "%s"', $directory));
+			throw new Cache_WriteException(sprintf('Problemas ao criar do diter√≥rio de cache "%s"', $directory));
 		}
 
 		$path = $dir->getPath().$fileName. '.' . self::CACHE_EXTENSION;
 
 		if(Cache_File::isFile($path) && !Cache_File::isWritable($path)) {
-			throw new Cache_WriteException('Permiss„o negada ao tentar escrever no arquivo de cache ' . $path);
+			throw new Cache_WriteException('Permiss√£o negada ao tentar escrever no arquivo de cache ' . $path);
 		}
 
 		if($contents instanceof Serializable) {
@@ -68,7 +68,7 @@ class Cache_Facade extends Cache_Facade_Abstract {
 			$cacheFile->setExpiration($expires);
 			return $cacheFile->write($contents, $mode);
 		} catch (FileSystem_File_Exception $e) {
-			throw new Cache_WriteException('ImpossÌ≠vel escrever no arquivo de cache em ' . $path);
+			throw new Cache_WriteException('Imposs√≠¬≠vel escrever no arquivo de cache em ' . $path);
 		}
 	}
 
@@ -102,7 +102,7 @@ class Cache_Facade extends Cache_Facade_Abstract {
 	 */
 	public function get($directory, $fileName) {
 		if(!self::isCacheEnabled()) {
-			throw new Cache_DisabledException('O cache foi desabilitado nesta aplicaÁ„o!');
+			throw new Cache_DisabledException('O cache foi desabilitado nesta aplica√ß√£o!');
 		}
 
 		if(!$this->exists($directory, $fileName)) {
@@ -124,15 +124,15 @@ class Cache_Facade extends Cache_Facade_Abstract {
 	}
 
 	/**
-	 * Seta o diretÛrio para os arquivos de cache.
+	 * Seta o diret√≥rio para os arquivos de cache.
 	 *
-	 * @param string $cacheDir : caminho absoluto para o diretÛrio
-	 * 		ou relatiovo ao diretÛrio padr„o de cache da aplicaÁ„o
+	 * @param string $cacheDir : caminho absoluto para o diret√≥rio
+	 * 		ou relatiovo ao diret√≥rio padr√£o de cache da aplica√ß√£o
 	 * @return Cache_Facade : fluent interface
 	 */
 	public function setCacheDir($cacheDir) {
 		$cacheDir = (string) $cacheDir;
-		// Caso seja um caminho realativo, deve ser relativo ao diretÛrio padr„o
+		// Caso seja um caminho realativo, deve ser relativo ao diret√≥rio padr√£o
 		if(strpos($cacheDir, '/') !== 0) {
 			$cacheDir = Core::getInstance()->getCacheDir() . $cacheDir;
 		}
@@ -141,12 +141,12 @@ class Cache_Facade extends Cache_Facade_Abstract {
 	}
 
 	/**
-	 * Retorna o diretÛrio de cache.
+	 * Retorna o diret√≥rio de cache.
 	 *
 	 * @return string
 	 */
 	public function getCacheDir() {
-		// Se n„o h· um diretÛrio de cache setado, usamos o padr„o
+		// Se n√£o h√° um diret√≥rio de cache setado, usamos o padr√£o
 		if($this->_cacheDir === null) {
 			$this->_cacheDir = Core::getInstance()->getCacheDir();
 		}
@@ -154,9 +154,9 @@ class Cache_Facade extends Cache_Facade_Abstract {
 	}
 
 	/**
-	 * Retorna uma inst‚ncia de Cache_File com base no diretÛrio e nome informados.
+	 * Retorna uma inst√¢ncia de Cache_File com base no diret√≥rio e nome informados.
 	 *
-	 * @param string $directory : o subdiretÛrio do arquivo
+	 * @param string $directory : o subdiret√≥rio do arquivo
 	 * @param string $fileName : o nome do arquivo
 	 * @return Cache_File
 	 */

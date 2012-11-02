@@ -7,7 +7,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	protected $_data = array();
 
 	/**
-	 * Instância de Db_Table pai deste objeto
+	 * InstÃ¢ncia de Db_Table pai deste objeto
 	 * @var Db_Table
 	 */
 	protected $_table;
@@ -19,7 +19,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	protected $_tableName;
 	
 	/**
-	 * É TRUE se temos uma referência a um objeto Db_Table ativo.
+	 * Ã‰ TRUE se temos uma referÃªncia a um objeto Db_Table ativo.
 	 * @var boolean
 	 */
 	protected $_connected = true;
@@ -43,19 +43,19 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	protected $_count = 0;
 	
 	/**
-	 * Coleção de instâncias de Db_Table_Row ou classes derivadas.
+	 * ColeÃ§Ã£o de instÃ¢ncias de Db_Table_Row ou classes derivadas.
 	 * @var array
 	 */
 	protected $_rows = array();
 	
 	/**
-	 * Se os dados neste objeto já estão armazenados no banco de dados.
+	 * Se os dados neste objeto jÃ¡ estÃ£o armazenados no banco de dados.
 	 * @var boolean
 	 */
 	protected $_stored = false;
 	
 	/**
-	 * Se os dados neste objeto são somente-leitura
+	 * Se os dados neste objeto sÃ£o somente-leitura
 	 * @var boolean
 	 */
 	protected $_readOnly = false;
@@ -63,14 +63,14 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	/**
 	 * Construtor.
 	 * 
-	 * Parâmetros de configuração possíveis:
-	 * - table 		: [Db_Table] a tabela ao qual este objeto está vinculado
+	 * ParÃ¢metros de configuraÃ§Ã£o possÃ­veis:
+	 * - table 		: [Db_Table] a tabela ao qual este objeto estÃ¡ vinculado
 	 * - rowClass	: [string] a classe para um objeto Db_Table_Row  
 	 * - data		: [array] os dados para armazenamento neste objeto
-	 * - readOnly	: [boolean] se os dados são somente-leitura
-	 * - stored		: [boolean] se os dados são provindos do banco de dados ou não
+	 * - readOnly	: [boolean] se os dados sÃ£o somente-leitura
+	 * - stored		: [boolean] se os dados sÃ£o provindos do banco de dados ou nÃ£o
 	 * 
-	 * @param array $config : os parâmetros de configuração
+	 * @param array $config : os parÃ¢metros de configuraÃ§Ã£o
 	 */
 	public function __construct(array $config) {
 		if(isset($config['table']) && $config['table'] instanceof Db_Table) {
@@ -110,8 +110,8 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Não é assumido que um objeto desserializado possua uma conexão 
-	 * com um banco de dados, logo, _connected é setado par FALSE.
+	 * NÃ£o Ã© assumido que um objeto desserializado possua uma conexÃ£o 
+	 * com um banco de dados, logo, _connected Ã© setado par FALSE.
 	 * 
 	 * @return void
 	 */
@@ -131,7 +131,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Retorna o estado de conexão do objeto.
+	 * Retorna o estado de conexÃ£o do objeto.
 	 * 
 	 * @return boolean
 	 */
@@ -149,7 +149,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Seta o objeto-tabela para restabelecer a conexão com o
+	 * Seta o objeto-tabela para restabelecer a conexÃ£o com o
 	 * banco de dados para o rowset que tenha sido desserializado.
 	 * 
 	 * @param Db_Table $table
@@ -157,8 +157,8 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	public function setTable(Db_Table $table) {
 		if($table->getName() !== $this->_tableName) {
 			throw new Db_Table_Rowset_Exception(sprintf(
-														'O objeto rowset pertence à tabela "%s", 
-														houve uma tentativa de associá-la a tabela "%s"', 
+														'O objeto rowset pertence Ã  tabela "%s", 
+														houve uma tentativa de associÃ¡-la a tabela "%s"', 
 														$this->_tableName,
 														$table->getName()
 													));
@@ -181,7 +181,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Retorna o nome da tabela ao qual o rowset está associado.
+	 * Retorna o nome da tabela ao qual o rowset estÃ¡ associado.
 	 * 
 	 * @return string
 	 */
@@ -190,8 +190,8 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * 'Rebobina' o iterador até o primeiro elemento.
-	 * Similar à função reset() para arrays em PHP.
+	 * 'Rebobina' o iterador atÃ© o primeiro elemento.
+	 * Similar Ã  funÃ§Ã£o reset() para arrays em PHP.
 	 * Requerido pela interface Iterator.
 	 * 
 	 * @return Iterator
@@ -204,7 +204,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	
 	/**
 	 * Retorna o elemento atual.
-	 * Similar à função current() para arrays em PHP.
+	 * Similar Ã  funÃ§Ã£o current() para arrays em PHP.
 	 * Requerido pela interface Iterator.
 	 * 
 	 * @return Db_Table_Row
@@ -220,7 +220,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	
 	/**
 	 * Retorna a chave do elemento atual.
-	 * Similar à função key() para arrays em PHP.
+	 * Similar Ã  funÃ§Ã£o key() para arrays em PHP.
 	 * Requerido pela interface Iterator.
 	 * 
 	 * @return int
@@ -231,8 +231,8 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Move o ponteiro para o próximo elemento.
-	 * Similar à função next() para arrays em PHP.
+	 * Move o ponteiro para o prÃ³ximo elemento.
+	 * Similar Ã  funÃ§Ã£o next() para arrays em PHP.
 	 * Requerido pela interface Iterator.
 	 * 
 	 * @return void
@@ -243,7 +243,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Checa se há um elemento válido após chamar prev() ou next().
+	 * Checa se hÃ¡ um elemento vÃ¡lido apÃ³s chamar prev() ou next().
 	 * Requerido pela interface Iterator.
 	 * 
 	 * @return boolean
@@ -254,7 +254,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Retorna o número de elementos na colenção.
+	 * Retorna o nÃºmero de elementos na colenÃ§Ã£o.
 	 * 
 	 * @return int
 	 * @see Countable::count()
@@ -264,10 +264,10 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Leva o iterador à posição $position.
+	 * Leva o iterador Ã  posiÃ§Ã£o $position.
 	 * Requerido pela interface SeekableIterator.
 	 * 
-	 * @param int $position : a posição de destino
+	 * @param int $position : a posiÃ§Ã£o de destino
 	 * @return Db_Table_Rowset : fluent interface
 	 * @throws OutOfBoundsException
 	 * @see SeekableIterator::seek()
@@ -275,7 +275,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	public function seek($position) {
 		$position = (int) $position;
 		
-		// Lança uma exceção se a posição não for válida ou não existir
+		// LanÃ§a uma exceÃ§Ã£o se a posiÃ§Ã£o nÃ£o for vÃ¡lida ou nÃ£o existir
 		$this->_requireOffset($position);
 		
 		$this->_pointer = $position;
@@ -283,7 +283,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Checa se um índice existe.
+	 * Checa se um Ã­ndice existe.
 	 * Requerido pela interface ArrayAccess.
 	 * 
 	 * @return boolean
@@ -295,7 +295,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Retorna a linha em um dado índice.
+	 * Retorna a linha em um dado Ã­ndice.
 	 * Requerido pela interface ArrayAccess.
 	 * 
 	 * @param string $offset
@@ -306,7 +306,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	public function offsetGet($offset) {
 		$offset = (int) $offset;
 		
-		// Lança uma exceção se a posição não for válida ou não existir
+		// LanÃ§a uma exceÃ§Ã£o se a posiÃ§Ã£o nÃ£o for vÃ¡lida ou nÃ£o existir
 		$this->_requireOffset($offset);
 		
 		$this->_pointer = $offset;
@@ -314,7 +314,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	}
 	
 	/**
-	 * Seta uma linha na posição $offset
+	 * Seta uma linha na posiÃ§Ã£o $offset
 	 * 
 	 * @param string $offset : esperado int
 	 * @param mixed $value : esperado Db_Table_Row
@@ -332,14 +332,14 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 												objetos do tipo Db_Table_Row. Tipo informado: ' . $type);
 		}
 		
-		// Lança uma exceção se a posição não for válida ou não existir
+		// LanÃ§a uma exceÃ§Ã£o se a posiÃ§Ã£o nÃ£o for vÃ¡lida ou nÃ£o existir
 		$this->_requireOffset($offset);
 		
 		$this[(int) $offset] = $value;
 	}
 	
 	/**
-	 * Remove uma linha na posição $offset
+	 * Remove uma linha na posiÃ§Ã£o $offset
 	 * 
 	 * @param string $offset : esperado int
 	 * @throws OutOfBoundsException
@@ -350,36 +350,36 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 		
 		unset($this->_data[(int) $offset]);
 		
-		// Reseta os índices do array
+		// Reseta os Ã­ndices do array
 		$this->_data = array_values($this->_data);
 		$this->_count = count($this->_data);
 		
-		// Se removermos o último elemento, estaremos apontando para uma posição inválida.
+		// Se removermos o Ãºltimo elemento, estaremos apontando para uma posiÃ§Ã£o invÃ¡lida.
 		if($this->_pointer >= $this->_count) {
-			//Assim, fazemos com que o ponteiro fique sempre na última posição.
+			//Assim, fazemos com que o ponteiro fique sempre na Ãºltima posiÃ§Ã£o.
 			$this->_pointer = $this->_count - 1;
 		}		
 	}
 	
 	/**
-	 * Lança uma exceção se a posição não for válida ou não existir
+	 * LanÃ§a uma exceÃ§Ã£o se a posiÃ§Ã£o nÃ£o for vÃ¡lida ou nÃ£o existir
 	 * @param string $offset
 	 * @throws OutOfBoundsException
 	 */
 	protected function _requireOffset($offset) {
 		if(!$this->offsetExists($offset)) {
-			throw new OutOfBoundsException(sprintf('O índice %d é ilegal.', $offset));
+			throw new OutOfBoundsException(sprintf('O Ã­ndice %d Ã© ilegal.', $offset));
 		}
 	}
 	
 	/**
-	 * Retorna uma linha na posição $position
+	 * Retorna uma linha na posiÃ§Ã£o $position
 	 * @param int $position
 	 * @param boolean $seek
 	 * @throws OutOfBoundsException
 	 */
 	public function getRow($position, $seek = false) {
-		// Lança uma exceção caso a posição $position não seja válida
+		// LanÃ§a uma exceÃ§Ã£o caso a posiÃ§Ã£o $position nÃ£o seja vÃ¡lida
 		$row = $this->_loadAndReturnRow($position);
 		
 		if($seek === true) {
@@ -403,12 +403,12 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	
 	
 	protected function _loadAndReturnRow($position) {
-		// Lança uma exceção caso $position não seja uma posição válida
+		// LanÃ§a uma exceÃ§Ã£o caso $position nÃ£o seja uma posiÃ§Ã£o vÃ¡lida
 		$this->_requireOffset($position);
 		
-		// Se não há um objeto-linha nesta posição...
+		// Se nÃ£o hÃ¡ um objeto-linha nesta posiÃ§Ã£o...
 		if(empty($this->_rows[$position])) {
-			// ... precisamos criá-lo
+			// ... precisamos criÃ¡-lo
 			$this->_rows[$position] = new $this->_rowClass(
 				array(
 					'table'		=>	$this->_table,

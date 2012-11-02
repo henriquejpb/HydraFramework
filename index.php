@@ -61,9 +61,9 @@ print_r($table->fetchAll()->toArray());
 // $headView->title = 'Teste CompositeView';
 // $headView->charset = 'iso-8859-1';
 
-// $contentView->header = '<header><h1>Isto é um HEADER!</h1></header>';
-// $contentView->aside = '<aside>Isto é um conteúdo lateral!</aside>';
-// $contentView->main = '<section id="main">Este é o conteúdo principal</section>';
+// $contentView->header = '<header><h1>Isto Ã© um HEADER!</h1></header>';
+// $contentView->aside = '<aside>Isto Ã© um conteÃºdo lateral!</aside>';
+// $contentView->main = '<section id="main">Este Ã© o conteÃºdo principal</section>';
 // $contentView->footer = '<footer>' . strftime ("%A, %d de %B de %Y") . '</footer>';
 
 // echo $homeView;

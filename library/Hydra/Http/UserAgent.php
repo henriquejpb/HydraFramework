@@ -1,17 +1,17 @@
 <?php
 /**
- * Armazena informações sobre o USER AGENT da requisição.
+ * Armazena informaÃ§Ãµes sobre o USER AGENT da requisiÃ§Ã£o.
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Http_UserAgent {
 	/**
-	 * Armazena as informações sobre o USER AGENT da requisição
+	 * Armazena as informaÃ§Ãµes sobre o USER AGENT da requisiÃ§Ã£o
 	 * @var array
 	 */
 	private static $info;
 
 	/**
-	 * Armazena os dados do arquivo de configuração contendo os USER AGENTS conhecidos
+	 * Armazena os dados do arquivo de configuraÃ§Ã£o contendo os USER AGENTS conhecidos
 	 * @var array
 	 */
 	private static $data;
@@ -30,8 +30,8 @@ class Http_UserAgent {
 	}
 
 	/**
-	 * Retorna informações sobre o user agent da requisição.
-	 * @param string|array|null $value : qual informação retornar. Valores possíveis:
+	 * Retorna informaÃ§Ãµes sobre o user agent da requisiÃ§Ã£o.
+	 * @param string|array|null $value : qual informaÃ§Ã£o retornar. Valores possÃ­veis:
 	 * <ul>
 	 * 	<li>browser</li>
 	 * 	<li>version</li>
@@ -40,7 +40,7 @@ class Http_UserAgent {
 	 *  	<li>raw</li>
 	 * </ul>
 	 *
-	 * Se nenhum valor for informado, serão retornados todos os possíveis.
+	 * Se nenhum valor for informado, serÃ£o retornados todos os possÃ­veis.
 	 *
 	 * @return string|array
 	 * @uses Core::getDefFile

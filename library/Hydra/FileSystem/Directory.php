@@ -1,30 +1,30 @@
 <?php
 /**
- * Representa um diretório no sistema de arquivos
+ * Representa um diretÃ³rio no sistema de arquivos
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class FileSystem_Directory extends FileSystem {
 	/**
-	 * Faz o escaneamento do diretório procurando apenas por diretórios
+	 * Faz o escaneamento do diretÃ³rio procurando apenas por diretÃ³rios
 	 * @var integer
 	 */
 	const ONLY_DIR 	= GLOB_ONLYDIR;
 
 	/**
-	 * Não ordena o resultado do escaneamento
+	 * NÃ£o ordena o resultado do escaneamento
 	 * @var integer
 	 */
 	const NO_SORT 	= GLOB_NOSORT;
 
 	/**
-	 * Array que armazena o conteúdo do diretório
+	 * Array que armazena o conteÃºdo do diretÃ³rio
 	 * @var array
 	 */
 	private $_contents = array();
 
 	/**
-	 * Construtor para um diretório. Se o caminho especificado não for um diretório,
-	 * haverá uma tentativa de criá-lo.
+	 * Construtor para um diretÃ³rio. Se o caminho especificado nÃ£o for um diretÃ³rio,
+	 * haverÃ¡ uma tentativa de criÃ¡-lo.
 	 *
 	 * @param string $path
 	 * @param integer $permissionMode
@@ -34,7 +34,7 @@ class FileSystem_Directory extends FileSystem {
 		if(!is_dir($path)){
 			$created = mkdir($path, $permissionMode, true);
 			if(!$created){
-				throw new FileSystem_Directory_Exception(sprintf('Impossível criar o diretório "%s"', $path));
+				throw new FileSystem_Directory_Exception(sprintf('ImpossÃ­vel criar o diretÃ³rio "%s"', $path));
 			}
 			
 			parent::__construct($path);
@@ -47,7 +47,7 @@ class FileSystem_Directory extends FileSystem {
 	}
 
 	/**
-	 * Retorna arquivo um dentro do diretório pelo seu nome, se existir.
+	 * Retorna arquivo um dentro do diretÃ³rio pelo seu nome, se existir.
 	 *
 	 * @param string $fileName
 	 * @return FileSystem_File | null
@@ -57,9 +57,9 @@ class FileSystem_Directory extends FileSystem {
 	}
 
 	/**
-	 * Retorna o subdiretório do diretório atual, se existir.
+	 * Retorna o subdiretÃ³rio do diretÃ³rio atual, se existir.
 	 *
-	 * @param string $dirName : o nome do subdiretório
+	 * @param string $dirName : o nome do subdiretÃ³rio
 	 * @return FileSystem_Directory | null
 	 */
 	public function getSubdir($dirName) {
@@ -67,10 +67,10 @@ class FileSystem_Directory extends FileSystem {
 	}
 
 	/**
-	 * Faz a busca por um nó (arquivo ou pasta) filho do diretório atual.
+	 * Faz a busca por um nÃ³ (arquivo ou pasta) filho do diretÃ³rio atual.
 	 *
-	 * @param string $name : o nome do nó
-	 * @param string $type : a classe que indica o tipo de nó (arquivo ou pasta)
+	 * @param string $name : o nome do nÃ³
+	 * @param string $type : a classe que indica o tipo de nÃ³ (arquivo ou pasta)
 	 * 								[FileSystem_Directory | FileSystem_File]
 	 */
 	private function _getChild($name, $type) {
@@ -85,9 +85,9 @@ class FileSystem_Directory extends FileSystem {
 	}
 
 	/**
-	 * Retorna o conteúdo do diretório.
+	 * Retorna o conteÃºdo do diretÃ³rio.
 	 *
-	 * @param string $pattern [OPCIONAL] : padrão glob
+	 * @param string $pattern [OPCIONAL] : padrÃ£o glob
 	 * @param integer $flags [OPCIONAL] : flags glob
 	 * @return array
 	 */
@@ -97,9 +97,9 @@ class FileSystem_Directory extends FileSystem {
 	}
 
 	/**
-	 * Retorna apenas os subdiretórios do diretório atual.
+	 * Retorna apenas os subdiretÃ³rios do diretÃ³rio atual.
 	 *
-	 * @param bool $recursive [OPCIONAL] : indica se a busca deve ser recursiva ou não
+	 * @param bool $recursive [OPCIONAL] : indica se a busca deve ser recursiva ou nÃ£o
 	 * @return array
 	 */
 	public function getSubDirectories($recursive = false) {
@@ -108,11 +108,11 @@ class FileSystem_Directory extends FileSystem {
 	}
 
 	/**
-	 * Escaneia o diretório atual
+	 * Escaneia o diretÃ³rio atual
 	 *
-	 * @param string $pattern : padrão glob
+	 * @param string $pattern : padrÃ£o glob
 	 * @param integer $flags [OPCIONAL] : flags glob
-	 * @param bool $recursive [OPCIONAL] : indica se o escaneamento deve ser recursivo ou não
+	 * @param bool $recursive [OPCIONAL] : indica se o escaneamento deve ser recursivo ou nÃ£o
 	 * @return array
 	 */
 	public function scan($pattern, $flags = 0, $recursive = false) {
@@ -121,17 +121,17 @@ class FileSystem_Directory extends FileSystem {
 	}
 
 	/**
-	 * Faz o escaneamento do diretório
+	 * Faz o escaneamento do diretÃ³rio
 	 *
-	 * @param string $pattern : padrão glob
+	 * @param string $pattern : padrÃ£o glob
 	 * @param integer $flags : flags glob
 	 * @param unknown_type $recursive
-	 * @param bool $recursive : indica se o escaneamento deve ser recursivo ou não
+	 * @param bool $recursive : indica se o escaneamento deve ser recursivo ou nÃ£o
 	 * @return array
 	 */
 	private function _doScan($pattern, $flags, $recursive){
 		if(!$this->_valid) {
-			throw new FileSystem_Directory_Exception(sprintf('O diretório "%s" é inválido!', $this->_path));
+			throw new FileSystem_Directory_Exception(sprintf('O diretÃ³rio "%s" Ã© invÃ¡lido!', $this->_path));
 		}
 
 		$scan = array();
@@ -156,7 +156,7 @@ class FileSystem_Directory extends FileSystem {
 	}
 
 	/**
-	 * Remove o diretório atual e todo o seu conteúdo.
+	 * Remove o diretÃ³rio atual e todo o seu conteÃºdo.
 	 *
 	 * @see FileSystem::delete()
 	 */
@@ -171,9 +171,9 @@ class FileSystem_Directory extends FileSystem {
 	}
 
 	/**
-	 * Verifica se o caminho é um diretório.
+	 * Verifica se o caminho Ã© um diretÃ³rio.
 	 *
-	 * @param string $path : o caminho para verificação
+	 * @param string $path : o caminho para verificaÃ§Ã£o
 	 */
 	public static function isDir($path) {
 		$realpath = realpath($path);
@@ -181,7 +181,7 @@ class FileSystem_Directory extends FileSystem {
 	}
 
 	/**
-	 * Transforma o diretório em uma representação array-árvore.
+	 * Transforma o diretÃ³rio em uma representaÃ§Ã£o array-Ã¡rvore.
 	 *
 	 * @return array
 	 */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Representa a resposta de uma requisiÁ„o.
+ * Representa a resposta de uma requisi√ß√£o.
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Controller_Response {
@@ -12,42 +12,42 @@ class Controller_Response {
 	private $_headers = array();
 
 	/**
-	 * Armazena os headers padr„o a serem enviados na resposta.
+	 * Armazena os headers padr√£o a serem enviados na resposta.
 	 *
 	 * @var array
 	 */
 	private static $_defaultHeaders = array();
 
 	/**
-	 * ContÈm o corpo da resposta.
+	 * Cont√©m o corpo da resposta.
 	 *
 	 * @var array
 	 */
 	private $_body = array();
 
 	/**
-	 * O cÛdigo do status da resposta.
+	 * O c√≥digo do status da resposta.
 	 *
 	 * @var integer
 	 */
 	private $_responseCode = 200;
 
 	/**
-	 * Pilha de exceÁıes.
+	 * Pilha de exce√ß√µes.
 	 *
 	 * @var array
 	 */
 	private $_exceptions = array();
 
 	/**
-	 * Se devemos ou n„o renderizar exceÁıes.
+	 * Se devemos ou n√£o renderizar exce√ß√µes.
 	 *
 	 * @var boolean
 	 */
 	private $_renderExceptions = false;
 
 	/**
-	 * Se devemos ou n„o lanÁar uma exceÁ„o caso alguma operaÁ„o sobre
+	 * Se devemos ou n√£o lan√ßar uma exce√ß√£o caso alguma opera√ß√£o sobre
 	 * headers tente ser executada depois dos mesmos terem sido enviados.
 	 *
 	 * @var unknown_type
@@ -65,7 +65,7 @@ class Controller_Response {
 	/**
 	 * Construtor.
 	 *
-	 * @param integer $code : o cÛdigo da resposta HTTP.
+	 * @param integer $code : o c√≥digo da resposta HTTP.
 	 */
 	public function __construct($headers = array(), $body = null, $code = null) {
 		$this->_headers = self::$_defaultHeaders;
@@ -98,7 +98,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Seta a flag para envio autom·tico da resposta ao navegador
+	 * Seta a flag para envio autom√°tico da resposta ao navegador
 	 *
 	 * @param boolean $opt
 	 * @return Controller_Response : fluent interface
@@ -109,8 +109,8 @@ class Controller_Response {
 	}
 
 	/**
-	 * Retorna a flag que indica se h· ou n„o envio autom·tico da
-	 * resposta ao servidor quando o objeto È destruÌdo.
+	 * Retorna a flag que indica se h√° ou n√£o envio autom√°tico da
+	 * resposta ao servidor quando o objeto √© destru√≠do.
 	 *
 	 * @return boolean
 	 */
@@ -120,7 +120,7 @@ class Controller_Response {
 
 	/**
 	 * Seta um header para a resposta.
-	 * Usando apenas 1 par‚metro, o header deve estar na forma:
+	 * Usando apenas 1 par√¢metro, o header deve estar na forma:
 	 * 		Header-Name:header_value
 	 *
 	 * @param string $name
@@ -135,7 +135,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Seta um header padr„o para todos os objetos Controller_Response.
+	 * Seta um header padr√£o para todos os objetos Controller_Response.
 	 *
 	 * @return void
 	 */
@@ -144,7 +144,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Faz a inserÁ„o de um header.
+	 * Faz a inser√ß√£o de um header.
 	 *
 	 * @param reference $var
 	 * @param string $name
@@ -156,7 +156,7 @@ class Controller_Response {
 		if($value === null) {
 			$pieces = explode(':', $name);
 			if(count($pieces) != 2) {
-				throw new Controller_Response_Exception(sprintf('Header "%s" inv·lido', $name));
+				throw new Controller_Response_Exception(sprintf('Header "%s" inv√°lido', $name));
 			}
 			$name = trim($pieces[0]);
 			$value = trim($pieces[1]);
@@ -166,7 +166,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Normaliza o nome de um header para o padr„o X-Capitalized-Header.
+	 * Normaliza o nome de um header para o padr√£o X-Capitalized-Header.
 	 *
 	 * @param string $name
 	 * @return string;
@@ -179,10 +179,10 @@ class Controller_Response {
 	}
 
 	/**
-	 * Se $headers È NULL, retorna os headers da resposta.
-	 * Se $headers È uma string, procura o valor do header 
+	 * Se $headers √© NULL, retorna os headers da resposta.
+	 * Se $headers √© uma string, procura o valor do header 
 	 * 		dentro do atributo $_headers e o retorna se encontrar.
-	 * Se $headers È um array, returna um array com os valores 
+	 * Se $headers √© um array, returna um array com os valores 
 	 * 		encontrados.
 	 *
 	 * @param array|string|NULL $headers
@@ -211,7 +211,7 @@ class Controller_Response {
 	/**
 	 * Limpa os headers da resposta.
 	 *
-	 * @param boolean $keepDefault : se os headers padr„o devem ou n„o ser mantidos.
+	 * @param boolean $keepDefault : se os headers padr√£o devem ou n√£o ser mantidos.
 	 * @return Controller_Response : fluent interface
 	 */
 	public function clearHeaders($keepDefault = true) {
@@ -255,7 +255,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Verifica se a resposta È de redirecionamento.
+	 * Verifica se a resposta √© de redirecionamento.
 	 *
 	 * @return boolean
 	 */
@@ -264,16 +264,16 @@ class Controller_Response {
 	}
 
 	/**
-	 * Seta um cÛdigo de status para a resposta HTTP.
+	 * Seta um c√≥digo de status para a resposta HTTP.
 	 *
 	 * @param integer $code
-	 * @throws Controller_Response_Exception : se o cÛdigo for inv·lido
+	 * @throws Controller_Response_Exception : se o c√≥digo for inv√°lido
 	 * @return Controller_Response : fluent interface
 	 */
 	public function setHttpResposeCode($code) {
 		$code = (int) $code;
 		if($code < 100 || $code > 599) {
-			throw new Controller_Response_Exception(sprintf('O cÛdigo de resposta HTTP %d È inv·lido', $code));
+			throw new Controller_Response_Exception(sprintf('O c√≥digo de resposta HTTP %d √© inv√°lido', $code));
 		}
 
 		$this->_responseCode = $code;
@@ -281,7 +281,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Retorna o cÛdigo de status da resposta HTTP.
+	 * Retorna o c√≥digo de status da resposta HTTP.
 	 *
 	 * @return integer
 	 */
@@ -290,12 +290,12 @@ class Controller_Response {
 	}
 
 	/**
-	 * Verifica se ainda È possÌvel enviar headers de resposta,
-	 * ou seja, se a saÌda para o navegador ainda n„o foi iniciada.
+	 * Verifica se ainda √© poss√≠vel enviar headers de resposta,
+	 * ou seja, se a sa√≠da para o navegador ainda n√£o foi iniciada.
 	 *
-	 * @param boolean $throwException : se TRUE, uma exceÁ„o È lanÁada uma exceÁ„o
-	 * 									caso n„o seja possÌvel enviar headers
-	 * @throws Controller_Response_Exception : se os headers j· foram enviados e $throwExcetion e
+	 * @param boolean $throwException : se TRUE, uma exce√ß√£o √© lan√ßada uma exce√ß√£o
+	 * 									caso n√£o seja poss√≠vel enviar headers
+	 * @throws Controller_Response_Exception : se os headers j√° foram enviados e $throwExcetion e
 	 * 									$this->_headersSentThrowException forem TRUE
 	 * @return boolean
 	 */
@@ -304,7 +304,7 @@ class Controller_Response {
 		$line = 0;
 		$sent = headers_sent($file, $line);
 		if($sent && $throw && $this->_headersSentThrowsException) {
-			throw new Controller_Response_Exception(sprintf('N„o È possÌvel enviar headers; SaÌda iniciada em %s, linha %d', $file, $line));
+			throw new Controller_Response_Exception(sprintf('N√£o √© poss√≠vel enviar headers; Sa√≠da iniciada em %s, linha %d', $file, $line));
 		}
 		return !$sent;
 	}
@@ -333,12 +333,12 @@ class Controller_Response {
 	}
 
 	/**
-	 * Seta o conte˙do do corpo da resposta.
+	 * Seta o conte√∫do do corpo da resposta.
 	 *
-	 * Se $name n„o È informado, resetamos o corpo da resposta
+	 * Se $name n√£o √© informado, resetamos o corpo da resposta
 	 * e colocamos $content no segmento 'default'.
 	 *
-	 * Se $name È uma string, adicionamos ao array do corpo o
+	 * Se $name √© uma string, adicionamos ao array do corpo o
 	 * $content sob a chave $name.
 	 *
 	 * @param string $content
@@ -357,7 +357,7 @@ class Controller_Response {
 
 	/**
 	 * Adiciona $content ao fim do segmento $name.
-	 * Se $name n„o È informado, utilizamos o segmento 'default'.
+	 * Se $name n√£o √© informado, utilizamos o segmento 'default'.
 	 *
 	 * @param string $content
 	 * @param string|null $name
@@ -382,7 +382,7 @@ class Controller_Response {
 	 * caso $name seja informado.
 	 *
 	 * @param string|null $name
-	 * @return boolean : FALSE caso o segmento $name n„o exista
+	 * @return boolean : FALSE caso o segmento $name n√£o exista
 	 */
 	public function clearBody($name = null) {
 		if($name !== null) {
@@ -400,11 +400,11 @@ class Controller_Response {
 	}
 
 	/**
-	 * Retorna o conte˙do do corpo da resposta.
+	 * Retorna o conte√∫do do corpo da resposta.
 	 *
-	 * Se $spec È FALSE, retorna os valores concatenados do array do corpo da resposta;
-	 * Se $spec È TRUE, retorna o prÛprio array do corpo da resposta;
-	 * Se $spec È o nome de um segmento do corpo, o conte˙do do segmento È adicionado.
+	 * Se $spec √© FALSE, retorna os valores concatenados do array do corpo da resposta;
+	 * Se $spec √© TRUE, retorna o pr√≥prio array do corpo da resposta;
+	 * Se $spec √© o nome de um segmento do corpo, o conte√∫do do segmento √© adicionado.
 	 *
 	 * @param boolean|string $spec
 	 * @return string|array|null
@@ -425,20 +425,20 @@ class Controller_Response {
 
 	/**
 	 * Adiciona um segmento nomeado ao fim do array do corpo da resposta.
-	 * Se o segmento j· existe, o seu conte˙do ser· substituÌdo.
+	 * Se o segmento j√° existe, o seu conte√∫do ser√° substitu√≠do.
 	 *
 	 * @param string $name
 	 * @param string $content
-	 * @throws Controller_Response_Exception : caso $name n„o seja uma string
+	 * @throws Controller_Response_Exception : caso $name n√£o seja uma string
 	 * @return Controller_Response : fluent interface
 	 */
 	public function append($name, $content) {
 		if(!is_string($name)) {
-			throw new Controller_Response_Exception('Chave de segmento de corpo inv·lida!
+			throw new Controller_Response_Exception('Chave de segmento de corpo inv√°lida!
 					Esperado string, dado ' . gettype($name));
 		}
 
-		// Se o segmento $name j· existe, iremos substituir seu conte˙do.
+		// Se o segmento $name j√° existe, iremos substituir seu conte√∫do.
 		if(isset($this->_body[$name])) {
 			unset($this->_body[$name]);
 		}
@@ -448,21 +448,21 @@ class Controller_Response {
 	}
 
 	/**
-	 * Adiciona um segmento nomeado ao inÌcio do array do corpo da resposta.
-	 * Se o segmento j· existe, o seu conte˙do ser· substituÌdo.
+	 * Adiciona um segmento nomeado ao in√≠cio do array do corpo da resposta.
+	 * Se o segmento j√° existe, o seu conte√∫do ser√° substitu√≠do.
 	 *
 	 * @param string $name
 	 * @param string $content
-	 * @throws Controller_Response_Exception : caso $name n„o seja uma string
+	 * @throws Controller_Response_Exception : caso $name n√£o seja uma string
 	 * @return Controller_Response : fluent interface
 	 */
 	public function prepend($name, $content) {
 		if(!is_string($name)) {
-			throw new Controller_Response_Exception('Chave de segmento de corpo inv·lida!
+			throw new Controller_Response_Exception('Chave de segmento de corpo inv√°lida!
 					Esperado string, dado ' . gettype($name));
 		}
 
-		// Se o segmento $name j· existe, iremos substituir seu conte˙do.
+		// Se o segmento $name j√° existe, iremos substituir seu conte√∫do.
 		if(isset($this->_body[$name])) {
 			unset($this->_body[$name]);
 		}
@@ -473,26 +473,26 @@ class Controller_Response {
 	}
 
 	/**
-	 * Insere um segmento nomeado no array de conte˙do do corpo da resposta.
+	 * Insere um segmento nomeado no array de conte√∫do do corpo da resposta.
 	 *
 	 * @param string $name : o nome do segmento
-	 * @param string $content : o conte˙do a ser adicionado
+	 * @param string $content : o conte√∫do a ser adicionado
 	 * @param string $parent [OPTIONAL] : o segmento pai do segmento inserido
 	 * @param boolean $beforeParent : se o segmento pai for informado, este
-	 * 		argumento indica se o conte˙do deve ser inserido antes ou depois
+	 * 		argumento indica se o conte√∫do deve ser inserido antes ou depois
 	 * 		do segmento pai.
-	 * @throws Controller_Response_Exception : se $name n„o for uma string ou se $parent
-	 * 		for diferente de NULL e n„o for uma string
+	 * @throws Controller_Response_Exception : se $name n√£o for uma string ou se $parent
+	 * 		for diferente de NULL e n√£o for uma string
 	 * @return Controller_Response : fluent interface
 	 */
 	public function insert($name, $content, $parent = null, $beforeParent = false) {
 		if(!is_string($name)) {
-			throw new Controller_Response_Exception('Chave de segmento de corpo inv·lida!
+			throw new Controller_Response_Exception('Chave de segmento de corpo inv√°lida!
 					Esperado string, dado ' . gettype($name));
 		}
 
 		if($parent !== null && !is_string($parent)) {
-			throw new Controller_Response_Exception('Chave de segmento pai inv·lida!
+			throw new Controller_Response_Exception('Chave de segmento pai inv√°lida!
 					Esperado string, dado ' . gettype($name));
 		}
 
@@ -512,7 +512,7 @@ class Controller_Response {
 			$loc++;
 		}
 
-		// Se estamos inserindo no comeÁo do array...
+		// Se estamos inserindo no come√ßo do array...
 		if($loc == 0) {
 			$this->_body = $ins + $this->_body;
 		}
@@ -520,7 +520,7 @@ class Controller_Response {
 		else if($loc >= count($this->_body)) {
 			$this->_body += $ins;
 		}
-		// Caso contr·rio, precisamos inserir numa posiÁ„o especÌfica...
+		// Caso contr√°rio, precisamos inserir numa posi√ß√£o espec√≠fica...
 		else {
 			$pre = array_slice($this->_body, 0, $loc, true);
 			$post = array_slice($this->_body, $loc, null, true);
@@ -531,7 +531,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Fornece a saÌda para o navegador, mostrano o conte˙do do corpo da resposta.
+	 * Fornece a sa√≠da para o navegador, mostrano o conte√∫do do corpo da resposta.
 	 *
 	 * @return void
 	 */
@@ -541,7 +541,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Seta uma exceÁ„o na resposta.
+	 * Seta uma exce√ß√£o na resposta.
 	 *
 	 * @param Exception $e
 	 * @return Controller_Response : fluent interface
@@ -552,7 +552,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Retorna a pilha de exceÁıes.
+	 * Retorna a pilha de exce√ß√µes.
 	 *
 	 * @return array
 	 */
@@ -561,7 +561,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Verifica se a resposta tem exceÁıes registradas.
+	 * Verifica se a resposta tem exce√ß√µes registradas.
 	 *
 	 * @return boolean
 	 */
@@ -570,7 +570,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Verifica se existem exceÁıes do tipo $type na respota.
+	 * Verifica se existem exce√ß√µes do tipo $type na respota.
 	 *
 	 * @param string $type
 	 * @return boolean
@@ -585,7 +585,7 @@ class Controller_Response {
 	}
 
 	/**
-	 * Verifica se existem exceÁıes com a mensagem $message na resposta.
+	 * Verifica se existem exce√ß√µes com a mensagem $message na resposta.
 	 *
 	 * @param string $message
 	 * @return boolean
@@ -600,9 +600,9 @@ class Controller_Response {
 	}
 
 	/**
-	 * Se devemos ou n„o renderizar as exceÁıes.
+	 * Se devemos ou n√£o renderizar as exce√ß√µes.
 	 *
-	 * Se nenhum argumento È passado, retorna o valor da flag;
+	 * Se nenhum argumento √© passado, retorna o valor da flag;
 	 * Se o argumento for booleano, seta a flag e retorna o valor setado.
 	 *
 	 * @param boolean|null $flag [OPCIONAL]
@@ -618,7 +618,7 @@ class Controller_Response {
 
 	/**
 	 * Envia a resposta para o navegador, incluindo os headers e
-	 * renderizando as exceÁıes, se requisitado.
+	 * renderizando as exce√ß√µes, se requisitado.
 	 *
 	 * @return void
 	 */

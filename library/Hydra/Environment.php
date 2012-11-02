@@ -1,11 +1,11 @@
 <?php
 /**
- * RepresentaÁ„o do ambiente do servidor.
+ * Representa√ß√£o do ambiente do servidor.
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 abstract class Environment {
 	/**
-	 * Retorna uma vari·vel do ambiente (em $_SERVER ou $_ENV).
+	 * Retorna uma vari√°vel do ambiente (em $_SERVER ou $_ENV).
 	 * 
 	 * @param string $key
 	 * @return string|null

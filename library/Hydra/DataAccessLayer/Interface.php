@@ -11,31 +11,31 @@ interface DataAccessLayer_Interface {
 	/**
 	 * Insere dados na base persistente.
 	 * 
-	 * @param array $data : dados para inserÁ„o
-	 * @return mixed : o identificador ("chave-prim·ria") dos dados inseridos.
+	 * @param array $data : dados para inser√ß√£o
+	 * @return mixed : o identificador ("chave-prim√°ria") dos dados inseridos.
 	 */
 	public function insert(array $data);
 	
 	/**
-	 * Atualiza dados na base persistente, com base na condiÁ„o $cond.
+	 * Atualiza dados na base persistente, com base na condi√ß√£o $cond.
 	 * 
-	 * @param array $data : dados para a atualizaÁ„o
-	 * @param mixed $cond : a condiÁ„o para atualizaÁ„o
-	 * @return int : o n˙mero de registros afetados 
+	 * @param array $data : dados para a atualiza√ß√£o
+	 * @param mixed $cond : a condi√ß√£o para atualiza√ß√£o
+	 * @return int : o n√∫mero de registros afetados 
 	 */
 	public function update(array $data, $cond);
 	
 	/**
-	 * Remove dados da base persistente, com base na condiÁ„o $cond.
+	 * Remove dados da base persistente, com base na condi√ß√£o $cond.
 	 * 
-	 * @param mixed $cond : a condiÁ„o para remoÁ„o
+	 * @param mixed $cond : a condi√ß√£o para remo√ß√£o
 	 */
 	public function delete($cond);
 	
 	/**
-	 * Retorna um registro da base persistente com base no seu identificador ˙nico.
+	 * Retorna um registro da base persistente com base no seu identificador √∫nico.
 	 * 
-	 * @param mixed $id : o identificador ("chave-prim·ria") do registro
+	 * @param mixed $id : o identificador ("chave-prim√°ria") do registro
 	 * @return Traversable
 	 */
 	public function getById($id);
@@ -43,10 +43,10 @@ interface DataAccessLayer_Interface {
 	/**
 	 * Retorna um conjunto de registros da base persistente.
 	 * 
-	 * @param mixed $where : condiÁ„o para a busca na base
+	 * @param mixed $where : condi√ß√£o para a busca na base
 	 * @param mixed $order : como ordenar os registros buscados
 	 * @param int $count : quantos registros buscar
-	 * @param int $offset : a partir de qual registro comeÁar a busca
+	 * @param int $offset : a partir de qual registro come√ßar a busca
 	 * @return Traversable
 	 */
 	public function fetchAll($where = null, $order = null, $count = null, $offset = null);
@@ -54,27 +54,27 @@ interface DataAccessLayer_Interface {
 	/**
 	 * Retorna um registro da base persistente.
 	 * 
-	 * @param mixed $where : condiÁ„o para a busca na base
+	 * @param mixed $where : condi√ß√£o para a busca na base
 	 * @param mixed $order : como ordenar a busca
-	 * @param int $offset : o registro a partir do qual comeÁar a busca
-	 * @return mixed : o registro buscado ou null, caso nenhum atenda as especificaÁıes
+	 * @param int $offset : o registro a partir do qual come√ßar a busca
+	 * @return mixed : o registro buscado ou null, caso nenhum atenda as especifica√ß√µes
 	 */
 	public function fetchOne($where = null, $order = null, $offset = null);
 	
 	/**
 	 * Cria um registro para ser inserido na base persistente.
 	 * @param array $data : os dados para inserir no registro criado
-	 * @param mixed $defaultSource : a origem dos dados, caso necess·rio algum preenchimento 
+	 * @param mixed $defaultSource : a origem dos dados, caso necess√°rio algum preenchimento 
 	 * 								 adicional
 	 */
 	public function createEntry(array $data = array(), $defaultSource = null);
 	
 	/**
-	 * Verifica se um dado identificador È "chave-prim·ria".
+	 * Verifica se um dado identificador √© "chave-prim√°ria".
 	 * 
 	 * @param string $identifier : o nome do identificador
 	 * @return boolean
-	 * @throws DataAccessLayer_Exception : caso o identificador n„o exista na estrutura de
+	 * @throws DataAccessLayer_Exception : caso o identificador n√£o exista na estrutura de
 	 * 									   armazenamento.
 	 */
 	public function isIdentity($identifier);

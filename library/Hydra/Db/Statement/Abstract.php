@@ -6,7 +6,7 @@
 abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 
 	/**
-	 * O statement a ní­vel de driver
+	 * O statement a nÃ­Â­vel de driver
 	 * @var object|resource
 	 */
 	protected $_stmt;
@@ -18,19 +18,19 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	protected $_adapter;
 
 	/**
-	 * O modo de busca no banco de dados (parão = Db::FETCH_ASSOC)
+	 * O modo de busca no banco de dados (parÃ£o = Db::FETCH_ASSOC)
 	 * @var Db::FETCH_*
 	 */
 	protected $_fetchMode = Db::FETCH_ASSOC;
 
 	/**
-	 * Associações í s colunas do resultado
+	 * AssociaÃ§Ãµes Ã­Â s colunas do resultado
 	 * @var array
 	 */
 	protected $_boundColumns = array();
 
 	/**
-	 * Associações de parâmetros da query
+	 * AssociaÃ§Ãµes de parÃ¢metros da query
 	 * @var array
 	 */
 	protected $_boundParams = array();
@@ -42,7 +42,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	protected $_sqlSplit = array();
 
 	/**
-	 * Placeholder de parâmetros na sentença SQL por posição em $_sqlSplit
+	 * Placeholder de parÃ¢metros na sentenÃ§a SQL por posiÃ§Ã£o em $_sqlSplit
 	 * @var array
 	 */
 	protected $_sqlParams = array();
@@ -51,7 +51,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	 * Construtor
 	 *
 	 * @param Db_Adapter_Abstract $adapter : o adapter relacionado a este statement
-	 * @param string|Db_Select $sql : a sentença SQL
+	 * @param string|Db_Select $sql : a sentenÃ§a SQL
 	 */
 	public function __construct(Db_Adapter_Abstract $adapter, $sql) {
 		$this->_adapter = $adapter;
@@ -64,7 +64,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 
 	/**
-	 * Prepara uma sentença SQL a ní­vel de driver
+	 * Prepara uma sentenÃ§a SQL a nÃ­Â­vel de driver
 	 * @param string $sql
 	 * @return void
 	 * @throws Db_Statement_Exception
@@ -72,7 +72,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	abstract protected function _prepare($sql);
 
 	/**
-	 * Faz o parse dos parâmetros embutidos na sentença SQL
+	 * Faz o parse dos parÃ¢metros embutidos na sentenÃ§a SQL
 	 * @param string $sql
 	 * @throws Db_Statement_Exception
 	 * @return void
@@ -81,12 +81,12 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 		$sql = $this->_stripQuoted($sql);
 
 		/*
-		 * Quebra a sentença SQL em pedaços, separando os placeholders.
+		 * Quebra a sentenÃ§a SQL em pedaÃ§os, separando os placeholders.
 		 *
 		 * Exemplo:
 		 * 			SELECT * FROM teste WHERE var1 = :campo1 AND var2 = :campo2
 		 *
-		 * É quebrado em:
+		 * Ã‰ quebrado em:
 		 * 	Array(
 		 * 		[0] => SELECT * FROM teste WHERE var1 =
 		 * 		[1] => :campo1
@@ -97,26 +97,26 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 		$this->_sqlSplit = preg_split('#(\?|\:[A-Za-z0-9_]+)#', $sql, -1,
 								PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
-		//Limpa os parâmetros, se houver algum
+		//Limpa os parÃ¢metros, se houver algum
 		$this->_sqlParams = array();
 
-		//Limpa os parâmetros associados, se houver
+		//Limpa os parÃ¢metros associados, se houver
 		$this->_bindParams = array();
 
 		foreach($this->_sqlSplit as $key => $each) {
 			if($each == '?' &&
 				!$this->_adapter->supportsParameters(Db_Adapter_Abstract::POSITIONAL_PARAMETERS)) {
-				throw new Db_Statement_Exception(sprintf('A variável de associação "%s" é inválida', $each));
+				throw new Db_Statement_Exception(sprintf('A variÃ¡vel de associaÃ§Ã£o "%s" Ã© invÃ¡lida', $each));
 			} else if($each[0] == ':' &&
 				!$this->_adapter->supportsParameters(Db_Adapter_Abstract::NAMED_PARAMETERS)) {
-				throw new Db_Statement_Exception(sprintf('A variável de associação "%s" é inválida', $each));
+				throw new Db_Statement_Exception(sprintf('A variÃ¡vel de associaÃ§Ã£o "%s" Ã© invÃ¡lida', $each));
 			}
 			$this->_sqlParams[] = $each;
 		}
 	}
 
 	/**
-	 * Retira as partes quotadas da sentença
+	 * Retira as partes quotadas da sentenÃ§a
 	 * @param string $sql
 	 */
 	protected function _stripQuoted($sql) {
@@ -153,7 +153,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	 */
 	public function bindParam($parameter, &$variable, $type = null, $length = null) {
 		if(!is_int($parameter) || !is_string($parameter)) {
-			throw new Db_Statement_Exception(sprintf('Posição de associação "%s" inválida', $parameter));
+			throw new Db_Statement_Exception(sprintf('PosiÃ§Ã£o de associaÃ§Ã£o "%s" invÃ¡lida', $parameter));
 		}
 
 		$position = null;
@@ -171,7 +171,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 		}
 
 		if($position === null) {
-			throw new Db_Statement_Exception(sprintf('Posição de associação "%s" inválida', $parameter));
+			throw new Db_Statement_Exception(sprintf('PosiÃ§Ã£o de associaÃ§Ã£o "%s" invÃ¡lida', $parameter));
 		}
 
 		$this->_boundParams[$position] =& $variable;
@@ -248,13 +248,13 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	 */
 	public function fetchObject($class = 'stdClass', array $config = array()) {
 		if(!class_exists($class)){
-			throw new Exception(sprintf('Classe "%s" não encontrada', $class));
+			throw new Exception(sprintf('Classe "%s" nÃ£o encontrada', $class));
 		}
 
 		$obj = new $class($config);
 		if(! $obj instanceof stdClass ||
 			! $obj instanceof Db_Fetchable) {
-			throw new Db_Adapter_Exception('A classe para o método fetchObject deve ser
+			throw new Db_Adapter_Exception('A classe para o mÃ©todo fetchObject deve ser
 				stdClass ou implementar a inteface Db_Fetchable_Interface');
 		}
 
@@ -290,7 +290,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 
 			default:
 				$this->closeCursor();
-				throw new Db_Statement_Exception('Mode de fetch inválido');
+				throw new Db_Statement_Exception('Mode de fetch invÃ¡lido');
 		}
 	}
 
@@ -303,7 +303,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 
 	/**
-	 * Retorna o statement a ní­vel de driver deste objeto
+	 * Retorna o statement a nÃ­Â­vel de driver deste objeto
 	 * @return object|resource|null
 	 */
 	public function getStatement() {

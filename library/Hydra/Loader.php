@@ -9,13 +9,13 @@ require_once 'Loader/Exception.php';
  * @version 0.8
  * 
  * <p>
- * 	Data de modificaÁ„o: 11/07/2011
+ * 	Data de modifica√ß√£o: 11/07/2011
  * </p>
- * <h2>Lista de ModificaÁıes</h2>
+ * <h2>Lista de Modifica√ß√µes</h2>
  * <ul>
  * 	<li>
- *		Loader agora È genÈrico, pode ser utilizado tanto para o Hydra, 
- *		quanto para mÛdulos de terceiros, que sigam a estrutura Zend.
+ *		Loader agora √© gen√©rico, pode ser utilizado tanto para o Hydra, 
+ *		quanto para m√≥dulos de terceiros, que sigam a estrutura Zend.
  * 	</li>
  * </ul>
  */
@@ -23,7 +23,7 @@ class Loader {
 	const DS = DIRECTORY_SEPARATOR;
 	
 	/**
-	 * Armazena o caminho para o diretÛrio base para autoload
+	 * Armazena o caminho para o diret√≥rio base para autoload
 	 * @var array
 	 */
 	private $_path;
@@ -34,16 +34,16 @@ class Loader {
 	 */
 	public function __construct($path) {
 		if(!is_dir($path)) {
-			throw new Exception('DiretÛrio inv·lido para autoload!');
+			throw new Exception('Diret√≥rio inv√°lido para autoload!');
 		}
 		$this->_path = $path;
 		spl_autoload_register(array($this, 'autoload'));
 	}
 	
 	/**
-	 * Respons·vel pelo autoloading.
+	 * Respons√°vel pelo autoloading.
 	 * @param string $className
-	 * @throw Loader_Exception : caso uma inst‚ncia de Core n„o seja configurada no bootstrap
+	 * @throw Loader_Exception : caso uma inst√¢ncia de Core n√£o seja configurada no bootstrap
 	 */
 	public function autoload($className) {
 		$file = str_replace('_', self::DS, $className);

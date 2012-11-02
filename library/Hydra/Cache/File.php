@@ -1,14 +1,14 @@
 <?php
 class Cache_File extends FileSystem_File {
 	/**
-	 * Define um prazo de expiraÁ„o padr„o
+	 * Define um prazo de expira√ß√£o padr√£o
 	 * @var string
 	 */
 	const DEFAULT_EXPIRATION = '+ 1 WEEK';
 
 	/**
-	 * Os primeiros 'n' bytes do arquivo de cache s„o informaÁıes sobre
-	 * o prÛprio arquivo (data de expiraÁ„o).
+	 * Os primeiros 'n' bytes do arquivo de cache s√£o informa√ß√µes sobre
+	 * o pr√≥prio arquivo (data de expira√ß√£o).
 	 * Por enquanto, definimos 'n' como 16:
 	 * 		15 bytes para o timestamp + 1 para uma quebra de linha.
 	 *
@@ -17,13 +17,13 @@ class Cache_File extends FileSystem_File {
 	const METADATA_SIZE = 16;
 
 	/**
-	 * Armazena uma unix-timestamp com a data de expiraÁ„o informada
+	 * Armazena uma unix-timestamp com a data de expira√ß√£o informada
 	 * @var integer
 	 */
 	private $_expires;
 
 	/**
-	 * Informa se a data de expiraÁ„o do arquivo foi modificada
+	 * Informa se a data de expira√ß√£o do arquivo foi modificada
 	 * @var boolean
 	 */
 	private $_expModified = false;
@@ -39,9 +39,9 @@ class Cache_File extends FileSystem_File {
 	}
 
 	/**
-	 * Destrutor: se a expiraÁ„o foi alterada e nenhuma operaÁ„o sobre
-	 * o arquivo foi executada, ao destruir a vari·vel, precisamos fazer
-	 * o update da data de expiraÁ„o
+	 * Destrutor: se a expira√ß√£o foi alterada e nenhuma opera√ß√£o sobre
+	 * o arquivo foi executada, ao destruir a vari√°vel, precisamos fazer
+	 * o update da data de expira√ß√£o
 	 */
 	public function __destruct() {
 		if($this->_expModified === true && $this->isValid()) {
@@ -71,14 +71,14 @@ class Cache_File extends FileSystem_File {
 		$buffer = str_pad($this->getExpiration(), self::METADATA_SIZE-1, '0', STR_PAD_LEFT)."\n";
 
 		//As flags podem ser concatenadas por meio do operador de bit |
-		//Para testar se a flag self::APPEND = 8 est· setada, precisamos de uma m·scara.
+		//Para testar se a flag self::APPEND = 8 est√° setada, precisamos de uma m√°scara.
 		$mask = self::APPEND;
 
-		//Aplicamos essa m·scara ‡ flag utilizando o operador de bit &
-		//e fazemos um shift 3 bits para a direita, pois 8 em bin·rio È 1000...
+		//Aplicamos essa m√°scara √† flag utilizando o operador de bit &
+		//e fazemos um shift 3 bits para a direita, pois 8 em bin√°rio √© 1000...
 		$isAppend = ($flags & $mask) >> 3;
 
-		//... e verificamos se seu valor È 1. Se for, temos uma concatenaÁ„o
+		//... e verificamos se seu valor √© 1. Se for, temos uma concatena√ß√£o
 		if($isAppend === 1) {
 			$buffer = $this->read();
 		}
@@ -90,7 +90,7 @@ class Cache_File extends FileSystem_File {
 	}
 
 	/**
-	 * Seta a data de expiraÁ„o do arquivo de cache
+	 * Seta a data de expira√ß√£o do arquivo de cache
 	 *
 	 * @param string|integer $expires :
 	 * 		Integer: uma unix-timestamp
@@ -98,10 +98,10 @@ class Cache_File extends FileSystem_File {
 	 * @return Cache_File : Fluent Interface
 	 */
 	public function setExpiration($expires) {
-		//Se um valor inteiro È informado, ent„o supıe-se que È uma unix-timestamp
+		//Se um valor inteiro √© informado, ent√£o sup√µe-se que √© uma unix-timestamp
 		if(is_int($expires)) {
 			$this->_expires = $expires;
-		//Se n„o, esperamos uma string que possa ser convertida em timestamp
+		//Se n√£o, esperamos uma string que possa ser convertida em timestamp
 		} else {
 			$this->_expires = strtotime($expires);
 		}
@@ -111,7 +111,7 @@ class Cache_File extends FileSystem_File {
 	}
 
 	/**
-	 * Retorna a data de expiraÁ„o do arquivo de cache
+	 * Retorna a data de expira√ß√£o do arquivo de cache
 	 *
 	 * @return integer
 	 */
@@ -128,7 +128,7 @@ class Cache_File extends FileSystem_File {
 	}
 
 	/**
-	 * Verifica se o arquivo de cache n„o est· expirado
+	 * Verifica se o arquivo de cache n√£o est√° expirado
 	 *
 	 * @return boolean
 	 */

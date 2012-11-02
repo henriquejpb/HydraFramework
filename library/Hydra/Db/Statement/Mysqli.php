@@ -14,7 +14,7 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	private $_values;
 	
 	/**
-	 * Dados sobre o prÛprio statement
+	 * Dados sobre o pr√≥prio statement
 	 * @var array
 	 */
 	private $_metaData = null;
@@ -106,13 +106,13 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 
 		$stmtParams = array();
 		if(!empty($params)) {
-			/* O primeiro par‚metro passado para o mÈtodo bind_param deve conter uma string 
-			 * contendo os formatos dos par‚metros, tal como a funÁ„o sprintf, mas sem o '%'
-			 * Assumimos aqui que todos os par‚metros s„o strings, por isso o 's'
+			/* O primeiro par√¢metro passado para o m√©todo bind_param deve conter uma string 
+			 * contendo os formatos dos par√¢metros, tal como a fun√ß√£o sprintf, mas sem o '%'
+			 * Assumimos aqui que todos os par√¢metros s√£o strings, por isso o 's'
 			 */
 			array_unshift($params, str_repeat('s', count($params)));
 			
-			//bind_param precisa de referÍncias como par‚metros
+			//bind_param precisa de refer√™ncias como par√¢metros
             foreach ($params as $k => &$value) {
                 $stmtParams[$k] = &$value;
             }
@@ -127,15 +127,15 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 		
 		$ret = $this->_stmt->execute();
 		if($ret === false) {
-			throw new Db_Statement_Mysqli_Exception('Erro de execuÁ„o MySQLi Statement: ' . $this->_stmt->error, $this->_stmt->errno);
+			throw new Db_Statement_Mysqli_Exception('Erro de execu√ß√£o MySQLi Statement: ' . $this->_stmt->error, $this->_stmt->errno);
 		}
 		
 		$this->_metaData = $this->_stmt->result_metadata();
 		if($this->_stmt->errno) {
-			throw new Db_Statement_Mysqli_Exception('Erro na obtenÁ„o dos metadados MySQLi: ' . $this->_stmt->error, $this->_stmt->errno);
+			throw new Db_Statement_Mysqli_Exception('Erro na obten√ß√£o dos metadados MySQLi: ' . $this->_stmt->error, $this->_stmt->errno);
 		}
 		
-		//Vai retornar false se executarmos operaÁıes que n„o sejam SELECT
+		//Vai retornar false se executarmos opera√ß√µes que n√£o sejam SELECT
 		if($this->_metaData !== false) {
 			$this->_keys = array();
 			foreach($this->_metaData->fetch_fields() as $col) {
@@ -201,7 +201,7 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 				$row = (object) array_combine($this->_keys, $values);
 				break;
 			default:
-				throw new Db_Statement_Mysqli_Exception('Modo de fetch inv·lido!');
+				throw new Db_Statement_Mysqli_Exception('Modo de fetch inv√°lido!');
 		}
 		return $row;
 	}
@@ -210,7 +210,7 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	 * @see Db_Statement_Interface::nextRowset()
 	 */
 	public function nextRowset() {
-		throw new Db_Statement_Mysqli_Exception('MySQLi n„o suporta esta operaÁ„o: ' . __FUNCTION__ . '()');	
+		throw new Db_Statement_Mysqli_Exception('MySQLi n√£o suporta esta opera√ß√£o: ' . __FUNCTION__ . '()');	
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 <?php
 /**
- * GeraÁ„o de SQL SELECTS
+ * Gera√ß√£o de SQL SELECTS
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Db_Select {
@@ -42,7 +42,7 @@ class Db_Select {
 	const SQL_DESC       = 'DESC';
 
 	/**
-	 * Par‚metros associados ‡ query
+	 * Par√¢metros associados √† query
 	 * @var array
 	 */
 	protected $_boundParams = array();
@@ -114,7 +114,7 @@ class Db_Select {
 	}
 
 	/**
-	 * Retorna os par‚metros associados ao select statement
+	 * Retorna os par√¢metros associados ao select statement
 	 * @return array;
 	 */
 	public function getBoundParams() {
@@ -122,7 +122,7 @@ class Db_Select {
 	}
 
 	/**
-	 * Retorna os par‚metros associados ao select statement
+	 * Retorna os par√¢metros associados ao select statement
 	 * @param array $params
 	 * @return void;
 	 */
@@ -158,14 +158,14 @@ class Db_Select {
 	 */
 	public function columns($columns = array(), $tableName = null) {
 		if($tableName === null && !empty($this->_parts[self::FROM])) {
-			/* Se n„o foi especificado o nome da tabela, pegamos o nome (ou alias)
-			 * da primeira tabela selecionada com o mÈtodo from()
+			/* Se n√£o foi especificado o nome da tabela, pegamos o nome (ou alias)
+			 * da primeira tabela selecionada com o m√©todo from()
 			*/
 			$tableName = current(array_keys($this->_parts[self::FROM]));
 		}
 
 		if(!array_key_exists($tableName, $this->_parts[self::FROM])) {
-			throw new Db_Select_Exception('Nenhuma tabela especificada para a cl·usula FROM');
+			throw new Db_Select_Exception('Nenhuma tabela especificada para a cl√°usula FROM');
 		}
 
 		$this->_tableCols($tableName, $columns);
@@ -173,7 +173,7 @@ class Db_Select {
 	}
 
 	/**
-	 * Adiciona uma cl·usula UNION ‡ query
+	 * Adiciona uma cl√°usula UNION √† query
 	 * @param array $selects : array de objetos Db_Select ou de strings sql
 	 * @param Db_Select::SQL_UNION_* $type : o tipo de union (UNION ou UNION ALL)
 	 * @throws Db_Select_Exception
@@ -182,12 +182,12 @@ class Db_Select {
 	public function union(array $selects, $type = self::SQL_UNION) {
 		if(!is_array($selects)) {
 			throw new Db_Select_Exception(
-				'union() aceita somente arrays de objetos Db_Select ou de sentenÁas sql (string)'
+				'union() aceita somente arrays de objetos Db_Select ou de senten√ßas sql (string)'
 			);
 		}
 
 		if(!in_array($type, self::$_unionTypes)) {
-			throw new Db_Select_Exception('Tipo de uni„o inv·lido: ' . $type);
+			throw new Db_Select_Exception('Tipo de uni√£o inv√°lido: ' . $type);
 		}
 
 		foreach($selects as $each) {
@@ -198,7 +198,7 @@ class Db_Select {
 	}
 
 	/**
-	 * Adiciona uma cl·usua UNION ALL ‡ query
+	 * Adiciona uma cl√°usua UNION ALL √† query
 	 * @param array $selects
 	 * @see Db_Select::union()
 	 * @return Db_Select : Fluent Interface
@@ -209,10 +209,10 @@ class Db_Select {
 
 
 	/**
-	 * Adiciona uma cl·usula JOIN ‡ query
+	 * Adiciona uma cl√°usula JOIN √† query
 	 * @param string $tableName : o nome da tabela
-	 * @param string $joinCond : a condiÁ„o de junÁ„o (ON)
-	 * @param array|string $columns : a(s) coluna(s) necess·ria(s) e/ou expressıes da tabela
+	 * @param string $joinCond : a condi√ß√£o de jun√ß√£o (ON)
+	 * @param array|string $columns : a(s) coluna(s) necess√°ria(s) e/ou express√µes da tabela
 	 * @param string $schema : o nome do schema
 	 * @return Db_Select : Fluent Interface
 	 */
@@ -221,10 +221,10 @@ class Db_Select {
 	}
 
 	/**
-	 * Adiciona uma cl·usula INNER JOIN ‡ query
+	 * Adiciona uma cl√°usula INNER JOIN √† query
 	 * @param string $tableName : o nome da tabela
-	 * @param string $joinCond : a condiÁ„o de junÁ„o (ON)
-	 * @param array|string $columns : a(s) coluna(s) necess·ria(s) e/ou expressıes da tabela
+	 * @param string $joinCond : a condi√ß√£o de jun√ß√£o (ON)
+	 * @param array|string $columns : a(s) coluna(s) necess√°ria(s) e/ou express√µes da tabela
 	 * @param string $schema : o nome do schema
 	 * @return Db_Select : Fluent Interface
 	 */
@@ -234,10 +234,10 @@ class Db_Select {
 
 
 	/**
-	 * Adiciona uma cl·usula LEFT [OUTER] JOIN ‡ query
+	 * Adiciona uma cl√°usula LEFT [OUTER] JOIN √† query
 	 * @param string $tableName : o nome da tabela
-	 * @param string $joinCond : a condiÁ„o de junÁ„o (ON)
-	 * @param array|string $columns : a(s) coluna(s) necess·ria(s) e/ou expressıes da tabela
+	 * @param string $joinCond : a condi√ß√£o de jun√ß√£o (ON)
+	 * @param array|string $columns : a(s) coluna(s) necess√°ria(s) e/ou express√µes da tabela
 	 * @param string $schema : o nome do schema
 	 * @return Db_Select : Fluent Interface
 	 */
@@ -246,10 +246,10 @@ class Db_Select {
 	}
 
 	/**
-	 * Adiciona uma cl·usula RIGHT [OUTER] JOIN ‡ query
+	 * Adiciona uma cl√°usula RIGHT [OUTER] JOIN √† query
 	 * @param string $tableName : o nome da tabela
-	 * @param string $joinCond : a condiÁ„o de junÁ„o (ON)
-	 * @param array|string $columns : a(s) coluna(s) necess·ria(s) e/ou expressıes da tabela
+	 * @param string $joinCond : a condi√ß√£o de jun√ß√£o (ON)
+	 * @param array|string $columns : a(s) coluna(s) necess√°ria(s) e/ou express√µes da tabela
 	 * @param string $schema : o nome do schema
 	 * @return Db_Select : Fluent Interface
 	 */
@@ -258,10 +258,10 @@ class Db_Select {
 	}
 
 	/**
-	 * Adiciona uma cl·usula FULL [OUTER] JOIN ‡ query
+	 * Adiciona uma cl√°usula FULL [OUTER] JOIN √† query
 	 * @param string $tableName : o nome da tabela
-	 * @param string $joinCond : a condiÁ„o de junÁ„o (ON)
-	 * @param array|string $columns : a(s) coluna(s) necess·ria(s) e/ou expressıes da tabela
+	 * @param string $joinCond : a condi√ß√£o de jun√ß√£o (ON)
+	 * @param array|string $columns : a(s) coluna(s) necess√°ria(s) e/ou express√µes da tabela
 	 * @param string $schema : o nome do schema
 	 * @return Db_Select : Fluent Interface
 	 */
@@ -270,9 +270,9 @@ class Db_Select {
 	}
 
 	/**
-	 * Adiciona uma cl·usula CROSS JOIN ‡ query
+	 * Adiciona uma cl√°usula CROSS JOIN √† query
 	 * @param string $tableName : o nome da tabelaORDER
-	 * @param array|string $columns : a(s) coluna(s) necess·ria(s) e/ou expressıes da tabela
+	 * @param array|string $columns : a(s) coluna(s) necess√°ria(s) e/ou express√µes da tabela
 	 * @param string $schema : o nome do schema
 	 * @return Db_Select : Fluent Interface
 	 */
@@ -281,9 +281,9 @@ class Db_Select {
 	}
 
 	/**
-	 * Adiciona uma cl·usula NATURAL INNER JOIN ‡ query
+	 * Adiciona uma cl√°usula NATURAL INNER JOIN √† query
 	 * @param string $tableName : o nome da tabela
-	 * @param array|string $columns : a(s) coluna(s) necess·ria(s) e/ou expressıes da tabela
+	 * @param array|string $columns : a(s) coluna(s) necess√°ria(s) e/ou express√µes da tabela
 	 * @param string $schema : o nome do schema
 	 * @return Db_Select : Fluent Interface
 	 */
@@ -292,10 +292,10 @@ class Db_Select {
 	}
 
 	/**
-	 * Faz o trabalho sujo das operaÁıes JOIN e FROM
+	 * Faz o trabalho sujo das opera√ß√µes JOIN e FROM
 	 * @param string $type : o tipo de join
 	 * @param string|array|Db_Select|Db_Expression $name : o nome da tabela
-	 * @param string $cond : a condiÁ„o de junÁ„o
+	 * @param string $cond : a condi√ß√£o de jun√ß√£o
 	 * @param array|string $cols : as colunas da tabela para selecionar
 	 * @param string $schema : o nome do schema da tabela
 	 * @throws Db_Select_Exception
@@ -303,7 +303,7 @@ class Db_Select {
 	 */
 	protected function _join($type, $name, $cond, $cols, $schema = null) {
 		if(!in_array($type, self::$_joinTypes) && !$type = self::FROM) {
-			throw new Db_Select_Exception(sprintf('"%s" n„o È um tipo de JOIN v·lido!', $type));
+			throw new Db_Select_Exception(sprintf('"%s" n√£o √© um tipo de JOIN v√°lido!', $type));
 		}
 		
 		if(count($this->_parts[self::UNION])) {
@@ -341,26 +341,26 @@ class Db_Select {
 		$lastFromAlias = null;
 		if(!empty($alias)) {
 			if(array_key_exists($alias, $this->_parts[self::FROM])) {
-				throw new Db_Select_Exception(sprintf('VocÍ n„o pode definir "%s" mais de uma vez', $alias));
+				throw new Db_Select_Exception(sprintf('Voc√™ n√£o pode definir "%s" mais de uma vez', $alias));
 			}
 
 			$tmpFromParts = array();
-			//Vamos colocar todos os FROM's no inÌcio do array de partes...
+			//Vamos colocar todos os FROM's no in√≠cio do array de partes...
 			if($type == self::FROM) {
-				//Para isso precisamos percorrer o array procurando pelo ˙ltimo FROM
+				//Para isso precisamos percorrer o array procurando pelo √∫ltimo FROM
 				$tmpFromParts = $this->_parts[self::FROM];
 				$this->_parts[self::FROM] = array();
 				$goOn = true;
 				while($tmpFromParts && $goOn){
 					//Pegamos a chave do elemento atual do array
 					$currentAlias = key($tmpFromParts);
-					//Se chegamos ao ˙ltimo FROM...
+					//Se chegamos ao √∫ltimo FROM...
 					if($tmpFromParts[$currentAlias]['joinType'] != self::FROM){
 						//Paramos de iterar sobre o array...
 						$goOn = false;
-						//Sen„o...
+						//Sen√£o...
 					} else {
-						//O ˙ltmo alias de uma tabela em FROM È o atual...
+						//O √∫ltmo alias de uma tabela em FROM √© o atual...
 						$lastFromAlias = $currentAlias;
 						//Colocamos o elemento de volta no array...
 						$this->_parts[self::FROM][$currentAlias] = array_shift($tmpFromParts);
@@ -389,7 +389,7 @@ class Db_Select {
 
 
 	/**
-	 * Insere uma cl·usula WHERE na query. Se j· houver uma cl·usula prÈvia, elas ser„o
+	 * Insere uma cl√°usula WHERE na query. Se j√° houver uma cl√°usula pr√©via, elas ser√£o
 	 * concatenadas pelo operador AND
 	 *
 	 * @param string $cond : a condicional
@@ -403,18 +403,18 @@ class Db_Select {
 	}
 
 	/**
-	 * Cria uma cl·usula WHERE
+	 * Cria uma cl√°usula WHERE
 	 * @param string $cond
 	 * @param mixed $boundValue [OPCIONAL]
 	 * @param Db::*_TYPE $type
-	 * @param bool $conjunction : se true, temos uma conjunÁ„o, ou seja, cl·usulas concatenadas por AND
-	 * 							  se false, temos uma disjunÁ„o, cl·usulas concatenadas por OR
+	 * @param bool $conjunction : se true, temos uma conjun√ß√£o, ou seja, cl√°usulas concatenadas por AND
+	 * 							  se false, temos uma disjun√ß√£o, cl√°usulas concatenadas por OR
 	 * @throws Db_Select_Exception
 	 * @return string
 	 */
 	protected function _where($cond, $boundValue = null, $type = null, $conjunction = true) {
 		if(!empty($this->_parts[self::UNION])) {
-			throw new Db_Select_Exception(sprintf('Uso inv·lido da cl·usula WHERE com %s', self::SQL_UNION));
+			throw new Db_Select_Exception(sprintf('Uso inv√°lido da cl√°usula WHERE com %s', self::SQL_UNION));
 		}
 
 		if($boundValue !== null) {
@@ -434,8 +434,8 @@ class Db_Select {
 	}
 
 	/**
-	 * Semelhante ao mÈtodo where(), entretanto, se j· houver uma cl·usula prÈvia,
-	 * a concatenaÁ„o ser· feita pelo operador OR
+	 * Semelhante ao m√©todo where(), entretanto, se j√° houver uma cl√°usula pr√©via,
+	 * a concatena√ß√£o ser√° feita pelo operador OR
 	 *
 	 * @param string $cond : a condicional
 	 * @param mixed $boundValue : o valor ou array de valores para substituir os placeholder em $cond
@@ -448,12 +448,12 @@ class Db_Select {
 	}
 
 	/**
-	 * Adiciona uma cl·usula GROUP ‡ query
-	 * … possÌvel passar quantos par‚metros quisermos, sendo que apenas um È obrigatÛrio:
+	 * Adiciona uma cl√°usula GROUP √† query
+	 * √â poss√≠vel passar quantos par√¢metros quisermos, sendo que apenas um √© obrigat√≥rio:
 	 * Db_Select::group($col1, [$col2, [...]])
 	 *  
-	 * @param array|string $expr : a coluna ou express„o pela qual agrupar ou um array delas
-	 * @param array|string $_ [OPCIONAL] : idÍntico a $expr
+	 * @param array|string $expr : a coluna ou express√£o pela qual agrupar ou um array delas
+	 * @param array|string $_ [OPCIONAL] : id√™ntico a $expr
 	 * @return Db_Select : Fluent Interface
 	 * @throws Db_Select_Exception
 	 */
@@ -480,17 +480,17 @@ class Db_Select {
 			} else if(is_string($each)) {
 				$this->_parts[self::GROUP][] = $each;
 			} else {
-				throw new Db_Select_Exception(sprintf('Express„o de agrupamento "%s" inv·lida!', $each));
+				throw new Db_Select_Exception(sprintf('Express√£o de agrupamento "%s" inv√°lida!', $each));
 			}
 		}
 		return $this;
 	}
 
 	/**
-	 * Adiciona uma cl·usula HAVING ‡ query. Se j· houver alguma,
-	 * concatena atravÈs do operador AND
+	 * Adiciona uma cl√°usula HAVING √† query. Se j√° houver alguma,
+	 * concatena atrav√©s do operador AND
 	 *
-	 * Os par‚metros seguem a mesma lÛgica do mÈtodo where()
+	 * Os par√¢metros seguem a mesma l√≥gica do m√©todo where()
 	 * @see Db_Select::where()
 	 *
 	 * @param string $cond
@@ -503,8 +503,8 @@ class Db_Select {
 	}
 
 	/**
-	 * Semelhante a having(), com a diferenÁa que a concatenaÁ„o
-	 * È feita atravÈs do operador OR, caso j· haja alguma cl·usula
+	 * Semelhante a having(), com a diferen√ßa que a concatena√ß√£o
+	 * √© feita atrav√©s do operador OR, caso j√° haja alguma cl√°usula
 	 *
 	 * @see Db_Select::having()
 	 *
@@ -518,8 +518,8 @@ class Db_Select {
 	}
 
 	/**
-	 * Faz a adiÁ„o de uma cl·usula having, de acordo
-	 * com o operador de contacenaÁ„o informado
+	 * Faz a adi√ß√£o de uma cl√°usula having, de acordo
+	 * com o operador de contacena√ß√£o informado
 	 *
 	 * @param string $cond
 	 * @param mixed $boundParam
@@ -541,13 +541,13 @@ class Db_Select {
 	}
 
 	/**
-	 * Adiciona uma cl·usula ORDER BY ‡ query
+	 * Adiciona uma cl√°usula ORDER BY √† query
 	 * 
-	 * … possÌvel passar quantos par‚metros quisermos, sendo que apenas um È obrigatÛrio:
+	 * √â poss√≠vel passar quantos par√¢metros quisermos, sendo que apenas um √© obrigat√≥rio:
 	 * Db_Select::order($col1, [$col2, [...]])
 	 * 
-	 * @param array|string|Db_Expression $expr : coluna ou express„o para ordenaÁ„o, ou um array delass
-	 * @param array|string|Db_Expression $_ [OPCIONAL] : idÍntico a $expr
+	 * @param array|string|Db_Expression $expr : coluna ou express√£o para ordena√ß√£o, ou um array delass
+	 * @param array|string|Db_Expression $_ [OPCIONAL] : id√™ntico a $expr
 	 * @return Db_Select : Fluent Interface
 	 */
 	public function order($expr, $_ = null) {
@@ -587,9 +587,9 @@ class Db_Select {
 	}
 
 	/**
-	 * Adiciona uma cl·usula LIMIT ‡ query
-	 * @param int $count : quantidade m·xima de linhas retornadas
-	 * @param int $offset : linha inicial a ser retornada (a primeira È 0)
+	 * Adiciona uma cl√°usula LIMIT √† query
+	 * @param int $count : quantidade m√°xima de linhas retornadas
+	 * @param int $offset : linha inicial a ser retornada (a primeira √© 0)
 	 * @return Db_Select : Fluent Interface
 	 */
 	public function limit($count, $offset = 0) {
@@ -599,9 +599,9 @@ class Db_Select {
 	}
 
 	/**
-	 * Seta uma cl·usula LIMIT para paginaÁ„o
-	 * @param int $page : a p·gina a ser buscada
-	 * @param int $rowCount : o n˙mero de linhas na p·gina
+	 * Seta uma cl√°usula LIMIT para pagina√ß√£o
+	 * @param int $page : a p√°gina a ser buscada
+	 * @param int $rowCount : o n√∫mero de linhas na p√°gina
 	 * @return Db_Select : Fluent Interface
 	 */
 	public function limitPage($page, $rowCount) {
@@ -614,7 +614,7 @@ class Db_Select {
 	}
 
 	/**
-	 * Faz da query uma sentenÁa SELECT FOR UPDATE
+	 * Faz da query uma senten√ßa SELECT FOR UPDATE
 	 * @param boolean $opt [OPCIONAL] : se true, faz com que a query SELECT FOR UPDATE,
 	 * 									se false, cancela este efeito
 	 * @return Db_Select : Fluent Interface
@@ -639,7 +639,7 @@ class Db_Select {
 
 	/**
 	 * Executa a query com o statement deste objeto
-	 * @param array $boundParams : par‚metros associados (prepared statements)
+	 * @param array $boundParams : par√¢metros associados (prepared statements)
 	 * @param Db::FETCH_* $fetchMode : modo de fetch
 	 * @return Db_Statement_Abstract
 	 */
@@ -657,7 +657,7 @@ class Db_Select {
 	}
 
 	/**
-	 * Monta a sentenÁa SELECT
+	 * Monta a senten√ßa SELECT
 	 * @return string
 	 */
 	public function assemble() {
@@ -673,7 +673,7 @@ class Db_Select {
 
 	/**
 	 * Reseta o statement ou parte dele
-	 * @param string $part : o nome da parte para resetar, se n„o informado, reseta todas as partes
+	 * @param string $part : o nome da parte para resetar, se n√£o informado, reseta todas as partes
 	 * @return Db_Select : Fluent Interface
 	 */
 	public function reset($part = null) {
@@ -700,7 +700,7 @@ class Db_Select {
 	}
 	
 	/**
-	 * Gera um alias ˙nico para um identificador
+	 * Gera um alias √∫nico para um identificador
 	 * @param mixed $tableName
 	 * @return string
 	 */
@@ -775,9 +775,9 @@ class Db_Select {
 			if(is_string($afterTableAlias)) {
 				$goOn = true;
 				while($tmpColumns && $goOn) {
-					//Vai retirando elementos do inÌcio do array...
+					//Vai retirando elementos do in√≠cio do array...
 					$this->_parts[self::COLUMNS][] = $currColumn = array_shift($tmpColumns);
-					//AtÈ que o nome/alias da tabela seja igual ao do elemento atual.
+					//At√© que o nome/alias da tabela seja igual ao do elemento atual.
 					//Veja (**)
 					if($currColumn['tableAlias'] == $afterTableAlias) {
 						$goOn = false;
@@ -827,7 +827,7 @@ class Db_Select {
 	}
 
 	/**
-	 * Renderiza a cl·usula DISTINCS
+	 * Renderiza a cl√°usula DISTINCS
 	 * @param string $sql
 	 * @return string
 	 */
@@ -881,7 +881,7 @@ class Db_Select {
 	 */
 	protected function _renderFrom($sql) {
 		/*
-		 * Se n„o hover tabelas em FROM, usamos a soluÁ„o dependente do SGBD
+		 * Se n√£o hover tabelas em FROM, usamos a solu√ß√£o dependente do SGBD
 		* para query sem tabelas
 		*/
 		if(empty($this->_parts[self::FROM])) {
@@ -915,7 +915,7 @@ class Db_Select {
 	}
 
 	/**
-	 * Renderiza as cl·usulas UNION e UNION ALL
+	 * Renderiza as cl√°usulas UNION e UNION ALL
 	 * @param string $sql
 	 * @return string
 	 */
@@ -946,7 +946,7 @@ class Db_Select {
 	}
 
 	/**
-	 * Renderiza a cl·usula GROUP BY
+	 * Renderiza a cl√°usula GROUP BY
 	 * @param string $sql
 	 * @return string
 	 */
@@ -964,7 +964,7 @@ class Db_Select {
 	}
 
 	/**
-	 * Renderiza a cl·usula HAVING
+	 * Renderiza a cl√°usula HAVING
 	 * @param string $sql
 	 * @return string
 	 */
@@ -977,7 +977,7 @@ class Db_Select {
 	}
 	
 	/**
-	 * Renderiza a cl·usula ORDER BY
+	 * Renderiza a cl√°usula ORDER BY
 	 * @param string $sql
 	 * @return string
 	 */
@@ -985,7 +985,7 @@ class Db_Select {
 		if(!empty($this->_parts[self::ORDER])) {
 			$order = array();
 			foreach($this->_parts[self::ORDER] as $col) {
-				//Se È um array, temos: array('order' => $exprOrder, 'sort' => $exprSort) 
+				//Se √© um array, temos: array('order' => $exprOrder, 'sort' => $exprSort) 
 				if(is_array($col)) {
 					if(is_numeric($col['order'])) {
 						$order[] = (int) trim($col['order']) . ' ' . $col['sort'];
@@ -1005,17 +1005,17 @@ class Db_Select {
 	}
 	
 	/**
-	 * Renderiza a cl·usula LIMIT
+	 * Renderiza a cl√°usula LIMIT
 	 * @param string $sql
 	 */
 	protected function _renderLimitCount($sql) {
 		$count = 0;
 		$offset = 0;
 		
-		//Se h· uma cl·usula OFFSET...
+		//Se h√° uma cl√°usula OFFSET...
 		if(!empty($this->_parts[self::LIMIT_OFFSET])) {
 			$offset = (int) $this->_parts[self::LIMIT_OFFSET];
-			//Inicialmente setamos COUNT como o maior valor inteiro possÌvel
+			//Inicialmente setamos COUNT como o maior valor inteiro poss√≠vel
 			$count = PHP_INT_MAX;
 		}
 		
@@ -1031,7 +1031,7 @@ class Db_Select {
 	}
 	
 	/**
-	 * Renderiza a cl·usula FOR UPDATE
+	 * Renderiza a cl√°usula FOR UPDATE
 	 * @param string $sql
 	 * @return string
 	 */
@@ -1043,7 +1043,7 @@ class Db_Select {
 	}
 	
 	/**
-	 * MÈtodo m·gico para transformaÁ„o de um objeto Db_Select em string
+	 * M√©todo m√°gico para transforma√ß√£o de um objeto Db_Select em string
 	 * @return string
 	 */
 	public function __toString() {

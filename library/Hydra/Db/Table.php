@@ -3,12 +3,12 @@
  * Interface com uma tabela do banco de dados.
  *
  * Modificado em: 07/03/2012
- * <h2>Modificações</h2>
+ * <h2>ModificaÃ§Ãµes</h2>
  * <ul>
- * 	<li>Implementação da inteface DataAccessLayer_Interface
+ * 	<li>ImplementaÃ§Ã£o da inteface DataAccessLayer_Interface
  * 		<ul>
- * 			<li>Adição do método <em>fetchOne</em></li>
- * 			<li>Adição do método <em>createEntry</em></li>
+ * 			<li>AdiÃ§Ã£o do mÃ©todo <em>fetchOne</em></li>
+ * 			<li>AdiÃ§Ã£o do mÃ©todo <em>createEntry</em></li>
  * 		</ul>
  * 	</li>
  * </ul>
@@ -51,7 +51,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	const TABLE_CACHE_DIR	= 'table_metadata';
 
 	/**
-	 * Armazena um Db_Adapter padrão para os objetos Db_Table
+	 * Armazena um Db_Adapter padrÃ£o para os objetos Db_Table
 	 * @var Db_Adapter_Abstract
 	 */
 	private static $_defaultAdapter;
@@ -76,42 +76,42 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Armazena as colunas da tabela, obtidas a
-	 * partir do método Db_Adapter::describeTable()
+	 * partir do mÃ©todo Db_Adapter::describeTable()
 	 * @var array
 	 */
 	private $_cols;
 
 	/**
-	 * Armazena a chave primária da tabela
+	 * Armazena a chave primÃ¡ria da tabela
 	 * @var mixed
 	 */
 	private $_primary = null;
 
 	/**
-	 * Se a chave primária é composta e uma das colunas
-	 * usa auto-incremnto ou sequência-gerada, setamos
-	 * $identity para o índice ordinal do campo no
-	 * array $_primary. O array $_primary começa em 1.
+	 * Se a chave primÃ¡ria Ã© composta e uma das colunas
+	 * usa auto-incremnto ou sequÃªncia-gerada, setamos
+	 * $identity para o Ã­ndice ordinal do campo no
+	 * array $_primary. O array $_primary comeÃ§a em 1.
 	 * @var integer
 	 */
 	private $_identity = 1;
 
 
 	/**
-	 * Define a lógica para novos valores na chave
-	 * primária. Pode ser uma string ou booleano.
+	 * Define a lÃ³gica para novos valores na chave
+	 * primÃ¡ria. Pode ser uma string ou booleano.
 	 * @var mixed
 	 */
 	private $_sequence = true;
 
 	/**
-	 * Informação fornecida pelo método describeTable() do Adapter
+	 * InformaÃ§Ã£o fornecida pelo mÃ©todo describeTable() do Adapter
 	 * @var array
 	 */
 	private $_metadata = array();
 
 	/**
-	 * Flag: informa se devemos ou não cachear os metadados na classe
+	 * Flag: informa se devemos ou nÃ£o cachear os metadados na classe
 	 * @var boolean
 	 */
 	private $_metadataCacheInClass = true;
@@ -129,20 +129,20 @@ class Db_Table implements DataAccessLayer_Interface {
 	private $_rowsetClass = 'Db_Table_Rowset';
 
 	/**
-	 * Array associativo contendo informações sobre regras de integridade.
+	 * Array associativo contendo informaÃ§Ãµes sobre regras de integridade.
 	 * Existe uma entrada para cada chave estrangeira da tabela.
-	 * Cada chave é um mnemônico para a regra de referência.
+	 * Cada chave Ã© um mnemÃ´nico para a regra de referÃªncia.
 	 *
-	 * Cada entrada é um array associativo contendo os seguintes índices:
+	 * Cada entrada Ã© um array associativo contendo os seguintes Ã­ndices:
 	 * - columns		=>	array contendo os nomes das colunas na tabela-filha
 	 * - refTable	=>	nome da classe na tabela-pai
 	 * - refColumns		=>	array de nomes contendo os nomes das colunas na
-	 * 						tabela-pai na mesma ordem que no índice 'columns'
+	 * 						tabela-pai na mesma ordem que no Ã­ndice 'columns'
 	 * - onDelete		=>	"cascade" significa que deletar uma linha na
-	 * 						tabela-pai causa uma deleção das linhas
+	 * 						tabela-pai causa uma deleÃ§Ã£o das linhas
 	 * 						referenciadas na tabela-filha
 	 * - onUpdate		=>	"cascade" significa que uma atualizar uma linha na
-	 * 						tabela-pai c""ausa uma atualização das linhas
+	 * 						tabela-pai c""ausa uma atualizaÃ§Ã£o das linhas
 	 * 						referenciadas na tabela-filha
 	 *
 	 * @var array
@@ -151,53 +151,53 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Array contendo os nomes das tabelas "filhas" da atual, ou seja,
-	 * aquelas que contém uma chave estrangeira para esta.
+	 * aquelas que contÃ©m uma chave estrangeira para esta.
 	 * @var array
 	 */
 	private $_dependentTables = array();
 
 	/**
-	 * Se TRUE, é possível configurar os triggers
+	 * Se TRUE, Ã© possÃ­vel configurar os triggers
 	 * ON DELETE e ON UPDATE da tabela.
-	 * Se FALSE, esses eventos serão ignorados.
+	 * Se FALSE, esses eventos serÃ£o ignorados.
 	 *
 	 * @var boolean
 	 */
 	private $_integrityCheck = false;
 
 	/**
-	 * Informa onde valores-padrão da tabela são encontrados
+	 * Informa onde valores-padrÃ£o da tabela sÃ£o encontrados
 	 * @var string
 	 */
 	private $_defaultSource = self::DEFAULT_NONE;
 
 	/**
-	 * Armazena os valores pardrão para as coluans da tabela
+	 * Armazena os valores pardrÃ£o para as coluans da tabela
 	 * @var array
 	 */
 	private $_defaultValues = array();
 
 	/**
-	 * A definição da tabela.
+	 * A definiÃ§Ã£o da tabela.
 	 * @var Db_Table_Definition
 	 */
 	private $_definition;
 
 	/**
-	 * A definição padrão para os objetos Db_Table
+	 * A definiÃ§Ã£o padrÃ£o para os objetos Db_Table
 	 * @var Db_Table_Definition
 	 */
 	private static $_defaultDefinition;
 
 	/**
-	 * O manipulador de cache que irá auxiliar o objeto Db_Table.
+	 * O manipulador de cache que irÃ¡ auxiliar o objeto Db_Table.
 
 	 * @var Cache_Facade_Abstract
 	 */
 	private $_cacheHandler;
 
 	/**
-	 * O manipulador padrão de cache que irá auxiliar o objeto Db_Table.
+	 * O manipulador padrÃ£o de cache que irÃ¡ auxiliar o objeto Db_Table.
 	 *
 	 * @var Cache_Facade_Abstract
 	 */
@@ -206,20 +206,20 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Construtor.
 	 *
-	 * Parâmetros de configuração:
-	 * - db				 =>	instância de Db_Adapter
+	 * ParÃ¢metros de configuraÃ§Ã£o:
+	 * - db				 =>	instÃ¢ncia de Db_Adapter
 	 * - name			 =>	o nome da tabela
 	 * - schema			 =>	o schema da tabela
-	 * - primary		 =>	a chave primária da tabela (string | array)
+	 * - primary		 =>	a chave primÃ¡ria da tabela (string | array)
 	 * - rowClass		 =>	nome da classe TableRow
 	 * - rowsetClass	 =>	nome da classe TableRowset
-	 * - referenceMap	 =>	declaração das relações de integridade da tabela
+	 * - referenceMap	 =>	declaraÃ§Ã£o das relaÃ§Ãµes de integridade da tabela
 	 * - dependentTables =>	array de tabelas-filhas
 	 * - metadataCache	 =>	cache dos metadados
-	 * - integrityCheck	 => se o objeto deve ou não verificar a integridade
-	 * 						da tabela em remoções e atualizações.
+	 * - integrityCheck	 => se o objeto deve ou nÃ£o verificar a integridade
+	 * 						da tabela em remoÃ§Ãµes e atualizaÃ§Ãµes.
 	 *
-	 * @param mixed $config : array de configurações, nome da tabela ou somente um Db_Adapter
+	 * @param mixed $config : array de configuraÃ§Ãµes, nome da tabela ou somente um Db_Adapter
 	 */
 	public function __construct($config = array()) {
 		if($config instanceof Db_Adapter_Abstract) {
@@ -237,7 +237,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Seta opções de configuração da tabela
+	 * Seta opÃ§Ãµes de configuraÃ§Ã£o da tabela
 	 * @param array $options
 	 * @return Db_Table : fluent interface
 	 */
@@ -339,7 +339,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Adiciona uma referência para a tabela.
+	 * Adiciona uma referÃªncia para a tabela.
 	 *
 	 * @param string $ruleKey
 	 * @param string|array $columns
@@ -370,7 +370,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * @param array $references : array de referências para a tabela atual
+	 * @param array $references : array de referÃªncias para a tabela atual
 	 * @see $_referenceMap
 	 */
 	public function setReferences(array $references) {
@@ -379,11 +379,11 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Retorna uma referência desta tabela para a tabela $table.
-	 * Se houver mais de uma dependência para a tabela $table,
-	 * deve-se informar qual o nome da regra de referência.
-	 * Caso contrário, sempre será retornada a primeira
-	 * referência àquela tabela.
+	 * Retorna uma referÃªncia desta tabela para a tabela $table.
+	 * Se houver mais de uma dependÃªncia para a tabela $table,
+	 * deve-se informar qual o nome da regra de referÃªncia.
+	 * Caso contrÃ¡rio, sempre serÃ¡ retornada a primeira
+	 * referÃªncia Ã quela tabela.
 	 *
 	 * @param string $table
 	 * @param string $ruleKey
@@ -395,10 +395,10 @@ class Db_Table implements DataAccessLayer_Interface {
 
 		if($ruleKey !== null) {
 			if(!isset($refMap[$ruleKey])) {
-				throw new Db_Table_Exception(sprintf('Nenhuma referência sob o nome "%s" da tabela "%s" para a tabela "%s".', $ruleKey, $this->_name, $table));
+				throw new Db_Table_Exception(sprintf('Nenhuma referÃªncia sob o nome "%s" da tabela "%s" para a tabela "%s".', $ruleKey, $this->_name, $table));
 			}
 			if($refMap[$ruleKey][self::REF_TABLE] != $table) {
-				throw new Db_Table_Exception(sprintf('A regra de referência "%s" não referencia a tabela "%s".', $ruleKey, $table));
+				throw new Db_Table_Exception(sprintf('A regra de referÃªncia "%s" nÃ£o referencia a tabela "%s".', $ruleKey, $table));
 			}
 			return $refMap[$ruleKey];
 		}
@@ -408,7 +408,7 @@ class Db_Table implements DataAccessLayer_Interface {
 				return $reference;
 			}
 		}
-		throw new Db_Table_Exception(sprintf('Não há referência da tabela "%s" para a tabela "%s".', $this->_name, $table));
+		throw new Db_Table_Exception(sprintf('NÃ£o hÃ¡ referÃªncia da tabela "%s" para a tabela "%s".', $this->_name, $table));
 	}
 
 	/**
@@ -440,7 +440,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Seta a fonte de valores-padrão para as colunas da tabela.
+	 * Seta a fonte de valores-padrÃ£o para as colunas da tabela.
 	 *
 	 * @param string $source
 	 * @return Db_Table : fluent interface
@@ -460,7 +460,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Seta os valores-padrão para as colunas da tabela.
+	 * Seta os valores-padrÃ£o para as colunas da tabela.
 	 *
 	 * @param array $defaultValues
 	 * @return Db_Table : fluent interface
@@ -475,7 +475,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Retorna os valores-padrão para as colunas da tabela.
+	 * Retorna os valores-padrÃ£o para as colunas da tabela.
 	 *
 	 * @return array
 	 */
@@ -484,7 +484,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Seta a checagem de integridade de dependências.
+	 * Seta a checagem de integridade de dependÃªncias.
 	 *
 	 * @param boolean $opt
 	 * @return Db_Table : fluent interface
@@ -495,7 +495,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Retorna a configuração da checagem de integridade.
+	 * Retorna a configuraÃ§Ã£o da checagem de integridade.
 	 *
 	 * @return boolean
 	 */
@@ -504,7 +504,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Seta um adapter padrão para todos os objetos Db_Table.
+	 * Seta um adapter padrÃ£o para todos os objetos Db_Table.
 	 *
 	 * @param Db_Adapter_Abstract $adapter : o adapter
 	 * @return void
@@ -514,7 +514,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Retorna o adapter padrão para todos os objetos Db_Table.
+	 * Retorna o adapter padrÃ£o para todos os objetos Db_Table.
 	 *
 	 * @return Db_Adapter_Abstract
 	 */
@@ -543,7 +543,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Seta a definição da tabela.
+	 * Seta a definiÃ§Ã£o da tabela.
 	 *
 	 * @param Db_Table_Definition $definition
 	 * @return Db_Table : fluent interface
@@ -554,7 +554,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Retorna a definição da tabela.
+	 * Retorna a definiÃ§Ã£o da tabela.
 	 *
 	 * @return Db_Table_Definition
 	 */
@@ -563,8 +563,8 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Seta uma definição padrão para todos os objetos Db_Table.
-	 * Cada objeto Db_Table_Definition pode armazenar definições de várias tabelas.
+	 * Seta uma definiÃ§Ã£o padrÃ£o para todos os objetos Db_Table.
+	 * Cada objeto Db_Table_Definition pode armazenar definiÃ§Ãµes de vÃ¡rias tabelas.
 	 *
 	 * @param Db_Table_Definition $definition
 	 * @return void
@@ -574,7 +574,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Retorna a definição padrão dos objetos Db_Table.
+	 * Retorna a definiÃ§Ã£o padrÃ£o dos objetos Db_Table.
 	 *
 	 * @return Db_Table_Definition
 	 */
@@ -584,12 +584,12 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Seta o atributo $_sequence, que define como uma nova
-	 * chave primária deve ser gerada.
+	 * chave primÃ¡ria deve ser gerada.
 	 *
-	 * - Se for uma string, então a string nomeia a sequência
+	 * - Se for uma string, entÃ£o a string nomeia a sequÃªncia
 	 * - Se for TRUE, utiliza auto-incremento ou algum mecanismo
 	 *   de identidade
-	 * - se for FALSE, então a chave é definida pelo usuário
+	 * - se for FALSE, entÃ£o a chave Ã© definida pelo usuÃ¡rio
 	 *
 	 * @param mixed $sequence
 	 * @return void
@@ -599,7 +599,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Inicialização da tabela.
+	 * InicializaÃ§Ã£o da tabela.
 	 *
 	 * @return void
 	 */
@@ -611,7 +611,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Inicializa o adapter de conexão com o banco de dados.
+	 * Inicializa o adapter de conexÃ£o com o banco de dados.
 	 *
 	 * @return void
 	 * @throws Db_Table_Exception
@@ -639,7 +639,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Se nenhuma definição foi informada, utilizamos a definição padrão.
+	 * Se nenhuma definiÃ§Ã£o foi informada, utilizamos a definiÃ§Ã£o padrÃ£o.
 	 *
 	 * @return void.
 	 */
@@ -659,8 +659,8 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Inicializa os metadados da tabela.
 	 *
-	 * Se os metadados não puderem ser carregados do cache, o método
-	 * describeTable() do adapter é chamado para buscar essa informação.
+	 * Se os metadados nÃ£o puderem ser carregados do cache, o mÃ©todo
+	 * describeTable() do adapter Ã© chamado para buscar essa informaÃ§Ã£o.
 	 * Retorna true se e somente se os metadados forem carregados do cache
 	 *
 	 * @return boolean
@@ -681,23 +681,23 @@ class Db_Table implements DataAccessLayer_Interface {
 			}
 		}
 
-		//Se o cache não existe...
+		//Se o cache nÃ£o existe...
 		if($cacheContents === null) {
 			$isMetadataFromCache = false;
 			$this->_metadata = $this->_adapter->describeTable($this->_name);
 			if(empty($this->_metadata)) {
-				throw new Db_Table_Exception('Impossível obter a descrição da tabela "' . $this->_name . '".
+				throw new Db_Table_Exception('ImpossÃ­vel obter a descriÃ§Ã£o da tabela "' . $this->_name . '".
 						 Verifique se tal tabela existe.');
 			}
 			if($this->_cacheHandler instanceof Cache_Facade_Abstract) {
 				try {
 					$this->_cacheHandler->set(self::TABLE_CACHE_DIR, $cacheName, $this->_metadata, '+ 1 YEAR');
 				} catch(Cache_WriteException $e) {
-					// Essa exceção será lançada quando o Cache estiver habilitado, mas não puder ser escrito
-					trigger_error(sprintf('Impossível salvar o arquivo de cache de metadados da tabela  "%s"',
+					// Essa exceÃ§Ã£o serÃ¡ lanÃ§ada quando o Cache estiver habilitado, mas nÃ£o puder ser escrito
+					trigger_error(sprintf('ImpossÃ­vel salvar o arquivo de cache de metadados da tabela  "%s"',
 						$this->_name), E_USER_NOTICE);
 				} catch(Cache_DisabledException $e) {
-					// Essa exceção será lançada caso o Cache não esteja habilitado
+					// Essa exceÃ§Ã£o serÃ¡ lanÃ§ada caso o Cache nÃ£o esteja habilitado
 				}
 			}
 		} else {
@@ -755,7 +755,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Busca e configura a chave primária da tabela.
+	 * Busca e configura a chave primÃ¡ria da tabela.
 	 *
 	 * @return void
 	 * @throws Db_Table_Exception
@@ -774,7 +774,7 @@ class Db_Table implements DataAccessLayer_Interface {
 			}
 
 			if(empty($this->_primary)) {
-				throw new Db_Table_Exception(sprintf('Uma tabela deve conter uma chave primária, mas nenhuma foi encontrada em "%s"', $this->_name));
+				throw new Db_Table_Exception(sprintf('Uma tabela deve conter uma chave primÃ¡ria, mas nenhuma foi encontrada em "%s"', $this->_name));
 			}
 		} else if(!is_array($this->_primary)) {
 			$this->_primary = array(1 => $this->_primary);
@@ -785,9 +785,9 @@ class Db_Table implements DataAccessLayer_Interface {
 
 		$cols = $this->_getCols();
 		if(!array_intersect((array) $this->_primary, $cols) == (array) $this->_primary) {
-			throw new Db_Table_Exception("As chaves primárias ("
+			throw new Db_Table_Exception("As chaves primÃ¡rias ("
 			. implode(',', (array) $this->_primary)
-			. ") não são colunas na tabela " . $this->_name . "("
+			. ") nÃ£o sÃ£o colunas na tabela " . $this->_name . "("
 			. implode(',', $cols)
 			. ")");
 		}
@@ -798,8 +798,8 @@ class Db_Table implements DataAccessLayer_Interface {
 				$pkIdentity = $primary[(int) $this->_identity];
 
 				/**
-				 * Caso especial para PostgreSQL: uma chave SERIAL implícita usa
-				 * um objeto-sequência cujo nome é "<table>_<column>_seq".
+				 * Caso especial para PostgreSQL: uma chave SERIAL implÃ­cita usa
+				 * um objeto-sequÃªncia cujo nome Ã© "<table>_<column>_seq".
 				 */
 				if ($this->_sequence === true && $this->_adapter instanceof Db_Adapter_Pdo_Pgsql) {
 					$this->_sequence = $this->_adapter->quoteIdentifier("{$this->_name}_{$pkIdentity}_seq");
@@ -814,7 +814,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Normaliza o array de referências.
+	 * Normaliza o array de referÃªncias.
 	 *
 	 * @return array
 	 */
@@ -842,9 +842,9 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Retorna as informações da tabela.
+	 * Retorna as informaÃ§Ãµes da tabela.
 	 *
-	 * @param string|null $key : qual informação retornar ou NULL
+	 * @param string|null $key : qual informaÃ§Ã£o retornar ou NULL
 	 * @return mixed : array ou string
 	 */
 	public function info($key = null) {
@@ -875,15 +875,15 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Lógica de inicialização da tabela.
-	 * Deve ser implementado por possíveis classes-filhas.
+	 * LÃ³gica de inicializaÃ§Ã£o da tabela.
+	 * Deve ser implementado por possÃ­veis classes-filhas.
 	 */
 	public function init() {
 
 	}
 
 	/**
-	 * Cria e retorna uma instâncida de Db_Select
+	 * Cria e retorna uma instÃ¢ncida de Db_Select
 	 * @param mixed $cols : array ou string
 	 * @return Db_Select
 	 */
@@ -901,7 +901,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * Insere uma nova linha.
 	 *
 	 * @param array $data : valores para inserir (pares coluna => valor)
-	 * @return mixed : a chave primária da linha inserida
+	 * @return mixed : a chave primÃ¡ria da linha inserida
 	 */
 	public function insert(array $data) {
 		$this->_setupPrimaryKey();
@@ -925,7 +925,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		$tableSpec = $this->_getTableSpec();
 		$this->_adapter->insert($tableSpec, $data);
 
-		// Busca o último id inserido na tabela que foi gerado por
+		// Busca o Ãºltimo id inserido na tabela que foi gerado por
 		// auto-incremento, a menos que seja especificado um valor
 		// sobrescrevendo o valor do auto-incremento
 		if($this->_sequence === true && !isset($data[$pkIdentity])) {
@@ -934,7 +934,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 		$pkData = array_intersect($data, array_flip($primary));
 
-		//Se a chave primária não é composta, retorna o próprio valor
+		//Se a chave primÃ¡ria nÃ£o Ã© composta, retorna o prÃ³prio valor
 		if(count($pkData) == 1) {
 			reset;($pkData);
 			return current($pkData);
@@ -944,25 +944,25 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Verifica se a coluna $column é identidade da tabela.
+	 * Verifica se a coluna $column Ã© identidade da tabela.
 	 *
 	 * @param string $column
 	 */
 	public function isIdentity($column) {
 		$this->_setupPrimaryKey();
 		if(!isset($this->_metadata[$column])) {
-			throw new Db_Table_Exception(sprintf('Coluna "%s" não encontrada na tabela "%s".', $column, $this->_name));
+			throw new Db_Table_Exception(sprintf('Coluna "%s" nÃ£o encontrada na tabela "%s".', $column, $this->_name));
 		}
 
 		return (bool) $this->_metadata[$column]['IDENTITY'];
 	}
 
 	/**
-	 * Atualiza as linhas da tabela que satifazem a condição $cond.
+	 * Atualiza as linhas da tabela que satifazem a condiÃ§Ã£o $cond.
 	 *
-	 * @param array $data : os dados para atualização
-	 * @param array|string $cond : a condição para atualização
-	 * @return integer : o número de linhas afetadas
+	 * @param array $data : os dados para atualizaÃ§Ã£o
+	 * @param array|string $cond : a condiÃ§Ã£o para atualizaÃ§Ã£o
+	 * @return integer : o nÃºmero de linhas afetadas
 	 */
 	public function update(array $data, $cond) {
 		$rowsAffected = 0;
@@ -992,12 +992,12 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Chamado pela tabela-pai durante o método save().
+	 * Chamado pela tabela-pai durante o mÃ©todo save().
 	 *
 	 * @param string $parentTableName
 	 * @param array $oldPrimaryKey
 	 * @param array $newPrimaryKey
-	 * @return int : o número de linhas afetadas
+	 * @return int : o nÃºmero de linhas afetadas
 	 */
 	private function _cascadeUpdate($parentTableName, array $oldPrimaryKey, array $newPrimaryKey) {
 		$this->_setupMetadata();
@@ -1035,10 +1035,10 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Remove as linhas da tabela que satisfaçam $cond.
+	 * Remove as linhas da tabela que satisfaÃ§am $cond.
 	 *
 	 * @param string $cond
-	 * @return integer : o número de linhas removidas
+	 * @return integer : o nÃºmero de linhas removidas
 	 */
 	public function delete($cond) {
 		$rowAffected = 0;
@@ -1065,11 +1065,11 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Chamado pela tabela-pai durante o método delete().
+	 * Chamado pela tabela-pai durante o mÃ©todo delete().
 	 *
 	 * @param string $parentTableName : o nome da tabela-pai
-	 * @param array $primaryKey : a chave primária da linha deletada
-	 * @return integer : o número de linhas removidas
+	 * @param array $primaryKey : a chave primÃ¡ria da linha deletada
+	 * @return integer : o nÃºmero de linhas removidas
 	 */
 	private function _cascadeDelete($parentTableName, array $primaryKey) {
 		$this->_setupMetadata();
@@ -1103,7 +1103,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Retorna uma string no formato <schema>.<table_name> se o schema
-	 * estiver setado ou no formato <table_name> caso contrário.
+	 * estiver setado ou no formato <table_name> caso contrÃ¡rio.
 	 *
 	 * @return string
 	 */
@@ -1112,11 +1112,11 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Busca linhas pela chave primária.
+	 * Busca linhas pela chave primÃ¡ria.
 	 * Caso a chave seja composta, o argumento deve ser um array
-	 * contendo o mesmo número de elementos que a chave e na mesma ordem.
+	 * contendo o mesmo nÃºmero de elementos que a chave e na mesma ordem.
 	 *
-	 * @param mixed $pk : a chave primária do registro a ser buscado
+	 * @param mixed $pk : a chave primÃ¡ria do registro a ser buscado
 	 * @return Db_Table_Row
 	 */
 	public function getById($pk) {
@@ -1128,7 +1128,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		}
 
 		if(($n = count($pk)) != ($m = count($keyNames))) {
-			throw new Db_Table_Exception(sprintf('A chave primária da tabela "%s" é composta por %d colunas.
+			throw new Db_Table_Exception(sprintf('A chave primÃ¡ria da tabela "%s" Ã© composta por %d colunas.
 														Foram passados %d valores para buscar.', $this->_name, $m, $n));
 		}
 
@@ -1150,7 +1150,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Busca todas as linhas da tabela que satisfaçam os critérios.
+	 * Busca todas as linhas da tabela que satisfaÃ§am os critÃ©rios.
 	 *
 	 * @param string|array|Db_Select $where
 	 * @param string|array $order
@@ -1193,12 +1193,12 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Busca uma linha na tabela que satisfaçãm os critérios.
+	 * Busca uma linha na tabela que satisfaÃ§Ã£m os critÃ©rios.
 	 *
 	 * @param string|array|Db_Select $where
 	 * @param string|array $order
 	 * @param int $offset
-	 * @return Db_Table_Row|null : retorna a linha da tabela ou null caso não haja nenhuma.
+	 * @return Db_Table_Row|null : retorna a linha da tabela ou null caso nÃ£o haja nenhuma.
 	 */
 	public function fetchOne($where = null, $order = null, $offset = null) {
 		if($where instanceof Db_Select) {
@@ -1235,7 +1235,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Define se um Db_Select é somente-leitura.
+	 * Define se um Db_Select Ã© somente-leitura.
 	 *
 	 * @param Db_Select $select
 	 * @return bool
@@ -1274,7 +1274,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * Cria uma nova linha para a tabela.
 	 *
 	 * @param array $data : os dados para popular a nova linha
-	 * @param string $defaultSource : fonte dos valores padrão para as colunas
+	 * @param string $defaultSource : fonte dos valores padrÃ£o para as colunas
 	 */
 	public function createEntry(array $data = array(), $defaultSource = null) {
 		$cols = $this->_getCols();
@@ -1325,7 +1325,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Gera uma cláusula WHERE a partir de um array ou string.
+	 * Gera uma clÃ¡usula WHERE a partir de um array ou string.
 	 *
 	 * @param Db_Select $select
 	 * @param string|array $where
@@ -1336,11 +1336,11 @@ class Db_Table implements DataAccessLayer_Interface {
 
 		foreach($where as $key => $val) {
 			if(is_int($key)) {
-				// $val é a condição por si só...
+				// $val Ã© a condiÃ§Ã£o por si sÃ³...
 				$select->where($val);
 			} else {
-				// $key é a condição com um placeholder
-				// $val é o valor para ser quotado dentro de $key
+				// $key Ã© a condiÃ§Ã£o com um placeholder
+				// $val Ã© o valor para ser quotado dentro de $key
 				$select->where($key, $val);
 			}
 		}
@@ -1349,7 +1349,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Gera uma cláusula ORDER a partir de um array ou string.
+	 * Gera uma clÃ¡usula ORDER a partir de um array ou string.
 	 *
 	 * @param Db_Select $select
 	 * @param array|string $order
@@ -1366,7 +1366,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Método de apoio para busca de linhas.
+	 * MÃ©todo de apoio para busca de linhas.
 	 *
 	 * @param Db_Select $select
 	 * @return array

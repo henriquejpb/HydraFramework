@@ -13,20 +13,20 @@ class Uri {
 	private $_host;
 	
 	/**
-	 * O caminho da URL apÛs o host
+	 * O caminho da URL ap√≥s o host
 	 * @var string
 	 */
 	private $_path;
 	
 	/**
-	 * Par‚metros de routing da URL, que devem ser
-	 * tratados separadamente dos par‚metros de query
+	 * Par√¢metros de routing da URL, que devem ser
+	 * tratados separadamente dos par√¢metros de query
 	 * @var array
 	 */
 	private $_params = array();
 	
 	/**
-	 * A porta utilizada para a requisiÁ„o.
+	 * A porta utilizada para a requisi√ß√£o.
 	 * @var int
 	 */
 	private $_port;
@@ -46,7 +46,7 @@ class Uri {
 	/**
 	 * Construtor.
 	 * 
-	 * @param string $url : o endereÁo da url
+	 * @param string $url : o endere√ßo da url
 	 */
 	public function __construct($url) {
 		$info = parse_url($url);
@@ -77,10 +77,10 @@ class Uri {
 	}
 	
 	/**
-	 * Seta ou retorna par‚metros de routing na URL.
-	 * Se nenhum par‚metro È passado, retorna a lista com todos os par‚metros existentes
-	 * Se um par‚metro È passado, age como getter.
-	 * Se os dois par‚metros s„o passados, age como setter.
+	 * Seta ou retorna par√¢metros de routing na URL.
+	 * Se nenhum par√¢metro √© passado, retorna a lista com todos os par√¢metros existentes
+	 * Se um par√¢metro √© passado, age como getter.
+	 * Se os dois par√¢metros s√£o passados, age como setter.
 	 * 
 	 * @param string|null $key
 	 * @param mixed $value
@@ -90,7 +90,7 @@ class Uri {
 	}
 	
 	/**
-	 * Seta ou retorna par‚metros da query na URL.
+	 * Seta ou retorna par√¢metros da query na URL.
 	 * 
 	 * @param string|null $key
 	 * @param mixed $value
@@ -108,23 +108,23 @@ class Uri {
 	 * @return mixed :
 	 * <ul>
 	 * 	<li>array : o valor de $property, caso $key e $value sejam NULL</li>
-	 * 	<li>mixed : o valor de $property[$key], ou NULL se n„o existir, caso $value seja NULL</li>
-	 * 	<li>Url : fluent interface, caso a setagem do par‚metro ocorra com sucesso</li>
-	 * 	<li>null : caso haja falha na setagem do par‚metro</li>
+	 * 	<li>mixed : o valor de $property[$key], ou NULL se n√£o existir, caso $value seja NULL</li>
+	 * 	<li>Url : fluent interface, caso a setagem do par√¢metro ocorra com sucesso</li>
+	 * 	<li>null : caso haja falha na setagem do par√¢metro</li>
 	 * </ul>
 	 */
 	private function _setOrGet($property, $key, $value) {
-		// Ambos vazios, retorna todos os par‚metros
+		// Ambos vazios, retorna todos os par√¢metros
 		if($key === null && $value === null) {
 			return $this->_params;
 		}
 
-		// Se $value n„o foi informado, age como um getter
+		// Se $value n√£o foi informado, age como um getter
 		if($value === null) {
 			return isset($this->{$property}[$key]) ? $this->{$property}[$key] : null;
 		}
 		
-		// Impede a criaÁ„o de par‚metros vazios
+		// Impede a cria√ß√£o de par√¢metros vazios
 		if(!empty($key) && !empty($value)) {
 			$this->{$property}[$key] = (string) $value;
 			return $this;
@@ -184,7 +184,7 @@ class Uri {
 	/**
 	 * Renderiza a URL.
 	 * 
-	 * @param boolean $local : tenta renderizar uma URL local se for possÌvel.
+	 * @param boolean $local : tenta renderizar uma URL local se for poss√≠vel.
 	 * @return string
 	 */
 	public function render($local = true) {
@@ -201,7 +201,7 @@ class Uri {
 	}
 	
 	/**
-	 * MÈtodo m·gico para transformaÁ„o do objeto em string.
+	 * M√©todo m√°gico para transforma√ß√£o do objeto em string.
 	 * 
 	 * @return string
 	 */
@@ -258,7 +258,7 @@ class Uri {
 	}
 	
 	/**
-	 * Renderiza os par‚metros de routing da URL.
+	 * Renderiza os par√¢metros de routing da URL.
 	 * 
 	 * @return string;
 	 */

@@ -1,7 +1,7 @@
 <?php
 abstract class Cache_Facade_Abstract {
 	/**
-	 * Retorna se o caching está habilitado.
+	 * Retorna se o caching estÃ¡ habilitado.
 	 *
 	 * @return boolean
 	 */
@@ -11,44 +11,44 @@ abstract class Cache_Facade_Abstract {
 
 	/**
 	 * Seta um arquivo de cache
-	 * @param string $directory : o no me do subdiretório no qual o arquivo será salvo
-	 * @param string $fileName : o nome do arquivo a ser salvo (sem extensão)
-	 * @param mixed $contents : o conteúdo a ser incluí­do no arquivo de cache
-	 * @param mixed $expires [OPTIONAL] : um timestamp ou tempo relativo para expiração	do arquivo de cache.
-	 * 		Se NULL, será utilizado o tempo padrão definido por Cache_File::DEFAULT_EXPIRATION
-	 * @param int $flag [OPTIONAL] : adicionar o conteúdo ao arquivo ou sobrescrevê-lo
+	 * @param string $directory : o no me do subdiretÃ³rio no qual o arquivo serÃ¡ salvo
+	 * @param string $fileName : o nome do arquivo a ser salvo (sem extensÃ£o)
+	 * @param mixed $contents : o conteÃºdo a ser incluÃ­Â­do no arquivo de cache
+	 * @param mixed $expires [OPTIONAL] : um timestamp ou tempo relativo para expiraÃ§Ã£o	do arquivo de cache.
+	 * 		Se NULL, serÃ¡ utilizado o tempo padrÃ£o definido por Cache_File::DEFAULT_EXPIRATION
+	 * @param int $flag [OPTIONAL] : adicionar o conteÃºdo ao arquivo ou sobrescrevÃª-lo
 	 * 					Cache::FILE_APPEND ou Cache::FILE_OVERWRITE
-	 * @return int : o número de bytes escritos
-	 * @throws Cache_WriteException caso a criação do arquivo de cache falhe
-	 * @throws Exception caso o cache esteja desabilitado na aplicação,
+	 * @return int : o nÃºmero de bytes escritos
+	 * @throws Cache_WriteException caso a criaÃ§Ã£o do arquivo de cache falhe
+	 * @throws Exception caso o cache esteja desabilitado na aplicaÃ§Ã£o,
 	 */
 	abstract public function set($directory, $fileName, $contents, $expires = null, $flag = null);
 
 	/**
 	 * Remove o arquivo do cache
 	 *
-	 * @param string $directory : o subdiretório do arquivo
+	 * @param string $directory : o subdiretÃ³rio do arquivo
 	 * @param string $fileName : o nome do arquivo
-	 * @return boolean : se a operação ocorreu com sucesso ou não
+	 * @return boolean : se a operaÃ§Ã£o ocorreu com sucesso ou nÃ£o
 	 */
 	abstract public function remove($directory, $fileName);
 
 	/**
 	 * Verifica se o arquivo de cache existe.
 	 *
-	 * @param string $directory : o subdiretório do arquivo
+	 * @param string $directory : o subdiretÃ³rio do arquivo
 	 * @param string $fileName : o nome do arquivo
-	 * @return boolean : se o arquivo de cache existe ou não
+	 * @return boolean : se o arquivo de cache existe ou nÃ£o
 	 */
 	abstract public function exists($directory, $fileName);
 
 	/**
-	 * Retorna o conteúdo de um arquivo do cache.
-	 * @param string $directory : o subdiretório do arquivo
+	 * Retorna o conteÃºdo de um arquivo do cache.
+	 * @param string $directory : o subdiretÃ³rio do arquivo
 	 * @param string $fileName : o nome do arquivo
-	 * @return mixed : null ou o conteúdo do arquivo
-	 * @throws Cache_WriteException : caso a criação do arquivo de cache falhe
-	 * @throws Exception : caso o cache esteja desabilitado na aplicação
+	 * @return mixed : null ou o conteÃºdo do arquivo
+	 * @throws Cache_WriteException : caso a criaÃ§Ã£o do arquivo de cache falhe
+	 * @throws Exception : caso o cache esteja desabilitado na aplicaÃ§Ã£o
 	 */
 	abstract public function get($directory, $fileName);
 }

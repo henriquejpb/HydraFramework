@@ -6,14 +6,14 @@
  */
 class View_Exception extends Exception {
 	/**
-	 * Armazena a instância da View responsável pelo lançamento da exceção.
+	 * Armazena a instÃ¢ncia da View responsÃ¡vel pelo lanÃ§amento da exceÃ§Ã£o.
 	 * 
 	 * @var View_Abstract
 	 */
 	private $_view;
 	
 	/**
-	 * Seta a View responsável pelo lançamento da exceção.
+	 * Seta a View responsÃ¡vel pelo lanÃ§amento da exceÃ§Ã£o.
 	 * 
 	 * @param View_Abstract $view
 	 */
@@ -22,7 +22,7 @@ class View_Exception extends Exception {
 	}
 	
 	/**
-	 * Retorna a View responsável pelo lançamento da exceção.
+	 * Retorna a View responsÃ¡vel pelo lanÃ§amento da exceÃ§Ã£o.
 	 * 
 	 * @return View_Abstract
 	 */

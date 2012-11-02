@@ -1,7 +1,7 @@
 <?php
 final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	/**
-	 * Tipos numéricos do MySQL
+	 * Tipos numÃ©ricos do MySQL
 	 * @var array
 	 */
 	protected $_numericDataTypes = array(
@@ -42,7 +42,7 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 		}
 		
 		if(!extension_loaded('mysqli')){
-			throw new Db_Adapter_Mysqli_Exception('A extensão mysqli não foi carregada!');
+			throw new Db_Adapter_Mysqli_Exception('A extensÃ£o mysqli nÃ£o foi carregada!');
 		}
 		
 		if(isset($this->_config['port'])){
@@ -143,12 +143,12 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	public function limit($sql, $count, $offset = 0) {
 		$count = (int) $count;
 		if($count <= 0) {
-			throw new Db_Adapter_Mysqli_Exception(sprintf('O argumento $count=%s para a cláusula LIMIT não é valido', $count));
+			throw new Db_Adapter_Mysqli_Exception(sprintf('O argumento $count=%s para a clÃ¡usula LIMIT nÃ£o Ã© valido', $count));
 		}
 		
 		$offset = (int) $offset;
 		if($offset < 0) {
-			throw new Db_Adapter_Mysqli_Exception(sprintf('O argumento $offset=%s para a cláusula LIMIT não é valido', $count));
+			throw new Db_Adapter_Mysqli_Exception(sprintf('O argumento $offset=%s para a clÃ¡usula LIMIT nÃ£o Ã© valido', $count));
 		}
 		
 		$sql .= "\nLIMIT " . $count;
@@ -261,7 +261,7 @@ final class Db_Adapter_Mysqli extends Db_Adapter_Abstract {
 	}
 
 	/**
-	 * Ajusta o quoting para MySQL, utilizando o método real_escape_string
+	 * Ajusta o quoting para MySQL, utilizando o mÃ©todo real_escape_string
 	 * @see Db_Adapter_Abstract::_doQuote()
 	 */
 	protected function _doQuote($value) {

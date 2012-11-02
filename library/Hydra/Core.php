@@ -1,12 +1,12 @@
 <?php
 /**
- * Representa o núcleo do sistema.
+ * Representa o nÃºcleo do sistema.
  *
  * @package Core
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 
-//Dependências diretas de Core.
+//DependÃªncias diretas de Core.
 
 require_once 'Localization.php';
 require_once 'Loader.php';
@@ -48,77 +48,77 @@ class Core {
 	const INDEX_FILE	= 'indexFile';
 
 	/**
-	 * Armazena o objeto responsável por carregar as classes da aplicação.
+	 * Armazena o objeto responsÃ¡vel por carregar as classes da aplicaÃ§Ã£o.
 	 *
 	 * @var Loader
 	 */
 	private $_loader;
 
 	/**
-	 * O ambiente em que a aplicação está rodando (DEVELOPMENT ou PRODUCTION).
+	 * O ambiente em que a aplicaÃ§Ã£o estÃ¡ rodando (DEVELOPMENT ou PRODUCTION).
 	 * @var int
 	 */
 	private $_environment = self::DEVELOPMENT;
 
 	/**
-	 * Armazena o subdiretório do sistema.
+	 * Armazena o subdiretÃ³rio do sistema.
 	 * @var string
 	 */
 	private $_systemDir = 'system/';
 
 	/**
-	 * Armazena o subdiretório das bibliotecas
+	 * Armazena o subdiretÃ³rio das bibliotecas
 	 * @var unknown_type
 	 */
-	private $_libraryDir = 'library/Hydra';
+	private $_libraryDir = 'library/Hydra/';
 
 	/**
-	 * Armazena o diretório de log.
+	 * Armazena o diretÃ³rio de log.
 	 * @var string
 	 */
 	private $_logDir = 'system/log/';
 
 	/**
-	 * Se o log da aplicação será gravado em disco ou não
+	 * Se o log da aplicaÃ§Ã£o serÃ¡ gravado em disco ou nÃ£o
 	 * @var boolean
 	 */
 	private $_logging = true;
 
 	/**
-	 * Armazena o diretório de cache.
+	 * Armazena o diretÃ³rio de cache.
 	 * @var string
 	 */
 	private $_cacheDir = 'system/cache/';
 
 	/**
-	 * Se a aplicação fará ou não uso de cache.
+	 * Se a aplicaÃ§Ã£o farÃ¡ ou nÃ£o uso de cache.
 	 * @var boolean
 	 */
 	private $_caching = true;
 
 	/**
-	 * O diretório que contém configurações do sistema.
+	 * O diretÃ³rio que contÃ©m configuraÃ§Ãµes do sistema.
 	 * @var string
 	 */
 	private $_configDir = 'system/config/';
 
 	/**
-	 * O diretório que contém as inicializações do sistema.
+	 * O diretÃ³rio que contÃ©m as inicializaÃ§Ãµes do sistema.
 	 * @var string
 	 */
 	private $_iniDir = 'system/ini/';
 
 	/**
-	 * O diretório que contém as definições do sistema.
+	 * O diretÃ³rio que contÃ©m as definiÃ§Ãµes do sistema.
 	 * @var string
 	 */
 	private $_defDir = 'system/def/';
 
 	/**
-	 * O charset da aplicação.
+	 * O charset da aplicaÃ§Ã£o.
 	 * @var string
 	 */
-	private $_charset = 'iso-8859-1';
+	private $_charset = 'utf-8';
 
 	/**
 	 * Os nomes das bibliotecas utilizadas no sistema.
@@ -127,31 +127,31 @@ class Core {
 	private $_libraries = array();
 
 	/**
-	 * O diretório raiz de toda a aplicação
+	 * O diretÃ³rio raiz de toda a aplicaÃ§Ã£o
 	 * @var string
 	 */
 	private $_root;
 
 	/**
-	 * O diretório raíz específico da aplicação.
+	 * O diretÃ³rio raÃ­z especÃ­fico da aplicaÃ§Ã£o.
 	 * @var string
 	 */
 	private $_appRoot = 'app/';
 
 	/**
-	 * Armazena o nome da biblioteca principal da aplicação
+	 * Armazena o nome da biblioteca principal da aplicaÃ§Ã£o
 	 * @var string
 	 */
 	private $_coreLib = 'Hydra';
 
 	/**
-	 * Armazena as configurações de localização da aplicação
+	 * Armazena as configuraÃ§Ãµes de localizaÃ§Ã£o da aplicaÃ§Ã£o
 	 * @var Localization
 	 */
 	private $_localization;
 
 	/**
-	 * Instância singleton de Core.
+	 * InstÃ¢ncia singleton de Core.
 	 * @var Core
 	 */
 	private static $_instance;
@@ -159,21 +159,21 @@ class Core {
 	/**
 	 * Construtor.
 	 *
-	 * As configurações possíveis são:
-	 * - *systemDir 	(string) : o diretório destinado aos recursos do sistema (log, cache, etc)
-	 * - *appRoot	(string) : o diretório raíz da aplicação
+	 * As configuraÃ§Ãµes possÃ­veis sÃ£o:
+	 * - *systemDir 	(string) : o diretÃ³rio destinado aos recursos do sistema (log, cache, etc)
+	 * - *appRoot	(string) : o diretÃ³rio raÃ­z da aplicaÃ§Ã£o
 	 *
 	 * - libraries	(array) : bibliotecas de scripts
-	 * - *modules	(array) : os módulos da aplicação
-	 * - *mainModule (array) : o módulo principal da aplicação
+	 * - *modules	(array) : os mÃ³dulos da aplicaÃ§Ã£o
+	 * - *mainModule (array) : o mÃ³dulo principal da aplicaÃ§Ã£o
 	 *
-	 * - cacheDir	(string) : o diretório para cache (subdiretório de systemDir)
-	 * - caching	(boolean) : se o sistema deve ou não fazer uso de cache
+	 * - cacheDir	(string) : o diretÃ³rio para cache (subdiretÃ³rio de systemDir)
+	 * - caching	(boolean) : se o sistema deve ou nÃ£o fazer uso de cache
 	 *
-	 * - logDir		(string) : o diretório para log (subdiretório de systemDir)
-	 * - logging	(boolean) : se o sistema deve ou não manter logs
+	 * - logDir		(string) : o diretÃ³rio para log (subdiretÃ³rio de systemDir)
+	 * - logging	(boolean) : se o sistema deve ou nÃ£o manter logs
 	 *
-	 * - charset 	(string) : o charset utilizado na aplicação
+	 * - charset 	(string) : o charset utilizado na aplicaÃ§Ã£o
 	 *
 	 * @param array $options
 	 */
@@ -238,14 +238,14 @@ class Core {
 	}
 
 	/**
-	 * Inicializa a aplicação.
+	 * Inicializa a aplicaÃ§Ã£o.
 	 *
 	 * @return void
 	 */
 	private function _init() {
+		$this->_setupEnvironment();
 		$this->_setupApplicationDirectories();
 		$this->_setupLocalization();
-		$this->_setupEnvironment();
 		$this->_setupAutoload();
 	}
 
@@ -254,7 +254,7 @@ class Core {
 	}
 
 	/**
-	 * Configura os diretórios da aplicação.
+	 * Configura os diretÃ³rios da aplicaÃ§Ã£o.
 	 * @return void
 	 */
 	private function _setupApplicationDirectories() {
@@ -266,7 +266,7 @@ class Core {
 	}
 
 	/**
-	 * Configura a localização da aplicação
+	 * Configura a localizaÃ§Ã£o da aplicaÃ§Ã£o
 	 * @return void
 	 */
 	private function _setupLocalization() {
@@ -278,7 +278,7 @@ class Core {
 	}
 
 	/**
-	 * Retorna a instância singleton da classe.
+	 * Retorna a instÃ¢ncia singleton da classe.
 	 * @param array $options
 	 */
 	public static function getInstance($options = array()) {
@@ -290,29 +290,29 @@ class Core {
 
 
 	/**
-	 * Verifica as configurações passadas ao construtor.
+	 * Verifica as configuraÃ§Ãµes passadas ao construtor.
 	 *
 	 * @param array $config
 	 * @throws Exception
 	 */
 	private function _verifyConfig(array &$config) {
 		if(!isset($config[self::ROOT])) {
-			throw new Exception('O diretório raiz da aplicação não foi definido!');
+			throw new Exception('O diretÃ³rio raiz da aplicaÃ§Ã£o nÃ£o foi definido!');
 		}
 
 		if(isset($config[self::CACHING]) && $config[self::CACHING] === TRUE
 			&& !isset($config[self::CACHE_DIR])) {
-			throw new Exception('O diretório de cache da aplicação não foi definido!');
+			throw new Exception('O diretÃ³rio de cache da aplicaÃ§Ã£o nÃ£o foi definido!');
 		}
 
 		if(isset($config[self::LOGGING]) && $config[self::LOGGING] === TRUE
 			&& !isset($config[self::LOG_DIR])) {
-			throw new Exception('O diretório de log da aplicação não foi definido!');
+			throw new Exception('O diretÃ³rio de log da aplicaÃ§Ã£o nÃ£o foi definido!');
 		}
 	}
 
 	/**
-	 * Seta o charset da aplicação.
+	 * Seta o charset da aplicaÃ§Ã£o.
 	 *
 	 * @param string $charset
 	 * @return Core : fluent interface
@@ -323,7 +323,7 @@ class Core {
 	}
 
 	/**
-	 * Retorna o charset da aplicação.
+	 * Retorna o charset da aplicaÃ§Ã£o.
 	 *
 	 * @return string
 	 */
@@ -332,15 +332,15 @@ class Core {
 	}
 
 	/**
-	 * Seta o diretório raiz de toda a aplicação.
-	 * (É o diretório que contém a aplicação, a library, os diretórios do sitema, etc.)
+	 * Seta o diretÃ³rio raiz de toda a aplicaÃ§Ã£o.
+	 * (Ã‰ o diretÃ³rio que contÃ©m a aplicaÃ§Ã£o, a library, os diretÃ³rios do sitema, etc.)
 	 *
 	 * @param string $dir
 	 * @throws Exception
 	 */
 	public function setRoot($dir) {
 		if(!is_dir($dir)) {
-			throw new Exception(sprintf('O diretório raiz informado %s não é um diretório válido.', $dir));
+			throw new Exception(sprintf('O diretÃ³rio raiz informado %s nÃ£o Ã© um diretÃ³rio vÃ¡lido.', $dir));
 		}
 
 		$this->_root = realpath($dir) . self::DS;
@@ -348,7 +348,7 @@ class Core {
 	}
 
 	/**
-	 * Retorna o diretório raiz de toda a aplicação.
+	 * Retorna o diretÃ³rio raiz de toda a aplicaÃ§Ã£o.
 	 *
 	 * @return string
 	 */
@@ -357,13 +357,13 @@ class Core {
 	}
 
 	/**
-	 * Seta o diretório raiz específico da aplicação.
-	 * (Aqui ficam os diretórios para Controllers, Views, Models,
-	 *  scripts, imagens, etc., específicos da
+	 * Seta o diretÃ³rio raiz especÃ­fico da aplicaÃ§Ã£o.
+	 * (Aqui ficam os diretÃ³rios para Controllers, Views, Models,
+	 *  scripts, imagens, etc., especÃ­ficos da
 	 *
 	 * @param string $dir
 	 * @return Core : fluent interface
-	 * @throws Exception : caso o diretório não seja válido
+	 * @throws Exception : caso o diretÃ³rio nÃ£o seja vÃ¡lido
 	 */
 	public function setAppRoot($dir) {
 		$this->_setPropertyDir('_appRoot', $dir);
@@ -371,7 +371,7 @@ class Core {
 	}
 
 	/**
-	 * Retorna o diretório raiz específico da aplicação
+	 * Retorna o diretÃ³rio raiz especÃ­fico da aplicaÃ§Ã£o
 	 *
 	 * @return string
 	 */
@@ -403,7 +403,7 @@ class Core {
 	}
 
 	/**
-	 * Habilita ou desabilita o cache para a aplicação.
+	 * Habilita ou desabilita o cache para a aplicaÃ§Ã£o.
 	 *
 	 * @param boolean $opt : se TRUE, habilita o cache,
 	 * 		se FALSE, desabilita
@@ -512,25 +512,25 @@ class Core {
 	}
 
 	/**
-	 * Seta o diretório para uma propriedade (_cacheDir, _logDir, etc).
-	 * Todos os diretórios devem ser subdiretórios de _appRoot.
+	 * Seta o diretÃ³rio para uma propriedade (_cacheDir, _logDir, etc).
+	 * Todos os diretÃ³rios devem ser subdiretÃ³rios de _appRoot.
 	 *
 	 * @param string $property : o nome da propriedade
-	 * @param string $dir : o diretório a ser setado.
-	 * @throws Exception : caso o diretório não seja válido
+	 * @param string $dir : o diretÃ³rio a ser setado.
+	 * @throws Exception : caso o diretÃ³rio nÃ£o seja vÃ¡lido
 	 */
 	private function _setPropertyDir($property, $dir) {
-		$fullPath = $this->_root . self::DS . $dir;
+		$fullPath = $this->_root . $dir;
 		if(!is_dir($fullPath)) {
 			if(!mkdir($fullPath, 0777, true)) {
-				throw new Exception(sprintf('O diretório informado %s não é um diretório válido e não pôde ser criado.', $fullPath));
+				throw new Exception(sprintf('O diretÃ³rio informado %s nÃ£o Ã© um diretÃ³rio vÃ¡lido e nÃ£o pÃ´de ser criado.', $fullPath));
 			}
 		}
 		$this->$property = realpath($dir) . self::DS;
 	}
 
 	/**
-	 * Seta o nome da biblioteca padrão.
+	 * Seta o nome da biblioteca padrÃ£o.
 	 *
 	 * @param string $lib
 	 * @return Core : fluent interface
@@ -541,7 +541,7 @@ class Core {
 	}
 
 	/**
-	 * Retorna o nome da biblioteca padrão.
+	 * Retorna o nome da biblioteca padrÃ£o.
 	 * @return string
 	 */
 	public function getCoreLib() {
@@ -549,7 +549,7 @@ class Core {
 	}
 
 	/**
-	 * Seta uma localização para a aplicação.
+	 * Seta uma localizaÃ§Ã£o para a aplicaÃ§Ã£o.
 	 *
 	 * @param Localization $loc
 	 * @return Core : fluent interface
@@ -561,7 +561,7 @@ class Core {
 	}
 
 	/**
-	 * Retorna a localização da aplicação.
+	 * Retorna a localizaÃ§Ã£o da aplicaÃ§Ã£o.
 	 *
 	 * @return Localization
 	 */
@@ -570,7 +570,7 @@ class Core {
 	}
 
 	/**
-	 * Seta o ambiente da aplicação
+	 * Seta o ambiente da aplicaÃ§Ã£o
 	 * @param int $env : constantes Core::PRODUCTIOIN ou Core::DEVELOPMENT
 	 */
 	public function setEnvironment($env) {
@@ -598,7 +598,7 @@ class Core {
 	}
 
 	/**
-	 * Retorna um arquivo de inicialização.
+	 * Retorna um arquivo de inicializaÃ§Ã£o.
 	 *
 	 * @param string $fileName
 	 * @param string $ext
@@ -607,7 +607,7 @@ class Core {
 	public function getIni($fileName, $ext = 'ini') {
 		$filePath = $this->_iniDir . $fileName . '.' . preg_replace('/^\./', '', $ext);
 		if(!is_file($filePath)) {
-			throw new Exception(sprintf('Arquivo de inicialização "%s" inexistente.', $filePath));
+			throw new Exception(sprintf('Arquivo de inicializaÃ§Ã£o "%s" inexistente.', $filePath));
 		}
 
 		$ini = parse_ini_file(realpath($filePath), true);
@@ -616,7 +616,7 @@ class Core {
 	}
 
 	/**
-	 * Retorna um arquivo de configuração.
+	 * Retorna um arquivo de configuraÃ§Ã£o.
 	 *
 	 * @param string $fileName
 	 * @param string $ext
@@ -625,14 +625,14 @@ class Core {
 	public function getConfigFile($fileName, $ext = 'php') {
 		$filePath = $this->_configDir . $fileName . '.' . preg_replace('/^\./', '', $ext);
 		if(!is_file($filePath)) {
-			throw new Exception(sprintf('Arquivo de configuração "%s" inexistente.', $filePath));
+			throw new Exception(sprintf('Arquivo de configuraÃ§Ã£o "%s" inexistente.', $filePath));
 		}
 
 		return realpath($filePath);
 	}
 
 	/**
-	 * Retorna um arquivo de definições.
+	 * Retorna um arquivo de definiÃ§Ãµes.
 	 *
 	 * @param string $fileName
 	 * @param string $ext
@@ -641,7 +641,7 @@ class Core {
 	public function getDefFile($fileName, $ext = 'php') {
 		$filePath = $this->_defDir . $fileName . '.' . preg_replace('/^\./', '', $ext);
 		if(!is_file($filePath)) {
-			throw new Exception(sprintf('Arquivo de definição "%s" inexistente.', $filePath));
+			throw new Exception(sprintf('Arquivo de definiÃ§Ã£o "%s" inexistente.', $filePath));
 		}
 
 		return realpath($filePath);

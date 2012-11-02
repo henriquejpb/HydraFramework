@@ -1,7 +1,7 @@
 <?php
 class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	/**
-	 * Tipos numéricos do PostgreSQL
+	 * Tipos numÃ©ricos do PostgreSQL
 	 * @var array
 	 */
 	protected $_numericDataTypes = array(
@@ -38,7 +38,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 		}
 		
 		if(!extension_loaded('pgsql')) {
-			throw new Db_Adapter_Pgsql_Exception('A extensão pgsql não foi carregada!');
+			throw new Db_Adapter_Pgsql_Exception('A extensÃ£o pgsql nÃ£o foi carregada!');
 		}
 		
 		if(isset($this->_config['port'])){
@@ -58,7 +58,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 		if($this->_connection === false) {
 			$this->_connection = null;
 			throw new Db_Adapter_Pgsql_Exception(sprintf(
-				'Impossível conectar ao banco de dados %s no servidor %s através do usuário %s', 
+				'ImpossÃ­vel conectar ao banco de dados %s no servidor %s atravÃ©s do usuÃ¡rio %s', 
 				$this->_config['dbname'], $this->_config['host'], $this->_config['user']
 			));
 		}
@@ -119,13 +119,13 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 			$this->getConnection();
 			return $this->lastSequenceId($seqName);
 		} else {
-			throw new Db_Adapter_Pgsql_Exception('É necessário informar ao menos o nome da tabela para
-					obter o último id inserido!');
+			throw new Db_Adapter_Pgsql_Exception('Ã‰ necessÃ¡rio informar ao menos o nome da tabela para
+					obter o Ãºltimo id inserido!');
 		}
 	}
 	
 	/**
-	 * Retorna o último ID da sequência $sequenceName.
+	 * Retorna o Ãºltimo ID da sequÃªncia $sequenceName.
 	 * 
 	 * @param string $sequenceName
 	 * @return int
@@ -177,7 +177,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	
 		$offset = (int) $offset;
 		if($offset < 0) {
-			throw new Db_Adapter_Mysqli_Exception(sprintf('O argumento $offset=%s para a cláusula LIMIT não é valido', $count));
+			throw new Db_Adapter_Mysqli_Exception(sprintf('O argumento $offset=%s para a clÃ¡usula LIMIT nÃ£o Ã© valido', $count));
 		}
 	
 		$sql .= "\nLIMIT " . $count;
@@ -189,7 +189,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * TODO: verificar se há suporte a named parameters
+	 * TODO: verificar se hÃ¡ suporte a named parameters
 	 * @see Db_Adapter_Abstract::supportsParameters()
 	 */
 	public function supportsParameters($type) {
@@ -218,7 +218,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	public function describeTable($tableName, $schemaName = null) {
 		$results = array();
 		
-		// Workaround, pois o PgSQL não possui o comando DESCRIBE
+		// Workaround, pois o PgSQL nÃ£o possui o comando DESCRIBE
 		$sql = "SELECT
                 a.attnum AS colpos,
                 n.nspname AS schema_name,
@@ -279,7 +279,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 			if($pos !== false && $row['contype'] == 'p') {
 				$isPk = true;
 				$pkPos = $pos + 1; // 1-based
-				$isId = (bool) preg_match('/^nextval/', $row['default_value']); // se é uma sequência
+				$isId = (bool) preg_match('/^nextval/', $row['default_value']); // se Ã© uma sequÃªncia
 			}
 			
 			$desc[$row['colname']] = array(

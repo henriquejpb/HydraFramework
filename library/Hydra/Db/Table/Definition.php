@@ -1,7 +1,7 @@
 <?php
 class Db_Table_Definition {
 	/**
-	 * Coleção de definições de tabela.
+	 * ColeÃ§Ã£o de definiÃ§Ãµes de tabela.
 	 * 
 	 * @var array
 	 */
@@ -9,11 +9,11 @@ class Db_Table_Definition {
 	
 	/**
 	 * Construtor. 
-	 * Seta uma ou mais definições de tabela 
-	 * através de um array da forma:
-	 * - nomeDaTabela	=>	opções
+	 * Seta uma ou mais definiÃ§Ãµes de tabela 
+	 * atravÃ©s de um array da forma:
+	 * - nomeDaTabela	=>	opÃ§Ãµes
 	 * 
-	 * Para ver as definições possíveis, veja
+	 * Para ver as definiÃ§Ãµes possÃ­veis, veja
 	 * @see Db_Table::__construct
 	 * 
 	 * @param array|null $definitions
@@ -27,7 +27,7 @@ class Db_Table_Definition {
 	}
 	
 	/**
-	 * Seta a definição para a tabela $tableName.
+	 * Seta a definiÃ§Ã£o para a tabela $tableName.
 	 * 
 	 * @param string $tableName
 	 * @param array $tableDef
@@ -44,7 +44,7 @@ class Db_Table_Definition {
 	}
 
 	/**
-	 * Retorna a definição da tabela $tableName.
+	 * Retorna a definiÃ§Ã£o da tabela $tableName.
 	 * 
 	 * @param string $tableName
 	 */
@@ -56,7 +56,7 @@ class Db_Table_Definition {
 	}
 	
 	/**
-	 * Verifica se existe a definição para a tabela $tableName.
+	 * Verifica se existe a definiÃ§Ã£o para a tabela $tableName.
 	 * 
 	 * @param string $tableName
 	 */
@@ -65,7 +65,7 @@ class Db_Table_Definition {
 	}
 	
 	/**
-	 * Remove a definição da tabela $tableName.
+	 * Remove a definiÃ§Ã£o da tabela $tableName.
 	 * 
 	 * @param string $tableName
 	 */

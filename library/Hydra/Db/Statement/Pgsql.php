@@ -3,20 +3,20 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 	
 	/**
 	 * No PostgreSQL, cada prepared statement precisa ter um nome.
-	 * Para execut·-lo, informamos apenas o nome do mesmo.
+	 * Para execut√°-lo, informamos apenas o nome do mesmo.
 	 * @var string
 	 */
 	private $_name;
 	
 	
 	/**
-	 * Armazena o ˙ltimo resultado de uma query.
+	 * Armazena o √∫ltimo resultado de uma query.
 	 * @var resource
 	 */
 	private $_lastResult = null;
 	
 	public function __construct(Db_Adapter_Abstract $adapter, $sql) {
-		// Dando um nome ˙nico para cada statement
+		// Dando um nome √∫nico para cada statement
 		$this->_name = uniqid('stmt');
 		parent::__construct($adapter, $sql);
 	}
@@ -26,7 +26,7 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 	 */
 	protected function _prepare($sql) {
 		$conn = $this->_adapter->getConnection();
-		// No PostgreSQL, os placeholders para par‚metros s„o da forma '$n', n„o '?'
+		// No PostgreSQL, os placeholders para par√¢metros s√£o da forma '$n', n√£o '?'
 		$sql = preg_replace_callback('/\?/', 
 			create_function(
 				'$matches', 
@@ -34,8 +34,8 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 				 return "\$" . ++$count;'
 			), $sql, -1, $count);
 		
-		/* Infelizmente n„o h· outro jeito de suprimir os warnings gerados pela 
-		 * funÁ„o pg_prepare, se n„o o uso do '@'.
+		/* Infelizmente n√£o h√° outro jeito de suprimir os warnings gerados pela 
+		 * fun√ß√£o pg_prepare, se n√£o o uso do '@'.
 		 */
 		$this->_stmt = @pg_prepare($conn, $this->_name, $sql);
 		$error = pg_last_error($conn);
@@ -58,7 +58,7 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 	 * @see Db_Statement_Interface::columnCount()
 	 */
 	public function columnCount() {
-		// TODO: verificar como retornar o n˙mero de colunas retornadas de uma query
+		// TODO: verificar como retornar o n√∫mero de colunas retornadas de uma query
 		return null; 
 	}
 	
@@ -72,8 +72,8 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 		
 		$conn = $this->_adapter->getConnection();
 		
-		/* Infelizmente n„o h· outro jeito de suprimir os warnings gerados pela
-		 * funÁ„o pg_prepare, se n„o o uso do '@'.
+		/* Infelizmente n√£o h√° outro jeito de suprimir os warnings gerados pela
+		 * fun√ß√£o pg_prepare, se n√£o o uso do '@'.
 		 */
 		$this->_lastResult = @pg_execute($conn, $this->_name, $params);
 		if($this->_lastResult === false) {
@@ -103,7 +103,7 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 			case Db::FETCH_OBJ:
 				return pg_fetch_object($this->_lastResult);
 			default:
-				throw new Db_Statement_Pgsql_Exception('Modo de fetch inv·lido!');
+				throw new Db_Statement_Pgsql_Exception('Modo de fetch inv√°lido!');
 		}
 	}
 	
@@ -111,7 +111,7 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 	 * @see Db_Statement_Interface::nextRowset()
 	 */
 	public function nextRowset() {
-		throw new Db_Statement_Pgsql_Exception('PostgreSQL n„o suporta esta operaÁ„o: ' . __FUNCTION__ . '()');
+		throw new Db_Statement_Pgsql_Exception('PostgreSQL n√£o suporta esta opera√ß√£o: ' . __FUNCTION__ . '()');
 	}
 	
 	/**

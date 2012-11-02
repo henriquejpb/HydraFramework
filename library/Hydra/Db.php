@@ -1,6 +1,6 @@
 <?php
 /**
- * Conexão com SGBD's
+ * ConexÃ£o com SGBD's
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 abstract class Db {
@@ -9,39 +9,39 @@ abstract class Db {
     const FLOAT_TYPE  = 2;
 
 	/**
-	 * Indica que os métodos fetch* devem retornar arrays associativos nome_campo => valor_campo
+	 * Indica que os mÃ©todos fetch* devem retornar arrays associativos nome_campo => valor_campo
 	 * @var integer
 	 */
 	const FETCH_ASSOC = 100;
 
 	/**
-	 * Indica que os métodos fetch* devem retornar arrays com í­ndices numéricos n => valor_campo
+	 * Indica que os mÃ©todos fetch* devem retornar arrays com Ã­Â­ndices numÃ©ricos n => valor_campo
 	 * @var integer
 	 */
 	const FETCH_NUM   = 101;
 
 	/**
-	 * Indica que os métodos fetch* devem retornar arrays associativos e numéricos
+	 * Indica que os mÃ©todos fetch* devem retornar arrays associativos e numÃ©ricos
 	 * @var integer
 	 */
 	const FETCH_ARRAY = 102;
 
 	/**
-	 * Indica que os métodos fetch* devem retornar objetos stdClass
+	 * Indica que os mÃ©todos fetch* devem retornar objetos stdClass
 	 * @var integer
 	 */
 	const FETCH_OBJ	  = 103;
 
 	/**
-	 * Indica que os métodos fetch* devem retornar uma única coluna
+	 * Indica que os mÃ©todos fetch* devem retornar uma Ãºnica coluna
 	 * @var integer
 	 */
 	const FETCH_COLUMN = 104;
 
 	/**
-	 * Retorna um Db_Adapter para conexão com o banco de dados
+	 * Retorna um Db_Adapter para conexÃ£o com o banco de dados
 	 * @param string $adapter : o nome do Adapter
-	 * @param array $config : as configurações do novo Adapter
+	 * @param array $config : as configuraÃ§Ãµes do novo Adapter
 	 * @throws Db_Exception
 	 */
 	public static function factory($adapter, array $config){

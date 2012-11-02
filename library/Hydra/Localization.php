@@ -1,6 +1,6 @@
 <?php
 /**
- * Protótipo de uma classe de localização
+ * ProtÃ³tipo de uma classe de localizaÃ§Ã£o
  * @package Core
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
@@ -12,7 +12,7 @@ class Localization {
 	private $_timezone;
 	
 	/**
-	 * A localização
+	 * A localizaÃ§Ã£o
 	 * @var array
 	 */
 	private $_locale = array();

@@ -1,9 +1,9 @@
 <?php
 /**
- * Array melhorado, com suporte ‡ notaÁ„o com ponto.
+ * Array melhorado, com suporte √† nota√ß√£o com ponto.
  * Exemplo:
  * 		<code>$data['a.b.c'] = 1</code>
- * Resultar· em:
+ * Resultar√° em:
  * 		<code>
  * 		array (
  * 			a => array (
@@ -23,7 +23,7 @@
 class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializable {
 	
 	/**
-	 * Constante que armazena o separador para a notaÁ„o mais curta.
+	 * Constante que armazena o separador para a nota√ß√£o mais curta.
 	 * 
 	 * @var string
 	 */
@@ -37,8 +37,8 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	protected $_data = array();
 	
 	/**
-	 * Define se uma exceÁ„o deve ser lanÁada caso haja a tentativa de
-	 * acessar um Ìndice inv·lido do array.
+	 * Define se uma exce√ß√£o deve ser lan√ßada caso haja a tentativa de
+	 * acessar um √≠ndice inv√°lido do array.
 	 * 
 	 * @var boolean
 	 */
@@ -52,14 +52,14 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	protected $_countCache;
 
 	/**
-	 * Converte um array em notaÁ„o com ponto para um array PHP.
+	 * Converte um array em nota√ß√£o com ponto para um array PHP.
 	 * Atua como um Factory Method.
 	 * 
 	 * Exemplo:
 	 * 		<code>
 	 * 			array('a.b.c' => 'foo', 'a.b.d' => 'bar')
 	 * 		</code>
-	 * 		Ser· convertido em:
+	 * 		Ser√° convertido em:
 	 * 		<code>
 	 * 			array (	
 	 * 				a => array (
@@ -83,8 +83,8 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	}
 	
 	/**
-	 * Seta a flag que indica se uma exceÁ„o deve ser lanÁada
-	 * caso tente-se acessar um Ìndice inv·lido do array.
+	 * Seta a flag que indica se uma exce√ß√£o deve ser lan√ßada
+	 * caso tente-se acessar um √≠ndice inv√°lido do array.
 	 * 
 	 * @param bool $opt
 	 * @return Util_Array : fluent interface
@@ -95,7 +95,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	}
 	
 	/**
-	 * MÈtodo de acesso da interface ArrayAccess.
+	 * M√©todo de acesso da interface ArrayAccess.
 	 * Permite setar Util_Array da forma indexada:
 	 * 		<code>$foo['bar'] = $baz</code>
 	 * 
@@ -112,13 +112,13 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	} 
 	
 	/**
-	 * MÈtodo de acesso da interface ArrayAccess.
+	 * M√©todo de acesso da interface ArrayAccess.
 	 * Permite acessar Util_Array da forma indexada:
 	 * 		<code>$foo['bar']</code>
 	 * 
 	 * @param string $offset
 	 * @return mixed
-	 * @throws Exception caso $offset n„o exista e a flag 
+	 * @throws Exception caso $offset n√£o exista e a flag 
 	 * 		Util_Array::_invalidOffsetThrowsException seja TRUE
 	 */
 	public function offsetGet($offset) {
@@ -126,13 +126,13 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	}
 	
 	/**
-	 * MÈtodo de acesso da interface ArrayAccess.
+	 * M√©todo de acesso da interface ArrayAccess.
 	 * Permite remover um elemento de Util_Array da forma indexada:
 	 * 		<code>unset($foo['bar'])</code>
 	 * 
 	 * @param string $offset
 	 * @return Util_Array
-	 * @throws Exception caso $offset n„o exista e a flag 
+	 * @throws Exception caso $offset n√£o exista e a flag 
 	 * 		Util_Array::_invalidOffsetThrowsException seja TRUE
 	 */
 	public function offsetUnset($offset) {
@@ -142,8 +142,8 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	}
 	
 	/**
-	 * MÈtodo de acesso da interface ArrayAccess.
-	 * … invocado ao ser utilizado as funÁıes isset e empty:
+	 * M√©todo de acesso da interface ArrayAccess.
+	 * √â invocado ao ser utilizado as fun√ß√µes isset e empty:
 	 * 		<code>if(isset($array['bla'])) ...</code>
 	 * 
 	 * @param string $offset
@@ -158,7 +158,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	}
 
 	/**
-	 * ImplementaÁ„o da interface IteratorAggregate.
+	 * Implementa√ß√£o da interface IteratorAggregate.
 	 *  
 	 * @return Iterator
 	 */
@@ -167,7 +167,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	}
 	
 	/**
-	 * ImplementaÁ„o da interface Countable
+	 * Implementa√ß√£o da interface Countable
 	 * 
 	 * @return int
 	 */
@@ -184,8 +184,8 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	}
 	
 	/**
-	 * ImplementaÁ„o da interface Serializable.
-	 * Ir· serializar os dados do array.
+	 * Implementa√ß√£o da interface Serializable.
+	 * Ir√° serializar os dados do array.
 	 * 
 	 * @return string
 	 */
@@ -194,8 +194,8 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	}
 	
 	/**
-	 * ImplementaÁ„o da interface Serializable.
-	 * A partir dos dados serializados, ir· setar
+	 * Implementa√ß√£o da interface Serializable.
+	 * A partir dos dados serializados, ir√° setar
 	 * os dados do array.
 	 * 
 	 * @param string $serialized
@@ -219,31 +219,31 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	 * 				array('foo', 'bar', 'baz'), 'bazzinga')
 	 * 		</code>  
 	 * 
-	 * @param array &$data : referÍncia para o array contendo os dados
+	 * @param array &$data : refer√™ncia para o array contendo os dados
 	 * @param array $keys : array de chaves para setar o valor $value 
 	 * @param mixed $value : o valor a setar
 	 * @return void
 	 */
 	protected function _recursiveSet(array &$data, array $keys, $value) {
 		/*
-		 * O ˙ltimo elemento do array $keys È o nÛ-folha, 
-		 * ou seja, È ele que ir· armazenar $value.
-		 * Por este motivo, separaremos a ˙ltima chave das demais.
+		 * O √∫ltimo elemento do array $keys √© o n√≥-folha, 
+		 * ou seja, √© ele que ir√° armazenar $value.
+		 * Por este motivo, separaremos a √∫ltima chave das demais.
 		 * 
-		 * array_pop remove o ˙ltimo elemento de um array e o retorna.
+		 * array_pop remove o √∫ltimo elemento de um array e o retorna.
 		 */
 		$last = array_pop($keys);
 		foreach($keys as $innerKey) {
 			/*
-			 * Caso as chaves intermedi·rias n„o existam ou n„o sejam arrays,
-			 * faz-se necess·rio cri·-las ou converte-las em um array vazio.
+			 * Caso as chaves intermedi√°rias n√£o existam ou n√£o sejam arrays,
+			 * faz-se necess√°rio cri√°-las ou converte-las em um array vazio.
 			 * Exemplo:
 			 * 
 			 * 		A partir de um array vazio:
 			 * 			array()
 			 * 
-			 * 		Ao setar o Ìndice 'a.b.c', precisamos antes de 'c',
-			 * 		criar os Ìndices 'a' e 'b', ficando dessa forma:
+			 * 		Ao setar o √≠ndice 'a.b.c', precisamos antes de 'c',
+			 * 		criar os √≠ndices 'a' e 'b', ficando dessa forma:
 			 * 			array(
 			 * 				a => array(
 			 * 					b => array(
@@ -254,22 +254,22 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 			 * 
 			 */
 			if(!isset($data[$innerKey]) || !is_array($data[$innerKey])) {
-				// Declaramos ou substituÌmos o Ìndice no array...
+				// Declaramos ou substitu√≠mos o √≠ndice no array...
 				$data[$innerKey] = array();
 			}
 			/*
-			 * Movemos o "ponteiro" para um nÌvel abaixo no array
+			 * Movemos o "ponteiro" para um n√≠vel abaixo no array
 			 */
 			$data =& $data[$innerKey];
 		}
 		/*
-		 * ApÛs iterarmos sobre todas as chaves intermedi·rias do array,
-		 * movendo o ponteiro corretamente, o nÛ-folha agora pode ser setado 
+		 * Ap√≥s iterarmos sobre todas as chaves intermedi√°rias do array,
+		 * movendo o ponteiro corretamente, o n√≥-folha agora pode ser setado 
 		 * corretamente pois o valor de sua chave foi salvo anteriormente.
 		 */
 		
 		
-		// Caso tenhamos um array em $value, È necess·rio repetir todo o processo.
+		// Caso tenhamos um array em $value, √© necess√°rio repetir todo o processo.
 		if(is_array($value)) {
 			if(!isset($data[$last])) {
 				$data[$last] = array();
@@ -278,7 +278,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 				$this->_recursiveSet($data[$last], explode(self::SEPARATOR, $key), $val);
 			}
 		}
-		// Caso contr·rio, apenas setamos o valor 
+		// Caso contr√°rio, apenas setamos o valor 
 		else {
 			$data[$last] = $value;
 		}
@@ -299,50 +299,50 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	 * 
 	 * @param array $keys
 	 * @return mixed
-	 * @throws Exception se alguma das chaves n„o existir e
+	 * @throws Exception se alguma das chaves n√£o existir e
 	 * 		Util_Array::_invalidOffsetThrowsException for TRUE
 	 */
 	protected function _recursiveGet(array $keys) {
-		// Para operar sobre os dados, precisaremos utilizar suas referÍncias...
+		// Para operar sobre os dados, precisaremos utilizar suas refer√™ncias...
 		$data =& $this->_data;
 		// Copiamos o vetor $keys, pois podemos precisar do mesmo intacto...
 		$keysCopy = $keys;
-		// Para cada nÛ (chave) da ramificaÁ„o do array, fazemos...
+		// Para cada n√≥ (chave) da ramifica√ß√£o do array, fazemos...
 		do {
 			/*
-			 * A pesquisa pelas chaves se dar· da esquerda para a direita.
-			 * Chaves mais ‡ esquerda est„o mais prÛximas da raiz.
-			 * Chaves mais ‡ direita est„o mais prÛximas das folhas.
+			 * A pesquisa pelas chaves se dar√° da esquerda para a direita.
+			 * Chaves mais √† esquerda est√£o mais pr√≥ximas da raiz.
+			 * Chaves mais √† direita est√£o mais pr√≥ximas das folhas.
 			 * Ou seja, estamos fazendo uma busca em profundidade.
 			 * 
-			 * array_shift ir· remover o elemento mais ‡ 
-			 * esquerda do array e retorn·-lo.
+			 * array_shift ir√° remover o elemento mais √† 
+			 * esquerda do array e retorn√°-lo.
 			 */ 
 			$innerKey = array_shift($keysCopy);
 			// Caso a chave-"interna" exista no ramo...
 			if(isset($data[$innerKey])) {
 				/*
-				 * 1. Caso tente-se acessar um nÌvel N menor que
-				 * a profundidade P da ramificaÁ„o do array.
+				 * 1. Caso tente-se acessar um n√≠vel N menor que
+				 * a profundidade P da ramifica√ß√£o do array.
 				 * 
-				 * Neste caso, h· 2 possibilidades:
-				 * 	1.1.A busca ainda n„o terminou, ainda restam
+				 * Neste caso, h√° 2 possibilidades:
+				 * 	1.1.A busca ainda n√£o terminou, ainda restam
 				 * 		chaves-'filhas' do elemento atual que 
-				 * 		ainda ser„o percorridas pelo loop.
-				 * 	1.2.A busca terminou, na prÛxima passagem
-				 * 		sairemos do loop e o valor ser· retornado.
+				 * 		ainda ser√£o percorridas pelo loop.
+				 * 	1.2.A busca terminou, na pr√≥xima passagem
+				 * 		sairemos do loop e o valor ser√° retornado.
 				 */
 				if(is_array($data[$innerKey])) {
 					/*
-					 * O que fazemos aqui È mover o "ponteiro" dos dados
-					 * um nÌvel abaixo na hierarquia do array.
+					 * O que fazemos aqui √© mover o "ponteiro" dos dados
+					 * um n√≠vel abaixo na hierarquia do array.
 					 */
 					$data =& $data[$innerKey];
 				}
 				/*
-				 * 2. Caso tente-se acessar o ˙ltimo nÌvel N da
-				 * ramificaÁ„o do array, teremos um nÛ-folha.
-				 * Logo, devemos retorn·-lo.
+				 * 2. Caso tente-se acessar o √∫ltimo n√≠vel N da
+				 * ramifica√ß√£o do array, teremos um n√≥-folha.
+				 * Logo, devemos retorn√°-lo.
 				 * 
 				 * Exemplo:
 				 * 		Dados:
@@ -357,8 +357,8 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 					return $data[$innerKey];
 				}
 				/*
-				 * 3. Caso tente-se acessar um nÌvel N maior que 
-				 * a profundidade P da ramificaÁ„o do array.
+				 * 3. Caso tente-se acessar um n√≠vel N maior que 
+				 * a profundidade P da ramifica√ß√£o do array.
 				 * 
 				 * Exemplo:
 				 * 		Dados:
@@ -369,16 +369,16 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 				 * 		Tentativa:
 				 * 			Util_Array::_recursiveGet('a.c');
 				 * 
-				 * Note que chegaremos ao nÛ-folha do array, 
-				 * entretanto, ainda h· chaves para buscar.
-				 * Isso indica que aquela posiÁ„o que estamos
-				 * tentando buscar È inv·lida.			
+				 * Note que chegaremos ao n√≥-folha do array, 
+				 * entretanto, ainda h√° chaves para buscar.
+				 * Isso indica que aquela posi√ß√£o que estamos
+				 * tentando buscar √© inv√°lida.			
 				 */ 
 				else {
 					return $this->_invalidOffsetAccess(join(self::SEPARATOR, $keys));
 				}
 			}
-			// Caso contr·rio, a chave È inv·lida. 
+			// Caso contr√°rio, a chave √© inv√°lida. 
 			else {
 				return $this->_invalidOffsetAccess(join(self::SEPARATOR, $keys));
 			}
@@ -403,7 +403,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	 * 
 	 * @param array $keys
 	 * @return void
-	 * @throws Exception se alguma das chaves n„o existir e
+	 * @throws Exception se alguma das chaves n√£o existir e
 	 * 		Util_Array::_invalidOffsetThrowsException for TRUE
 	 */
 	protected function _recursiveUnset(array $keys) {
@@ -420,12 +420,12 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	}
 	
 	/**
-	 * Verificar· a aÁ„o a ser feita caso tente-se acessar
-	 * um offset inv·lido no array.
+	 * Verificar√° a a√ß√£o a ser feita caso tente-se acessar
+	 * um offset inv√°lido no array.
 	 * 
 	 * Se a propriedade Util_Array::_invalidOffsetThrowsException
-	 * for TRUE, uma exceÁ„o ser· lanÁada.
-	 * Caso contr·rio, o valor NULL ser· retornado.
+	 * for TRUE, uma exce√ß√£o ser√° lan√ßada.
+	 * Caso contr√°rio, o valor NULL ser√° retornado.
 	 * 
 	 * @param string $offset
 	 * @return null
@@ -435,7 +435,7 @@ class Util_Array implements ArrayAccess, IteratorAggregate, Countable, Serializa
 	 */
 	protected function _invalidOffsetAccess($offset) {
 		if($this->_invalidOffsetThrowsException) {
-			throw new Exception('A chave "' . $offset . '" n„o existe no array.');
+			throw new Exception('A chave "' . $offset . '" n√£o existe no array.');
 		} else {
 			return null;
 		}

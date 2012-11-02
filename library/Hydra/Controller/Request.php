@@ -1,6 +1,6 @@
 <?php
 /**
- * Representa uma requisiÁ„o.
+ * Representa uma requisi√ß√£o.
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 class Controller_Request {
@@ -15,7 +15,7 @@ class Controller_Request {
 	const SCHEME_HTTPS = 'https';
 	
 	/**
-	 * Par‚metros de routing parseados a partir da URL.
+	 * Par√¢metros de routing parseados a partir da URL.
 	 * 
 	 * @var array
 	 */
@@ -26,76 +26,76 @@ class Controller_Request {
 	);
 	
 	/**
-	 * Par‚metros POST da requisiÁ„o.
+	 * Par√¢metros POST da requisi√ß√£o.
 	 * 
 	 * @var array
 	 */
 	private $_post = array();
 	
 	/**
-	 * Par‚metros GET da requisiÁ„o (via query string).
+	 * Par√¢metros GET da requisi√ß√£o (via query string).
 	 * 
 	 * @var array
 	 */
 	private $_get = array();
 	
 	/**
-	 * Arquivos enviados junto com a requisiÁ„o.
+	 * Arquivos enviados junto com a requisi√ß√£o.
 	 * 
 	 * @var array
 	 */
 	private $_files = array();
 	
 	/**
-	 * Os cookies enviados junto com a requisiÁ„o.
+	 * Os cookies enviados junto com a requisi√ß√£o.
 	 * 
 	 * @var array
 	 */
 	private $_cookies = array();
 	
 	/**
-	 * Se a requisiÁ„o atual j· foi despachada ou n„o.
+	 * Se a requisi√ß√£o atual j√° foi despachada ou n√£o.
 	 * 
 	 * @var boolean
 	 */
 	private $_dispatched = false;
 	
 	/**
-	 * A URI da requisiÁ„o.
+	 * A URI da requisi√ß√£o.
 	 * 
 	 * @var string
 	 */
 	private $_uri;
 	
 	/**
-	 * A URL base da aplicaÁ„o.
+	 * A URL base da aplica√ß√£o.
 	 * 
 	 * @var string
 	 */
 	private $_baseUrl;
 	
 	/**
-	 * O caminho base da requisiÁ„o.
+	 * O caminho base da requisi√ß√£o.
 	 * 
 	 * @var string
 	 */
 	private $_basePath;
 	
 	/**
-	 * O corpo da requisiÁ„o.
+	 * O corpo da requisi√ß√£o.
 	 * 
 	 * @var string
 	 */
 	private $_rawBody;
 	
 	/**
-	 * O User Agent da requisiÁ„o
+	 * O User Agent da requisi√ß√£o
 	 * @var Http_UserAgent
 	 */
 	private $_userAgent;
 	
 	/**
-	* Os detectores padr„o usados no mÈtodo is().
+	* Os detectores padr√£o usados no m√©todo is().
 	* @see Request::addDetector
 	* @var array
 	*/
@@ -120,9 +120,9 @@ class Controller_Request {
 	/**
 	 * Construtor.
 	 * 
-	 * @param string $uri : URI da requisiÁ„o
-	 * @param array|null $useSuperGlobals : quais vari·veis super-globais 
-	 * 		que ser„o utilizadas na requisiÁ„o:
+	 * @param string $uri : URI da requisi√ß√£o
+	 * @param array|null $useSuperGlobals : quais vari√°veis super-globais 
+	 * 		que ser√£o utilizadas na requisi√ß√£o:
 	 * 			- POST
 	 * 			- GET
 	 * 			- FILES
@@ -152,7 +152,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Processa os dados GET da requisiÁ„o, colocando-os neste objeto.
+	 * Processa os dados GET da requisi√ß√£o, colocando-os neste objeto.
 	 * 
 	 * @return void
 	 */
@@ -165,7 +165,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Processa os dados POST da requisiÁ„o, colocando-os neste objeto.
+	 * Processa os dados POST da requisi√ß√£o, colocando-os neste objeto.
 	 * 
 	 * @return void
 	 */
@@ -179,7 +179,7 @@ class Controller_Request {
 	
 	/**
 	 * Processa os dados de $_FILES, colocando-os neste objeto.
-	 * Se tivermos um upload m˙ltiplo, os dados ser„o transpostos, ficando da forma:
+	 * Se tivermos um upload m√∫ltiplo, os dados ser√£o transpostos, ficando da forma:
 	 * array (
 	 * 		0 => array (
 	 * 			'name' => 'file.txt'
@@ -203,7 +203,7 @@ class Controller_Request {
 	private function _proccessFiles() {
 		if(isset($_FILES)){
 			foreach($_FILES as $key => $value) {
-				// Transpıe o array $_FILES em caso de upload m˙ltiplo.
+				// Transp√µe o array $_FILES em caso de upload m√∫ltiplo.
 				if(is_array(current($value))) {
 					foreach($value as $fileKey => $fileVal) {
 						for($i = 0; $i < count($fileVal); $i++) {
@@ -233,8 +233,8 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Seta a URI da requisiÁ„o. Se nenhum par‚metro for informado, 
-	 * tenta obter esse valor a partir das vari·veis do servidor.
+	 * Seta a URI da requisi√ß√£o. Se nenhum par√¢metro for informado, 
+	 * tenta obter esse valor a partir das vari√°veis do servidor.
 	 * 
 	 * @param string|null $reqUri
 	 * @return Request : fluent interface
@@ -252,7 +252,7 @@ class Controller_Request {
 		} 
 		
 		if(!is_string($reqUri)) {
-			trigger_error('ImpossÌvel determinar a URI da requisiÁ„o atual!', E_USER_NOTICE);
+			trigger_error('Imposs√≠vel determinar a URI da requisi√ß√£o atual!', E_USER_NOTICE);
 			return $this;
 		}
 		
@@ -264,7 +264,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna a URI da requisiÁ„o.
+	 * Retorna a URI da requisi√ß√£o.
 	 * 
 	 * @return string
 	 */
@@ -276,7 +276,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Seta a URL base da aplicaÁ„o.
+	 * Seta a URL base da aplica√ß√£o.
 	 * 
 	 * @param string|null $baseUrl
 	 */
@@ -345,7 +345,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna a URL base da requisiÁ„o.
+	 * Retorna a URL base da requisi√ß√£o.
 	 * 
 	 * @param boolean $raw : se FALSE, a url deve ser codificada com urlencode
 	 * @return string
@@ -358,7 +358,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Seta o caminho base da requisiÁ„o.
+	 * Seta o caminho base da requisi√ß√£o.
 	 * 
 	 * @param string|null $path
 	 * @return Request
@@ -379,7 +379,7 @@ class Controller_Request {
 			}
 		}
 		
-		// DiretÛrios no Windows podem ser separados por \
+		// Diret√≥rios no Windows podem ser separados por \
 		if(stripos(PHP_OS, 'WIN') === 0) {
 			$path = str_replace('\\', '/', $path);
 		}
@@ -389,7 +389,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna o caminho base da requisiÁ„o.
+	 * Retorna o caminho base da requisi√ß√£o.
 	 * 
 	 * @return string
 	 */
@@ -402,7 +402,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Seta um par‚metro de routing na requisiÁ„o.
+	 * Seta um par√¢metro de routing na requisi√ß√£o.
 	 * 
 	 * @param string $key
 	 * @param mixed $value
@@ -414,10 +414,10 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna um par‚metro de routing da requisiÁ„o.
+	 * Retorna um par√¢metro de routing da requisi√ß√£o.
 	 * 
 	 * @param string $key
-	 * @param mixed $default : o valor padr„o de retorno, caso n„o exista o par‚metro $key
+	 * @param mixed $default : o valor padr√£o de retorno, caso n√£o exista o par√¢metro $key
 	 */
 	public function getParam($key, $default = null) {
 		$key = (string) $key;
@@ -425,7 +425,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Verifica se um dado par‚metro de routing existe.
+	 * Verifica se um dado par√¢metro de routing existe.
 	 * 
 	 * @param string $key
 	 * @return boolean
@@ -436,7 +436,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Remove um par‚metro de routing.
+	 * Remove um par√¢metro de routing.
 	 * 
 	 * @param string $key
 	 * @return boolean
@@ -450,10 +450,10 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Seta um par‚metro POST na requisiÁ„o.
+	 * Seta um par√¢metro POST na requisi√ß√£o.
 	 * 
-	 * @param string $spec : se È uma string, o par‚metro $value È obrigatÛrio
-	 * 						 se È um array, deve ser associativo nome => valor
+	 * @param string $spec : se √© uma string, o par√¢metro $value √© obrigat√≥rio
+	 * 						 se √© um array, deve ser associativo nome => valor
 	 * @param mixed $value
 	 * @return Request : fluent interface
 	 */
@@ -462,10 +462,10 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna um par‚metro POST da requisiÁ„o ou todos eles, se $key for NULL
+	 * Retorna um par√¢metro POST da requisi√ß√£o ou todos eles, se $key for NULL
 	 * 
 	 * @param string|null $key
-	 * @param mixed $default : o valor padr„o de retorno, caso n„o exista o par‚metro $key
+	 * @param mixed $default : o valor padr√£o de retorno, caso n√£o exista o par√¢metro $key
 	 * @return array|mixed|null
 	 */
 	public function getPost($key = null, $default = null) {
@@ -473,10 +473,10 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Seta um par‚metro GET na requisiÁ„o.
+	 * Seta um par√¢metro GET na requisi√ß√£o.
 	 * 
-	 * @param mixed $spec: se È uma string, o par‚metro $value È obrigatÛrio
-	 * 						se È um array, deve ser associativo nome => valor
+	 * @param mixed $spec: se √© uma string, o par√¢metro $value √© obrigat√≥rio
+	 * 						se √© um array, deve ser associativo nome => valor
 	 * @param string $value
 	 * @return Request
 	 */
@@ -485,10 +485,10 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna um par‚metro POST na requisiÁ„o.
+	 * Retorna um par√¢metro POST na requisi√ß√£o.
 	 * 
 	 * @param string|null $key
-	 * @param mixed $default : o valor padr„o de retorno, caso n„o exista o par‚metro $key
+	 * @param mixed $default : o valor padr√£o de retorno, caso n√£o exista o par√¢metro $key
 	 * @return array|mixed|null
 	 */
 	public function getQuery($key = null, $default = null) {
@@ -496,10 +496,10 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna um cookie da requisiÁ„o.
+	 * Retorna um cookie da requisi√ß√£o.
 	 * 
 	 * @param string|null $key
-	 * @param mixed $default : o valor padr„o de retorno, caso n„o exista o par‚metro $key
+	 * @param mixed $default : o valor padr√£o de retorno, caso n√£o exista o par√¢metro $key
 	 * @return array|mixed|null
 	 */
 	public function getCookie($key = null, $default = null) {
@@ -507,7 +507,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna uma vari·vel da requisiÁ„o (_get, _post, _cookie ou _files).
+	 * Retorna uma vari√°vel da requisi√ß√£o (_get, _post, _cookie ou _files).
 	 * 
 	 * @param string $varName
 	 * @param string|null $key
@@ -523,13 +523,13 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Seta uma vari·vel da requisiÁ„o (_get ou _post)
+	 * Seta uma vari√°vel da requisi√ß√£o (_get ou _post)
 	 * 
 	 * @param string $varName
-	 * @param string|array $spec : se È uma string, o par‚metro $value È obrigatÛrio
-	 * 							   se È um array, deve ser associativo nome => valor
+	 * @param string|array $spec : se √© uma string, o par√¢metro $value √© obrigat√≥rio
+	 * 							   se √© um array, deve ser associativo nome => valor
 	 * @param mixed $value
-	 * @throws Request_Exception : se $spec n„o È um array e $value È NULL
+	 * @throws Request_Exception : se $spec n√£o √© um array e $value √© NULL
 	 * @return Request : fluent interface
 	 */
 	private function _setVar($varName, $spec, $value) {
@@ -540,7 +540,7 @@ class Controller_Request {
 				}
 				return $this;
 			} else {
-				throw new Request_Exception(sprintf('Argumentos inv·lidos para o mÈdodo %s;	deve ser um
+				throw new Request_Exception(sprintf('Argumentos inv√°lidos para o m√©dodo %s;	deve ser um
 															array de valores ou um par chave/valor', __FUNCTION__));
 			}
 		}
@@ -550,7 +550,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna o mÈtodo da requisiÁ„o.
+	 * Retorna o m√©todo da requisi√ß√£o.
 	 * @return string|null
 	 */
 	public function getMethod() {
@@ -558,7 +558,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Faz uso dos detectores para caracterÌsticas da requisiÁ„o.
+	 * Faz uso dos detectores para caracter√≠sticas da requisi√ß√£o.
 	 * @param string $type
 	 */
 	public function is($type) {
@@ -593,26 +593,26 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Adiciona um detector na lista de detectores que a requisiÁ„o pode utilizar.
+	 * Adiciona um detector na lista de detectores que a requisi√ß√£o pode utilizar.
 	 *
-	 * Existem 4 formatos diferentes para a criaÁ„o de detectores:
+	 * Existem 4 formatos diferentes para a cria√ß√£o de detectores:
 	 * <ul>
 	 * 	<li>
 	 * 		addDetector('post', array('env' => 'REQUEST_METHOD', 'value' => 'POST'))
-	 * 		ComparaÁ„o com alguma vari·vel do ambiente.
+	 * 		Compara√ß√£o com alguma vari√°vel do ambiente.
 	 * 	</li>
 	 * 	<li>
 	 * 		addDetector('iphone', array('env' => 'Controller_USER_AGENT', 'pattern' => '/iPhone/i'))
-	 * 		ComparaÁ„o com alguma vari·vel do ambiente atravÈs de uma express„o regular.
+	 * 		Compara√ß√£o com alguma vari√°vel do ambiente atrav√©s de uma express√£o regular.
 	 * 	</li>
 	 * 	<li>
 	 * 		addDetector('mobile', array('env' => 'Controller_USER_AGENT', 'options' => array('Fennec', 'Opera Mini'))
-	 * 		ComparaÁ„o com uma lista de valores, com a qual È gerada uma express„o regular para comparaÁ„o.
+	 * 		Compara√ß√£o com uma lista de valores, com a qual √© gerada uma express√£o regular para compara√ß√£o.
 	 * 	</li>
 	 * <li>
 	 * 		addDetector('custom', array('env' => 'Controller_USER_AGENT', 'callback' => 'someFunction')
-	 * 		Utiliza o callback informado para manipular a checagem. O ˙nico argumento passado
-	 * 		para o callback È o objeto Controller_Request. O tipo de retorno deve ser booleano.
+	 * 		Utiliza o callback informado para manipular a checagem. O √∫nico argumento passado
+	 * 		para o callback √© o objeto Controller_Request. O tipo de retorno deve ser booleano.
 	 * 	</li>
 	 * </ul>
 	 *
@@ -626,13 +626,13 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Realiza a leitura do conte˙do de 'php://input'. 
-	 * ⁄til quando interagimos com requisiÁıes JSON ou XML.
+	 * Realiza a leitura do conte√∫do de 'php://input'. 
+	 * √ötil quando interagimos com requisi√ß√µes JSON ou XML.
 	 * 
-	 * Conseguindo um input com uma funÁ„o de decodificaÁ„o:
+	 * Conseguindo um input com uma fun√ß√£o de decodifica√ß√£o:
 	 * $request->input('json_decode');
 	 * 
-	 * Utilizando um callback com par‚metros:
+	 * Utilizando um callback com par√¢metros:
 	 * $request->input('someFunction', $arg1, [[$arg2], $arg3, ...]);
 	 * 
 	 * @param string $callback
@@ -654,7 +654,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * LÍ o conte˙do de 'php://input'
+	 * L√™ o conte√∫do de 'php://input'
 	 * @return string
 	 */
 	private function _readInput() {
@@ -671,7 +671,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna um header da requisiÁ„o.
+	 * Retorna um header da requisi√ß√£o.
 	 * 
 	 * @param string $header
 	 * @throws Request_Exception
@@ -679,7 +679,7 @@ class Controller_Request {
 	 */
 	public function getHeader($header) {
 		if(empty($header)) {
-			throw new Request_Exception('O nome do header HTTP È necess·rio!');
+			throw new Request_Exception('O nome do header HTTP √© necess√°rio!');
 		}
 		
 		$varName = 'Controller_' . strtoupper(str_replace('-', '_', $header));
@@ -687,7 +687,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna o scheme da requisiÁ„o.
+	 * Retorna o scheme da requisi√ß√£o.
 	 * 
 	 * @return string
 	 */
@@ -696,7 +696,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna uma vari·vel do servidor.
+	 * Retorna uma vari√°vel do servidor.
 	 * 
 	 * @param string $varName
 	 * @return string|null
@@ -706,7 +706,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna o host da requisiÁ„o.
+	 * Retorna o host da requisi√ß√£o.
 	 * 
 	 * @return string
 	 */
@@ -737,7 +737,7 @@ class Controller_Request {
 	/**
 	 * Retorna o IP do cliente.
 	 * 
-	 * @param boolean $secure : TRUE se houver suspeita que o cliente pode alterar seu prÛprio IP
+	 * @param boolean $secure : TRUE se houver suspeita que o cliente pode alterar seu pr√≥prio IP
 	 * @return string|null
 	 */
 	public function getClientIp($secure = true) {
@@ -757,7 +757,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Retorna a URL de referÍncia.
+	 * Retorna a URL de refer√™ncia.
 	 * 
 	 * @return string
 	 */
@@ -779,8 +779,8 @@ class Controller_Request {
 	}
 
 	/**
-	 * Retorna informaÁıes sobre o user agent da requisiÁ„o.
-	 * @param string|array|null $value : qual informaÁ„o retornar. Valores possÌveis:
+	 * Retorna informa√ß√µes sobre o user agent da requisi√ß√£o.
+	 * @param string|array|null $value : qual informa√ß√£o retornar. Valores poss√≠veis:
 	 * <ul>
 	 * 	<li>browser</li>
 	 * 	<li>version</li>
@@ -789,7 +789,7 @@ class Controller_Request {
 	 *  	<li>raw</li>
 	 * </ul>
 	 *
-	 * Se nenhum valor for informado, ser„o retornados todos os possÌveis.
+	 * Se nenhum valor for informado, ser√£o retornados todos os poss√≠veis.
 	 *
 	 * @return string|array
 	*/
@@ -798,7 +798,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Verifica se a requisiÁ„o j· foi despachada.
+	 * Verifica se a requisi√ß√£o j√° foi despachada.
 	 * 
 	 * @return boolean
 	 */
@@ -807,7 +807,7 @@ class Controller_Request {
 	}
 	
 	/**
-	 * Seta a flag indicando se a requisiÁ„o j· foi despachada.
+	 * Seta a flag indicando se a requisi√ß√£o j√° foi despachada.
 	 * 
 	 * @param boolen $opt
 	 * @return Request : fluent interface

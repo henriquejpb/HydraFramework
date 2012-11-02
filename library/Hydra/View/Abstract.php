@@ -3,11 +3,11 @@
  * @author henrique
  * @version 0.1 beta
  * 
- * ImplementaÁ„o da base de uma View Engine
+ * Implementa√ß√£o da base de uma View Engine
  */
 abstract class View_Abstract {
 	/**
-	 * Armazena as vari·veis que ser„o passadas ao template.
+	 * Armazena as vari√°veis que ser√£o passadas ao template.
 	 * 
 	 * @var array
 	 */
@@ -35,40 +35,40 @@ abstract class View_Abstract {
 	protected $_path;
 	
 	/**
-	 * Armazena um valor padr„o par ao caminho base dos templates.
+	 * Armazena um valor padr√£o par ao caminho base dos templates.
 	 * 
 	 * @var string
 	 */
 	protected static $_defaultPath;
 	
 	/**
-	 * Armazena a extens„o dos arquivos de template.
+	 * Armazena a extens√£o dos arquivos de template.
 	 * 
 	 * @var string
 	 */
 	protected $_templateExtension = 'phtml';
 	
 	/**
-	 * Armazena a extens„o padr„o dos arquivos de template.
+	 * Armazena a extens√£o padr√£o dos arquivos de template.
 	 * 
 	 * @var string
 	 */
 	protected static $_defaultTemplateExtension = 'phtml';
 	
 	/**
-	 * Se TRUE, uma exceÁ„o ser· disparada ao tentar 
-	 * acessar uma vari·vel inexistente.
+	 * Se TRUE, uma exce√ß√£o ser√° disparada ao tentar 
+	 * acessar uma vari√°vel inexistente.
 	 * 
 	 * @var boolean
 	 */
 	protected $_strictVars = true;
 	
 	/**
-	 * @param string $spec : o nome do template (sem extens„o)
-	 * @param array $vars : as vari·veis a serem passadas ao template
+	 * @param string $spec : o nome do template (sem extens√£o)
+	 * @param array $vars : as vari√°veis a serem passadas ao template
 	 * @param array $opt : um array associativo. Chaves:
-	 * 		path => o caminho para o diretÛrio do template. Se n„o informado, o padr„o ser· usado
-	 * 		templateExtension => a extens„o dos arquivos de template. O padr„o È 'phtml'
+	 * 		path => o caminho para o diret√≥rio do template. Se n√£o informado, o padr√£o ser√° usado
+	 * 		templateExtension => a extens√£o dos arquivos de template. O padr√£o √© 'phtml'
 	 */
 	public function __construct($spec, array $vars = array(), array $opt = array()) {
 		if(isset($opt['path'])) {
@@ -106,7 +106,7 @@ abstract class View_Abstract {
 	/**
 	 * Seta o arquivo de template para a view.
 	 * 
-	 * Para templates dentro de mÛdulos, utilize a notaÁ„o:
+	 * Para templates dentro de m√≥dulos, utilize a nota√ß√£o:
 	 * 		<code>module.templateName</code>
 	 * Exemplo:
 	 * 		<code>$view->setTemplate('user.list')</code>
@@ -118,7 +118,7 @@ abstract class View_Abstract {
 		$this->_template = (string) $spec;
 		$tplPath = $this->_path . $this->_normalizeTemplateName($spec) . '.' . $this->_templateExtension;
 		if(!FileSystem_File::isFile($tplPath)) {
-			$e = new View_Exception(sprintf('O template %s n„o È um arquivo v·lido!', $tplPath));
+			$e = new View_Exception(sprintf('O template %s n√£o √© um arquivo v√°lido!', $tplPath));
 			$e->setView($this);
 			throw $e;
 		}
@@ -151,7 +151,7 @@ abstract class View_Abstract {
 	 * 
 	 * @param string $path
 	 * @return View_Abstract : fluent interface
-	 * @throws View_Exception : caso $path n„o aponte para um diretÛrio
+	 * @throws View_Exception : caso $path n√£o aponte para um diret√≥rio
 	 */
 	public function setPath($path) {
 		self::_verifyPath($path);
@@ -169,7 +169,7 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Seta a extens„o para o template.
+	 * Seta a extens√£o para o template.
 	 * 
 	 * @param unknown_type $ext
 	 * @return View_Abstract
@@ -180,7 +180,7 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Retorna a extens„o do template.
+	 * Retorna a extens√£o do template.
 	 * 
 	 * @return string
 	 */
@@ -189,7 +189,7 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Atribui uma vari·vel de template.
+	 * Atribui uma vari√°vel de template.
 	 * 
 	 * @param string|array $var
 	 * @param mixed $value
@@ -206,26 +206,26 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Retorna uma vari·vel.
+	 * Retorna uma vari√°vel.
 	 * 
 	 * @param string $var
 	 * @return mixed
-	 * @throws View_Exception : caso a vari·vel n„o exista e strictVars seja TRUE
+	 * @throws View_Exception : caso a vari√°vel n√£o exista e strictVars seja TRUE
 	 */
 	public function getVar($var) {
 		$var = (string) $var;
 		if(isset($this->_vars[$var])) {
 			return $this->_vars[$var];
 		} else if($this->_strictVars === true) {
-			throw new View_Exception(sprintf('A vari·vel "%s" 
-					n„o existe para este template', $var));
+			throw new View_Exception(sprintf('A vari√°vel "%s" 
+					n√£o existe para este template', $var));
 		} else {
 			return null;
 		}
 	}
 	
 	/**
-	 * Verifica se a vari·vel de template com nome $var existe.
+	 * Verifica se a vari√°vel de template com nome $var existe.
 	 * 
 	 * @param string $var
 	 */
@@ -234,7 +234,7 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Retorna as vari·veis de template.
+	 * Retorna as vari√°veis de template.
 	 * 
 	 * @return string
 	 */
@@ -243,7 +243,7 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Limpa as vari·veis de template.
+	 * Limpa as vari√°veis de template.
 	 * 
 	 * @return View_Abstract : fluent interface
 	 */
@@ -272,7 +272,7 @@ abstract class View_Abstract {
 	abstract protected function _run();
 	
 	/**
-	 * Seta o diterÛrio padr„o para os templates.
+	 * Seta o diter√≥rio padr√£o para os templates.
 	 *
 	 * @param string $path
 	 * @return void
@@ -284,21 +284,21 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Verifica o caminho para os templates, lanÁando uma exceÁ„o se n„o for v·lido.
+	 * Verifica o caminho para os templates, lan√ßando uma exce√ß√£o se n√£o for v√°lido.
 	 *
 	 * @param string $path
 	 * @throws View_Exception
 	 */
 	protected static function _verifyPath($path) {
 		if(!FileSystem_Directory::isDir($path)) {
-			$e = new View_Exception('O diretÛrio para de templates n„o È v·lido');
+			$e = new View_Exception('O diret√≥rio para de templates n√£o √© v√°lido');
 			$e->setView($this);
 			throw $e;
 		}
 	}
 	
 	/**
-	 * Seta a extens„o padr„o para os templates.
+	 * Seta a extens√£o padr√£o para os templates.
 	 * 
 	 * @param string $ext
 	 * @return void
@@ -308,7 +308,7 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Retorna a extens„o padr„o para os templates.
+	 * Retorna a extens√£o padr√£o para os templates.
 	 * 
 	 * @return string
 	 */
@@ -317,8 +317,8 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Seta a flag que indica se deve ser lanÁada uma exceÁ„o
-	 * ao tentar pegar o valor de uma vari·vel inexistente.
+	 * Seta a flag que indica se deve ser lan√ßada uma exce√ß√£o
+	 * ao tentar pegar o valor de uma vari√°vel inexistente.
 	 * 
 	 * @param boolean $opt
 	 */
