@@ -1,5 +1,5 @@
 <?php
-class Cache_File extends FileSystem_File {
+class Hydra_Cache_File extends Hydra_FileSystem_File {
 	/**
 	 * Define um prazo de expiração padrão
 	 * @var string
@@ -32,7 +32,7 @@ class Cache_File extends FileSystem_File {
 	 * Construtor.
 	 * Cria um arquivo de cache.
 	 *
-	 * @see FileSystem_File::__construct
+	 * @see Hydra_FileSystem_File::__construct
 	 */
 	public function __construct($path, $permissionMode = 0777){
 		parent::__construct($path, $permissionMode);
@@ -51,20 +51,20 @@ class Cache_File extends FileSystem_File {
 	}
 
 	/**
-	 * @see FileSystem_File::read()
+	 * @see Hydra_FileSystem_File::read()
 	 */
 	public function read($offset = null, $maxlen = null) {
 		try {
 			return parent::read(self::METADATA_SIZE + (int) $offset, $maxlen);
-		} catch (FileSystem_File_Exception $e) {
+		} catch (Hydra_FileSystem_File_Exception $e) {
 			return null;
 		}
 	}
 
 	/**
-	 * @see FileSystem_File::write()
+	 * @see Hydra_FileSystem_File::write()
 	 */
-	public function write($data, $flags = FileSystem_File::LOCK_EX) {
+	public function write($data, $flags = Hydra_FileSystem_File::LOCK_EX) {
 		if(!$this->_expires) {
 			$this->setExpiration(self::DEFAULT_EXPIRATION);
 		}
@@ -86,7 +86,7 @@ class Cache_File extends FileSystem_File {
 		$buffer .= $data;
 
 		$this->_expModified = false;
-		return parent::write($buffer, FileSystem_File::LOCK_EX);
+		return parent::write($buffer, Hydra_FileSystem_File::LOCK_EX);
 	}
 
 	/**
@@ -95,7 +95,7 @@ class Cache_File extends FileSystem_File {
 	 * @param string|integer $expires :
 	 * 		Integer: uma unix-timestamp
 	 * 		String: data no formato USA ou ISO, ou strings relativas como '+ 3 DAY'
-	 * @return Cache_File : Fluent Interface
+	 * @return Hydra_Cache_File : Fluent Interface
 	 */
 	public function setExpiration($expires) {
 		//Se um valor inteiro é informado, então supõe-se que é uma unix-timestamp
@@ -120,7 +120,7 @@ class Cache_File extends FileSystem_File {
 			try {
 				$exp = parent::read(0, self::METADATA_SIZE);
 				$this->setExpiration((int) $exp);
-			} catch (FileSystem_File_Exception $e) {
+			} catch (Hydra_FileSystem_File_Exception $e) {
 				$this->setExpiration(self::DEFAULT_EXPIRATION);
 			}
 		}

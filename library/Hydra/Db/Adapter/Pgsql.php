@@ -1,36 +1,36 @@
 <?php
-class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
+class Hydra_Db_Adapter_Pgsql extends Hydra_Db_Adapter_Abstract {
 	/**
 	 * Tipos numéricos do PostgreSQL
 	 * @var array
 	 */
 	protected $_numericDataTypes = array(
-			Db::INT_TYPE    => Db::INT_TYPE,
-			Db::BIGINT_TYPE => Db::BIGINT_TYPE,
-			Db::FLOAT_TYPE  => Db::FLOAT_TYPE,
-			'INTEGER'            => Db::INT_TYPE,
-			'SERIAL'             => Db::INT_TYPE,
-			'SMALLINT'           => Db::INT_TYPE,
-			'BIGINT'             => Db::BIGINT_TYPE,
-			'BIGSERIAL'          => Db::BIGINT_TYPE,
-			'DECIMAL'            => Db::FLOAT_TYPE,
-			'DOUBLE PRECISION'   => Db::FLOAT_TYPE,
-			'NUMERIC'            => Db::FLOAT_TYPE,
-			'REAL'               => Db::FLOAT_TYPE
+			Hydra_Db::INT_TYPE    => Hydra_Db::INT_TYPE,
+			Hydra_Db::BIGINT_TYPE => Hydra_Db::BIGINT_TYPE,
+			Hydra_Db::FLOAT_TYPE  => Hydra_Db::FLOAT_TYPE,
+			'INTEGER'            => Hydra_Db::INT_TYPE,
+			'SERIAL'             => Hydra_Db::INT_TYPE,
+			'SMALLINT'           => Hydra_Db::INT_TYPE,
+			'BIGINT'             => Hydra_Db::BIGINT_TYPE,
+			'BIGSERIAL'          => Hydra_Db::BIGINT_TYPE,
+			'DECIMAL'            => Hydra_Db::FLOAT_TYPE,
+			'DOUBLE PRECISION'   => Hydra_Db::FLOAT_TYPE,
+			'NUMERIC'            => Hydra_Db::FLOAT_TYPE,
+			'REAL'               => Hydra_Db::FLOAT_TYPE
 	);
 	
 	/**
 	 * @var className
 	 */
-	protected $_statementClass = 'Db_Statement_Pgsql';
+	protected $_statementClass = 'Hydra_Db_Statement_Pgsql';
 	
 	/**
-	 * @var Db_Statement_Pgsql
+	 * @var Hydra_Db_Statement_Pgsql
 	 */
 	private $_statement = null;
 	
 	/**
-	 * @see Db_Adapter_Abstract::_connect()
+	 * @see Hydra_Db_Adapter_Abstract::_connect()
 	 */
 	protected function _connect() {
 		if($this->isConnected()) {
@@ -38,7 +38,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 		}
 		
 		if(!extension_loaded('pgsql')) {
-			throw new Db_Adapter_Pgsql_Exception('A extensão pgsql não foi carregada!');
+			throw new Hydra_Db_Adapter_Pgsql_Exception('A extensão pgsql não foi carregada!');
 		}
 		
 		if(isset($this->_config['port'])){
@@ -57,7 +57,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 		
 		if($this->_connection === false) {
 			$this->_connection = null;
-			throw new Db_Adapter_Pgsql_Exception(sprintf(
+			throw new Hydra_Db_Adapter_Pgsql_Exception(sprintf(
 				'Impossível conectar ao banco de dados %s no servidor %s através do usuário %s', 
 				$this->_config['dbname'], $this->_config['host'], $this->_config['user']
 			));
@@ -69,14 +69,14 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * @see Db_Adapter_Abstract::isConnected()
+	 * @see Hydra_Db_Adapter_Abstract::isConnected()
 	 */
 	public function isConnected() {
 		return $this->_connection !== null;
 	}
 	
 	/**
-	 * @see Db_Adapter_Abstract::disconnect()
+	 * @see Hydra_Db_Adapter_Abstract::disconnect()
 	 */
 	public function disconnect() {
 		if($this->isConnected()) {
@@ -86,7 +86,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * @see Db_Adapter_Abstract::prepare()
+	 * @see Hydra_Db_Adapter_Abstract::prepare()
 	 */
 	public function prepare($sql) {
 		$stmtClass = $this->_statementClass;
@@ -99,7 +99,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * @see Db_Adapter_Abstract::lastInsertId()
+	 * @see Hydra_Db_Adapter_Abstract::lastInsertId()
 	 */
 	public function lastInsertId($tableName = null, $pk = null) {
 		if($tableName !== null) {
@@ -119,7 +119,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 			$this->getConnection();
 			return $this->lastSequenceId($seqName);
 		} else {
-			throw new Db_Adapter_Pgsql_Exception('É necessário informar ao menos o nome da tabela para
+			throw new Hydra_Db_Adapter_Pgsql_Exception('É necessário informar ao menos o nome da tabela para
 					obter o último id inserido!');
 		}
 	}
@@ -135,7 +135,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	}
 
 	/**
-	 * @see Db_Adapter_Abstract::nextSequenceId()
+	 * @see Hydra_Db_Adapter_Abstract::nextSequenceId()
 	 */
 	public function nextSequenceId($sequenceName) {
 		$this->getConnection();
@@ -143,7 +143,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * @see Db_Adapter_Abstract::beginTransaction()
+	 * @see Hydra_Db_Adapter_Abstract::beginTransaction()
 	 */
 	public function beginTransaction() {
 		$this->getConnection();
@@ -151,7 +151,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	}
 
 	/**
-	 * @see Db_Adapter_Abstract::commitTransaction()
+	 * @see Hydra_Db_Adapter_Abstract::commitTransaction()
 	 */
 	public function commitTransaction() {
 		$this->getConnection();
@@ -159,7 +159,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * @see Db_Adapter_Abstract::rollBackTransaction()
+	 * @see Hydra_Db_Adapter_Abstract::rollBackTransaction()
 	 */	
 	public function rollBackTransaction() {
 		$this->getConnection();
@@ -167,7 +167,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * @see Db_Adapter_Abstract::limit()
+	 * @see Hydra_Db_Adapter_Abstract::limit()
 	 */
 	public function limit($sql, $count, $offset = 0) {
 		$count = (int) $count;
@@ -177,7 +177,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	
 		$offset = (int) $offset;
 		if($offset < 0) {
-			throw new Db_Adapter_Mysqli_Exception(sprintf('O argumento $offset=%s para a cláusula LIMIT não é valido', $count));
+			throw new Hydra_Db_Adapter_Mysqli_Exception(sprintf('O argumento $offset=%s para a cláusula LIMIT não é valido', $count));
 		}
 	
 		$sql .= "\nLIMIT " . $count;
@@ -190,14 +190,14 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	
 	/**
 	 * TODO: verificar se há suporte a named parameters
-	 * @see Db_Adapter_Abstract::supportsParameters()
+	 * @see Hydra_Db_Adapter_Abstract::supportsParameters()
 	 */
 	public function supportsParameters($type) {
-		return $type === Db_Adapter_Abstract::POSITIONAL_PARAMETERS;
+		return $type === Hydra_Db_Adapter_Abstract::POSITIONAL_PARAMETERS;
 	}
 	
 	/**
-	 * @see Db_Adapter_Abstract::listTables()
+	 * @see Hydra_Db_Adapter_Abstract::listTables()
 	 */
 	public function listTables() {
 		$results = array();
@@ -213,7 +213,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 	}
 	
 	/**
-	 * @see Db_Adapter_Abstract::describeTable()
+	 * @see Hydra_Db_Adapter_Abstract::describeTable()
 	 */
 	public function describeTable($tableName, $schemaName = null) {
 		$results = array();
@@ -246,7 +246,7 @@ class Db_Adapter_Pgsql extends Db_Adapter_Abstract {
 		}
 		$sql .= ' ORDER BY a.attnum';
 		
-		$results = $this->fetchAll($sql, array(), Db::FETCH_ASSOC);
+		$results = $this->fetchAll($sql, array(), Hydra_Db::FETCH_ASSOC);
 		
 		$desc = array();
 		

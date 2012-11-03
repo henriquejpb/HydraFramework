@@ -1,2 +1,2 @@
 <?php
-class Db_Fetchable_Exception extends Exception { }
+class Hydra_Db_Fetchable_Exception extends Exception { }

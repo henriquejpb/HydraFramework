@@ -1,5 +1,5 @@
 <?php
-class Db_Statement_Pgsql extends Db_Statement_Abstract {
+class Hydra_Db_Statement_Pgsql extends Hydra_Db_Statement_Abstract {
 	
 	/**
 	 * No PostgreSQL, cada prepared statement precisa ter um nome.
@@ -15,14 +15,14 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 	 */
 	private $_lastResult = null;
 	
-	public function __construct(Db_Adapter_Abstract $adapter, $sql) {
+	public function __construct(Hydra_Db_Adapter_Abstract $adapter, $sql) {
 		// Dando um nome único para cada statement
 		$this->_name = uniqid('stmt');
 		parent::__construct($adapter, $sql);
 	}
 	
 	/**
-	 * @see Db_Statement_Abstract::_prepare()
+	 * @see Hydra_Db_Statement_Abstract::_prepare()
 	 */
 	protected function _prepare($sql) {
 		$conn = $this->_adapter->getConnection();
@@ -40,12 +40,12 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 		$this->_stmt = @pg_prepare($conn, $this->_name, $sql);
 		$error = pg_last_error($conn);
 		if($this->_stmt === false || $error) {
-			throw new Db_Statement_Pgsql_Exception('Erro PostgreSQL:' . $error);
+			throw new Hydra_Db_Statement_Pgsql_Exception('Erro PostgreSQL:' . $error);
 		}
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::closeCursor()
+	 * @see Hydra_Db_Statement_Interface::closeCursor()
 	 */
 	public function closeCursor() {
 		if($this->_lastResult !== null) {
@@ -55,7 +55,7 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::columnCount()
+	 * @see Hydra_Db_Statement_Interface::columnCount()
 	 */
 	public function columnCount() {
 		// TODO: verificar como retornar o número de colunas retornadas de uma query
@@ -63,7 +63,7 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::execute()
+	 * @see Hydra_Db_Statement_Interface::execute()
 	 */
 	public function execute(array $params = array()) {
 		if($this->_stmt === null) {
@@ -77,12 +77,12 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 		 */
 		$this->_lastResult = @pg_execute($conn, $this->_name, $params);
 		if($this->_lastResult === false) {
-			throw new Db_Statement_Pgsql_Exception('Erro PgSQL: ' . pg_last_error($conn));
+			throw new Hydra_Db_Statement_Pgsql_Exception('Erro PgSQL: ' . pg_last_error($conn));
 		}
 	}
 	
 	/**
-	 * @see Db_Statement_Abstract::_doFetch()
+	 * @see Hydra_Db_Statement_Abstract::_doFetch()
 	 */
 	protected function _doFetch($mode = null) {
 		if($this->_stmt === null) {
@@ -94,28 +94,28 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 		}
 		
 		switch($mode) {
-			case Db::FETCH_NUM:
+			case Hydra_Db::FETCH_NUM:
 				return pg_fetch_row($this->_lastResult);
-			case Db::FETCH_ASSOC:
+			case Hydra_Db::FETCH_ASSOC:
 				return pg_fetch_assoc($this->_lastResult);
-			case Db::FETCH_ARRAY:
+			case Hydra_Db::FETCH_ARRAY:
 				return pg_fetch_array($this->_lastResult);
-			case Db::FETCH_OBJ:
+			case Hydra_Db::FETCH_OBJ:
 				return pg_fetch_object($this->_lastResult);
 			default:
-				throw new Db_Statement_Pgsql_Exception('Modo de fetch inválido!');
+				throw new Hydra_Db_Statement_Pgsql_Exception('Modo de fetch inválido!');
 		}
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::nextRowset()
+	 * @see Hydra_Db_Statement_Interface::nextRowset()
 	 */
 	public function nextRowset() {
-		throw new Db_Statement_Pgsql_Exception('PostgreSQL não suporta esta operação: ' . __FUNCTION__ . '()');
+		throw new Hydra_Db_Statement_Pgsql_Exception('PostgreSQL não suporta esta operação: ' . __FUNCTION__ . '()');
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::rowCount()
+	 * @see Hydra_Db_Statement_Interface::rowCount()
 	 */
 	public function rowCount() {
 		if($this->_adapter === null || $this->_lastResult === null) {
@@ -126,7 +126,7 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::errorCode()
+	 * @see Hydra_Db_Statement_Interface::errorCode()
 	 */
 	public function errorCode() {
 		$info = $this->errorInfo();
@@ -140,7 +140,7 @@ class Db_Statement_Pgsql extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::errorInfo()
+	 * @see Hydra_Db_Statement_Interface::errorInfo()
 	 */
 	public function errorInfo() {
 		if($this->_lastResult) {

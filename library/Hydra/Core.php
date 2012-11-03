@@ -2,17 +2,17 @@
 /**
  * Representa o núcleo do sistema.
  *
- * @package Core
+ * @package Hydra_Core
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
 
-//Dependências diretas de Core.
+//Dependências diretas de Hydra_Core.
 
 require_once 'Localization.php';
 require_once 'Loader.php';
 require_once 'Util/Array.php';
 
-class Core {
+class Hydra_Core {
 	const VERSION = '1.0';
 
 	const DS = DIRECTORY_SEPARATOR;
@@ -50,7 +50,7 @@ class Core {
 	/**
 	 * Armazena o objeto responsável por carregar as classes da aplicação.
 	 *
-	 * @var Loader
+	 * @var Hydra_Loader
 	 */
 	private $_loader;
 
@@ -70,7 +70,7 @@ class Core {
 	 * Armazena o subdiretório das bibliotecas
 	 * @var unknown_type
 	 */
-	private $_libraryDir = 'library/Hydra/';
+	private $_libraryDir = 'library/';
 
 	/**
 	 * Armazena o diretório de log.
@@ -146,13 +146,13 @@ class Core {
 
 	/**
 	 * Armazena as configurações de localização da aplicação
-	 * @var Localization
+	 * @var Hydra_Localization
 	 */
 	private $_localization;
 
 	/**
-	 * Instância singleton de Core.
-	 * @var Core
+	 * Instância singleton de Hydra_Core.
+	 * @var Hydra_Core
 	 */
 	private static $_instance;
 
@@ -250,7 +250,7 @@ class Core {
 	}
 
 	private function _setupAutoload() {
-		$this->_loader = new Loader($this->_libraryDir);
+		$this->_loader = new Hydra_Loader($this->_libraryDir);
 	}
 
 	/**
@@ -271,7 +271,7 @@ class Core {
 	 */
 	private function _setupLocalization() {
 		$loc = $this->_localization;
-		if($loc instanceof Localization) {
+		if($loc instanceof Hydra_Localization) {
 			date_default_timezone_set($loc->getTimezone());
 			call_user_func_array('setlocale', array_merge(array(LC_ALL), $loc->getLocale()));
 		}
@@ -315,7 +315,7 @@ class Core {
 	 * Seta o charset da aplicação.
 	 *
 	 * @param string $charset
-	 * @return Core : fluent interface
+	 * @return Hydra_Core : fluent interface
 	 */
 	public function setCharset($charset) {
 		$this->_charset = (string) $value;
@@ -358,11 +358,11 @@ class Core {
 
 	/**
 	 * Seta o diretório raiz específico da aplicação.
-	 * (Aqui ficam os diretórios para Controllers, Views, Models,
+	 * (Aqui ficam os diretórios para Controllers, Hydra_Views, Models,
 	 *  scripts, imagens, etc., específicos da
 	 *
 	 * @param string $dir
-	 * @return Core : fluent interface
+	 * @return Hydra_Core : fluent interface
 	 * @throws Exception : caso o diretório não seja válido
 	 */
 	public function setAppRoot($dir) {
@@ -381,7 +381,7 @@ class Core {
 
 	/**
 	 * @param string $dir
-	 * @return Core : fluent interface
+	 * @return Hydra_Core : fluent interface
 	 */
 	public function setCacheDir($dir) {
 		$this->_setPropertyDir('_cacheDir', $dir);
@@ -414,7 +414,7 @@ class Core {
 
 	/**
 	 * @param string $dir
-	 * @return Core : fluent interface
+	 * @return Hydra_Core : fluent interface
 	 */
 	public function setLogDir($dir) {
 		$this->_setPropertyDir('_logDir', $dir);
@@ -452,7 +452,7 @@ class Core {
 
 	/**
 	 * @param string $dir
-	 * @return Core : fluent interface
+	 * @return Hydra_Core : fluent interface
 	 */
 	public function setSystemDir($dir) {
 		$this->_setPropertyDir('_systemDir', $dir);
@@ -533,7 +533,7 @@ class Core {
 	 * Seta o nome da biblioteca padrão.
 	 *
 	 * @param string $lib
-	 * @return Core : fluent interface
+	 * @return Hydra_Core : fluent interface
 	 */
 	public function setCoreLib($lib) {
 		$this->_coreLib = (string) $lib;
@@ -551,10 +551,10 @@ class Core {
 	/**
 	 * Seta uma localização para a aplicação.
 	 *
-	 * @param Localization $loc
-	 * @return Core : fluent interface
+	 * @param Hydra_Localization $loc
+	 * @return Hydra_Core : fluent interface
 	 */
-	public function setLocalization(Localization $loc) {
+	public function setLocalization(Hydra_Localization $loc) {
 		$this->_localization = $loc;
 		$this->_setupLocalization();
 		return $this;
@@ -563,7 +563,7 @@ class Core {
 	/**
 	 * Retorna a localização da aplicação.
 	 *
-	 * @return Localization
+	 * @return Hydra_Localization
 	 */
 	public function getLocalization() {
 		return $this->_localization;
@@ -571,7 +571,7 @@ class Core {
 
 	/**
 	 * Seta o ambiente da aplicação
-	 * @param int $env : constantes Core::PRODUCTIOIN ou Core::DEVELOPMENT
+	 * @param int $env : constantes Hydra_Core::PRODUCTIOIN ou Hydra_Core::DEVELOPMENT
 	 */
 	public function setEnvironment($env) {
 		if($env == self::PRODUCTION || $env == self::DEVELOPMENT) {
@@ -593,7 +593,14 @@ class Core {
 			error_reporting(E_ALL | E_STRICT);
 			ini_set('display_errors','Off');
 			ini_set('log_errors', 'On');
-			ini_set('error_log', $this->getLogDir().'error.log');
+			$fileName = $this->getLogDir() . date('Ymd') . '_error.log';
+
+			if(!is_file($fileName)) {
+				$handle = fopen($fileName, 'w+');
+				fclose($handle);
+				chmod($fileName, 0777);
+			}
+			ini_set('error_log', $fileName);
 		}
 	}
 
@@ -611,7 +618,7 @@ class Core {
 		}
 
 		$ini = parse_ini_file(realpath($filePath), true);
-		$array = Util_Array::fromArray($ini);
+		$array = Hydra_Util_Array::fromArray($ini);
 		return $array;
 	}
 

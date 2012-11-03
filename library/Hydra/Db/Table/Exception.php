@@ -2,4 +2,4 @@
 /**
  * Modificada em: 07/03/2012
  */
-class Db_Table_Exception extends DataAccessLayer_Exception {}
+class Hydra_Db_Table_Exception extends Hydra_DataAccessLayer_Exception {}

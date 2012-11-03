@@ -3,7 +3,7 @@
  * Representa a resposta de uma requisição.
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-class Controller_Response {
+class Hydra_Controller_Response {
 	/**
 	 * Armazena os headers a serem enviados na resposta.
 	 *
@@ -156,7 +156,7 @@ class Controller_Response {
 		if($value === null) {
 			$pieces = explode(':', $name);
 			if(count($pieces) != 2) {
-				throw new Controller_Response_Exception(sprintf('Header "%s" inválido', $name));
+				throw new Hydra_Controller_Response_Exception(sprintf('Header "%s" inválido', $name));
 			}
 			$name = trim($pieces[0]);
 			$value = trim($pieces[1]);
@@ -273,7 +273,7 @@ class Controller_Response {
 	public function setHttpResposeCode($code) {
 		$code = (int) $code;
 		if($code < 100 || $code > 599) {
-			throw new Controller_Response_Exception(sprintf('O código de resposta HTTP %d é inválido', $code));
+			throw new Hydra_Controller_Response_Exception(sprintf('O código de resposta HTTP %d é inválido', $code));
 		}
 
 		$this->_responseCode = $code;
@@ -304,7 +304,7 @@ class Controller_Response {
 		$line = 0;
 		$sent = headers_sent($file, $line);
 		if($sent && $throw && $this->_headersSentThrowsException) {
-			throw new Controller_Response_Exception(sprintf('Não é possível enviar headers; Saída iniciada em %s, linha %d', $file, $line));
+			throw new Hydra_Controller_Response_Exception(sprintf('Não é possível enviar headers; Saída iniciada em %s, linha %d', $file, $line));
 		}
 		return !$sent;
 	}
@@ -434,7 +434,7 @@ class Controller_Response {
 	 */
 	public function append($name, $content) {
 		if(!is_string($name)) {
-			throw new Controller_Response_Exception('Chave de segmento de corpo inválida!
+			throw new Hydra_Controller_Response_Exception('Chave de segmento de corpo inválida!
 					Esperado string, dado ' . gettype($name));
 		}
 
@@ -458,7 +458,7 @@ class Controller_Response {
 	 */
 	public function prepend($name, $content) {
 		if(!is_string($name)) {
-			throw new Controller_Response_Exception('Chave de segmento de corpo inválida!
+			throw new Hydra_Controller_Response_Exception('Chave de segmento de corpo inválida!
 					Esperado string, dado ' . gettype($name));
 		}
 
@@ -487,12 +487,12 @@ class Controller_Response {
 	 */
 	public function insert($name, $content, $parent = null, $beforeParent = false) {
 		if(!is_string($name)) {
-			throw new Controller_Response_Exception('Chave de segmento de corpo inválida!
+			throw new Hydra_Controller_Response_Exception('Chave de segmento de corpo inválida!
 					Esperado string, dado ' . gettype($name));
 		}
 
 		if($parent !== null && !is_string($parent)) {
-			throw new Controller_Response_Exception('Chave de segmento pai inválida!
+			throw new Hydra_Controller_Response_Exception('Chave de segmento pai inválida!
 					Esperado string, dado ' . gettype($name));
 		}
 

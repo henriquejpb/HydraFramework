@@ -3,7 +3,7 @@
  * Representação do ambiente do servidor.
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-abstract class Environment {
+abstract class Hydra_Environment {
 	/**
 	 * Retorna uma variável do ambiente (em $_SERVER ou $_ENV).
 	 * 

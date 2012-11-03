@@ -1,10 +1,10 @@
 <?php
 /**
  * Protótipo de uma classe de localização
- * @package Core
+ * @package Hydra_Core
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-class Localization {
+class Hydra_Localization {
 	/**
 	 * A zona do tempo
 	 * @var string

@@ -1,5 +1,5 @@
 <?php
-class Uri {
+class Hydra_Uri {
 	/**
 	 * O scheme da URL (http, ftp, ssl, etc.)
 	 * @var string
@@ -57,7 +57,7 @@ class Uri {
 		if(isset($info['host'])) {
 			$this->_host = $info['host'];
 		} else {
-			$this->_host = Environment::getVar('HTTP_HOST');
+			$this->_host = Hydra_Environment::getVar('HTTP_HOST');
 		}
 		
 		if(isset($info['path'])) {
@@ -188,7 +188,7 @@ class Uri {
 	 * @return string
 	 */
 	public function render($local = true) {
-		if($local === true && Environment::getVar('HTTP_HOST') == $this->_host) {
+		if($local === true && Hydra_Environment::getVar('HTTP_HOST') == $this->_host) {
 			$url = '/';
 		} else {
 			$url = $this->_renderHost();

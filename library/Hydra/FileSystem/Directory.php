@@ -3,7 +3,7 @@
  * Representa um diretório no sistema de arquivos
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-class FileSystem_Directory extends FileSystem {
+class Hydra_FileSystem_Directory extends Hydra_FileSystem {
 	/**
 	 * Faz o escaneamento do diretório procurando apenas por diretórios
 	 * @var integer
@@ -28,13 +28,13 @@ class FileSystem_Directory extends FileSystem {
 	 *
 	 * @param string $path
 	 * @param integer $permissionMode
-	 * @throws FileSystem_Directory_Exception
+	 * @throws Hydra_FileSystem_Directory_Exception
 	 */
 	public function __construct($path, $permissionMode = 0777){
 		if(!is_dir($path)){
 			$created = mkdir($path, $permissionMode, true);
 			if(!$created){
-				throw new FileSystem_Directory_Exception(sprintf('Impossível criar o diretório "%s"', $path));
+				throw new Hydra_FileSystem_Directory_Exception(sprintf('Impossível criar o diretório "%s"', $path));
 			}
 			
 			parent::__construct($path);
@@ -50,20 +50,20 @@ class FileSystem_Directory extends FileSystem {
 	 * Retorna arquivo um dentro do diretório pelo seu nome, se existir.
 	 *
 	 * @param string $fileName
-	 * @return FileSystem_File | null
+	 * @return Hydra_FileSystem_File | null
 	 */
 	public function getFile($fileName) {
-		return $this->_getChild($fileName, 'FileSystem_File');
+		return $this->_getChild($fileName, 'Hydra_FileSystem_File');
 	}
 
 	/**
 	 * Retorna o subdiretório do diretório atual, se existir.
 	 *
 	 * @param string $dirName : o nome do subdiretório
-	 * @return FileSystem_Directory | null
+	 * @return Hydra_FileSystem_Directory | null
 	 */
 	public function getSubdir($dirName) {
-		return $this->_getChild($dirName, 'FileSystem_Directory');
+		return $this->_getChild($dirName, 'Hydra_FileSystem_Directory');
 	}
 
 	/**
@@ -71,7 +71,7 @@ class FileSystem_Directory extends FileSystem {
 	 *
 	 * @param string $name : o nome do nó
 	 * @param string $type : a classe que indica o tipo de nó (arquivo ou pasta)
-	 * 								[FileSystem_Directory | FileSystem_File]
+	 * 								[Hydra_FileSystem_Directory | Hydra_FileSystem_File]
 	 */
 	private function _getChild($name, $type) {
 		$this->getContents();
@@ -131,7 +131,7 @@ class FileSystem_Directory extends FileSystem {
 	 */
 	private function _doScan($pattern, $flags, $recursive){
 		if(!$this->_valid) {
-			throw new FileSystem_Directory_Exception(sprintf('O diretório "%s" é inválido!', $this->_path));
+			throw new Hydra_FileSystem_Directory_Exception(sprintf('O diretório "%s" é inválido!', $this->_path));
 		}
 
 		$scan = array();
@@ -139,14 +139,14 @@ class FileSystem_Directory extends FileSystem {
 		foreach($result as $key => $each) {
 			$baseName = basename($each);
 			if(!self::isDir($each)) {
-				$scan[$baseName] = new FileSystem_File($each);
+				$scan[$baseName] = new Hydra_FileSystem_File($each);
 			}
 		}
 		
 		if($recursive) {
 			$subFolders = glob($this->_path.'*', self::ONLY_DIR);
 			foreach($subFolders as $each) {
-				$subDir = new FileSystem_Directory($each);
+				$subDir = new Hydra_FileSystem_Directory($each);
 				$recScan = $subDir->_doScan($pattern, $flags, $recursive);
 				$baseName = basename($each);
 				$scan[$baseName] = $recScan;
@@ -158,7 +158,7 @@ class FileSystem_Directory extends FileSystem {
 	/**
 	 * Remove o diretório atual e todo o seu conteúdo.
 	 *
-	 * @see FileSystem::delete()
+	 * @see Hydra_FileSystem::delete()
 	 */
 	public function delete() {
 		$this->getContents();
@@ -190,7 +190,7 @@ class FileSystem_Directory extends FileSystem {
 
 		$array = array();
 		foreach($this->_contents as $key => $each) {
-			if($each instanceof FileSystem_Directory) {
+			if($each instanceof Hydra_FileSystem_Directory) {
 				$array[$key] = $each->toArray();
 			} else {
 				$array[$key] = $each->__toString();

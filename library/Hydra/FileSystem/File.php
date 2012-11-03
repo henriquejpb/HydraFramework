@@ -3,7 +3,7 @@
  * Representa um arquivo no sistema de arquivos
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-class FileSystem_File extends FileSystem {
+class Hydra_FileSystem_File extends Hydra_FileSystem {
 	/**
 	 * Indica se o conteúdo de escrita deve ser adicionado ao conteúdo atual.
 	 * @var integer
@@ -44,13 +44,13 @@ class FileSystem_File extends FileSystem {
 	
 	/**
 	 * Enter description here ...
-	 * @see FileSystem::__construct($path, $permissionMode = 0777)
+	 * @see Hydra_FileSystem::__construct($path, $permissionMode = 0777)
 	 */
 	public function __construct($path, $permissionMode = 0777) {
 		if(!self::isFile($path)) {
 			$dirName = dirname($path);
-			if(!FileSystem_Directory::isDir($dirName)) {
-				new FileSystem_Directory($dirName);
+			if(!Hydra_FileSystem_Directory::isDir($dirName)) {
+				new Hydra_FileSystem_Directory($dirName);
 			}
 			$this->_create($path);
 			parent::__construct($path);
@@ -67,12 +67,12 @@ class FileSystem_File extends FileSystem {
 	 * 
 	 * @param string $path : o caminho para o arquivo a ser cirado
 	 * @return void
-	 * @throws FileSystem_File_Exception caso o arquivo não possa ser criado
+	 * @throws Hydra_FileSystem_File_Exception caso o arquivo não possa ser criado
 	 */
 	private function _create($path) {
 		$created = fopen($path, 'w+');
 		if(!$created) {
-			throw new FileSystem_File_Exception(sprintf('Não foi possível criar o arquivo "%s"', $path));
+			throw new Hydra_FileSystem_File_Exception(sprintf('Não foi possível criar o arquivo "%s"', $path));
 		}
 		fclose($created);
 	}
@@ -126,11 +126,11 @@ class FileSystem_File extends FileSystem {
 	 * Retorna o conteúdo do arquivo.
 	 * 
 	 * @return string
-	 * @throws FileSystem_File_Exception
+	 * @throws Hydra_FileSystem_File_Exception
 	 */
 	public function read($offset = null, $maxlen = null) {
 		if(!$this->isValid()) {
-			throw new FileSystem_File_Exception(sprintf('Impossível recuperar os dados em "%s": o arquivo é inválido', $this->_path));
+			throw new Hydra_FileSystem_File_Exception(sprintf('Impossível recuperar os dados em "%s": o arquivo é inválido', $this->_path));
 		}
 		
 		if((int) $maxlen === 0) {
@@ -146,13 +146,13 @@ class FileSystem_File extends FileSystem {
 	 * 
 	 * @param string $data : os dados para escrever no arquivo
 	 * @param integer $flags : as flags para a operação de escrita 
-	 * 							[FileSystem_File::LOCK_EX | FileSystem_File::APPEND]
+	 * 							[Hydra_FileSystem_File::LOCK_EX | Hydra_FileSystem_File::APPEND]
 	 * @return int | bool : o número de bytes escritos com sucesso no arquivo ou false em caso de falha  
-	 * @throws FileSystem_File_Exception
+	 * @throws Hydra_FileSystem_File_Exception
 	 */
 	public function write($data, $flags = self::LOCK_EX) {
 		if(!$this->isValid()) {
-			throw new FileSystem_File_Exception(sprintf('Impossível salvar dados em "%s": o arquivo é inválido', $this->_path));
+			throw new Hydra_FileSystem_File_Exception(sprintf('Impossível salvar dados em "%s": o arquivo é inválido', $this->_path));
 		}
 		return file_put_contents($this->_path, $data, $flags);
 	}
@@ -160,7 +160,7 @@ class FileSystem_File extends FileSystem {
 	/**
 	 * Remove o arquivo.
 	 * 
-	 * @see FileSystem::delete()
+	 * @see Hydra_FileSystem::delete()
 	 */
 	public function delete() {
 		$ret = unlink($this->_path);

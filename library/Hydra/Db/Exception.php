@@ -1,3 +1,3 @@
 <?php
-class Db_Exception extends Exception {
+class Hydra_Db_Exception extends Exception {
 }

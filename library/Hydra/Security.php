@@ -3,7 +3,7 @@
  * Camada básica se funções de segurança.
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-abstract class Security {
+abstract class Hydra_Security {
 	/**
 	 * Retira barras invertidas de todos os valores.
 	 * 

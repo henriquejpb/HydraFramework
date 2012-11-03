@@ -1,2 +1,2 @@
 <?php
-class Db_Table_Row_Exception extends Db_Table_Exception {}
+class Hydra_Db_Table_Row_Exception extends Hydra_Db_Table_Exception {}

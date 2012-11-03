@@ -1,2 +1,2 @@
 <?php
-class Controller_Request_Exception extends Exception {}
+class Hydra_Controller_Request_Exception extends Exception {}

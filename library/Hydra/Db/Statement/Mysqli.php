@@ -1,5 +1,5 @@
 <?php
-class Db_Statement_Mysqli extends Db_Statement_Abstract {
+class Hydra_Db_Statement_Mysqli extends Hydra_Db_Statement_Abstract {
 	
 	/**
 	 * Armazena os nomes das colunas
@@ -20,19 +20,19 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	private $_metaData = null;
 	
 	/**
-	 * @see Db_Statement_Abstract::_prepare()
+	 * @see Hydra_Db_Statement_Abstract::_prepare()
 	 */
 	protected function _prepare($sql) {
 		$conn = $this->_adapter->getConnection();
 		$this->_stmt = $conn->prepare($sql);
 		if($this->_stmt === false || $conn->errno) {
-			throw new Db_Statement_Mysqli_Exception('Erro MySQLi:' . $conn->error, $conn->errno);
+			throw new Hydra_Db_Statement_Mysqli_Exception('Erro MySQLi:' . $conn->error, $conn->errno);
 		}
 	}
 	
 	/**
 	 * Fecha o cursor e o statement
-	 * @return Db_Statement_Mysqli : Fluent Interface
+	 * @return Hydra_Db_Statement_Mysqli : Fluent Interface
 	 */
 	public function close() {
 		if($this->_stmt) {
@@ -43,7 +43,7 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::closeCursor()
+	 * @see Hydra_Db_Statement_Interface::closeCursor()
 	 */
 	public function closeCursor() {
 		if($this->_stmt) {
@@ -58,7 +58,7 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::columnCount()
+	 * @see Hydra_Db_Statement_Interface::columnCount()
 	 */
 	public function columnCount() {
 		if($this->_metaData !== null) {
@@ -68,7 +68,7 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::errorCode()
+	 * @see Hydra_Db_Statement_Interface::errorCode()
 	 */
 	public function errorCode() {
 		if(!$this->_stmt) {
@@ -78,7 +78,7 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::errorInfo()
+	 * @see Hydra_Db_Statement_Interface::errorInfo()
 	 */
 	public function errorInfo() {
 		if(!$this->_stmt) {
@@ -93,7 +93,7 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::execute()
+	 * @see Hydra_Db_Statement_Interface::execute()
 	 */
 	public function execute(array $params = array()) {
 		if(!$this->_stmt) {
@@ -127,12 +127,12 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 		
 		$ret = $this->_stmt->execute();
 		if($ret === false) {
-			throw new Db_Statement_Mysqli_Exception('Erro de execução MySQLi Statement: ' . $this->_stmt->error, $this->_stmt->errno);
+			throw new Hydra_Db_Statement_Mysqli_Exception('Erro de execução MySQLi Statement: ' . $this->_stmt->error, $this->_stmt->errno);
 		}
 		
 		$this->_metaData = $this->_stmt->result_metadata();
 		if($this->_stmt->errno) {
-			throw new Db_Statement_Mysqli_Exception('Erro na obtenção dos metadados MySQLi: ' . $this->_stmt->error, $this->_stmt->errno);
+			throw new Hydra_Db_Statement_Mysqli_Exception('Erro na obtenção dos metadados MySQLi: ' . $this->_stmt->error, $this->_stmt->errno);
 		}
 		
 		//Vai retornar false se executarmos operações que não sejam SELECT
@@ -162,7 +162,7 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 	}
 	
 	/**
-	 * @see Db_Statement_Abstract::_doFetch()
+	 * @see Hydra_Db_Statement_Abstract::_doFetch()
 	 */
 	public function _doFetch($mode = null) {
 		if(!$this->_stmt) {
@@ -187,34 +187,34 @@ class Db_Statement_Mysqli extends Db_Statement_Abstract {
 		
 		$row = null;
 		switch($mode) {
-			case Db::FETCH_NUM:
+			case Hydra_Db::FETCH_NUM:
 				$row = $values;
 				break;
-			case Db::FETCH_ASSOC:
+			case Hydra_Db::FETCH_ASSOC:
 				$row = array_combine($this->_keys, $values);
 				break;
-			case Db::FETCH_ARRAY:
+			case Hydra_Db::FETCH_ARRAY:
 				$assoc = array_combine($this->_keys, $value);
 				$row = array_merge($assoc, $values);
 				break;
-			case Db::FETCH_OBJ:
+			case Hydra_Db::FETCH_OBJ:
 				$row = (object) array_combine($this->_keys, $values);
 				break;
 			default:
-				throw new Db_Statement_Mysqli_Exception('Modo de fetch inválido!');
+				throw new Hydra_Db_Statement_Mysqli_Exception('Modo de fetch inválido!');
 		}
 		return $row;
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::nextRowset()
+	 * @see Hydra_Db_Statement_Interface::nextRowset()
 	 */
 	public function nextRowset() {
-		throw new Db_Statement_Mysqli_Exception('MySQLi não suporta esta operação: ' . __FUNCTION__ . '()');	
+		throw new Hydra_Db_Statement_Mysqli_Exception('MySQLi não suporta esta operação: ' . __FUNCTION__ . '()');	
 	}
 	
 	/**
-	 * @see Db_Statement_Interface::rowCount()
+	 * @see Hydra_Db_Statement_Interface::rowCount()
 	 */
 	public function rowCount() {
 		if(!$this->_adapter) {

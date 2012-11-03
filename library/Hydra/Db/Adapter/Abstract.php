@@ -1,5 +1,5 @@
 <?php
-abstract class Db_Adapter_Abstract {
+abstract class Hydra_Db_Adapter_Abstract {
 	/**
 	 * @var string
 	 */
@@ -62,22 +62,22 @@ abstract class Db_Adapter_Abstract {
 	 * Informa qual o modo de fetch dos dados provindos do SGBD
 	 * @var integer
 	 */
-	protected $_fetchMode = Db::FETCH_ASSOC;
+	protected $_fetchMode = Hydra_Db::FETCH_ASSOC;
 
 	/**
 	 * A classe de statement.
 	 * @var string
 	 */
-	protected $_statementClass = 'Db_Statement_Abstract';
+	protected $_statementClass = 'Hydra_Db_Statement_Abstract';
 
 	/**
 	 * Tipos de dados numéricos, que não precisam ser quotados
 	 * @var array
 	 */
 	protected $_numericDataTypes = array(
-		Db::INT_TYPE => Db::INT_TYPE,
-		Db::BIG_INT_TYPE => Db::BIG_INT_TYPE,
-		Db::FLOAT_TYPE => Db::FLOAT_TYPE ,
+		Hydra_Db::INT_TYPE => Hydra_Db::INT_TYPE,
+		Hydra_Db::BIG_INT_TYPE => Hydra_Db::BIG_INT_TYPE,
+		Hydra_Db::FLOAT_TYPE => Hydra_Db::FLOAT_TYPE ,
 	);
 
 	/**
@@ -105,7 +105,7 @@ abstract class Db_Adapter_Abstract {
 	 * Checa as configurações informadas pelo usuário
 	 * @param array $config
 	 * @return void
-	 * @throws Db_Exception
+	 * @throws Hydra_Db_Exception
 	 */
 	protected function _checkConfig(array $config) {
 		if(
@@ -114,7 +114,7 @@ abstract class Db_Adapter_Abstract {
 			!array_key_exists('password', $config) ||
 			!array_key_exists('dbname', $config)
 		) {
-			throw new Db_Adapter_Exception(sprintf('Estão faltando parâmetros de configuração para o Adapter "%s"', get_class($this)));
+			throw new Hydra_Db_Adapter_Exception(sprintf('Estão faltando parâmetros de configuração para o Adapter "%s"', get_class($this)));
 		}
 	}
 
@@ -146,15 +146,15 @@ abstract class Db_Adapter_Abstract {
 	/**
 	 * Seta a classe de Statement padrão
 	 * @param class $class
-	 * @return Db_Adapter_Abstract Fluent Interface
-	 * @throws Db_Adapter_Exception
+	 * @return Hydra_Db_Adapter_Abstract Fluent Interface
+	 * @throws Hydra_Db_Adapter_Exception
 	 */
 	public function setStatementClass($class) {
 		if(class_exists($class)) {
 			$this->_statementClass = $class;
 			return $this;
 		} else {
-			throw new Db_Adapter_Exception(sprintf('A classe "%s" não existe', $class));
+			throw new Hydra_Db_Adapter_Exception(sprintf('A classe "%s" não existe', $class));
 		}
 	}
 
@@ -196,21 +196,21 @@ abstract class Db_Adapter_Abstract {
 
 	/**
 	 * Retorna um prepared stetement
-	 * @param string|Db_Select $sql : a query SQL
-	 * @return Db_Statement
+	 * @param string|Hydra_Db_Select $sql : a query SQL
+	 * @return Hydra_Db_Statement
 	 */
 	abstract public function prepare($sql);
 
 	/**
 	 * Prepara e executa um SQL statement com parâmetros associados
-	 * @param string|Db_Select $sql
+	 * @param string|Hydra_Db_Select $sql
 	 * @param mixed $boundParams
-	 * @return Db_Statement_Abstract
+	 * @return Hydra_Db_Statement_Abstract
 	 */
 	public function query($sql, $boundParams = array()) {
 		$this->_connect();
 
-		if($sql instanceof Db_Select) {
+		if($sql instanceof Hydra_Db_Select) {
 			if(empty($boundParams)) {
 				$boundParams = $sql->getBoundParams();
 			}
@@ -233,7 +233,7 @@ abstract class Db_Adapter_Abstract {
 	 * Insere na tabela $table os dados especificados em $boundParams
 	 * @param string $table : a tabela na qual os dados serão inseridos
 	 * @param array $boundParams : os dados a inserir, na forma array(coluna1 => valor1, coluna2 => valor2, ...)
-	 * @throws Db_Adapter_Exception
+	 * @throws Hydra_Db_Adapter_Exception
 	 * @return integer : o número de linhas afetadas
 	 */
 	public function insert($table, array $boundParams) {
@@ -241,8 +241,8 @@ abstract class Db_Adapter_Abstract {
 		$values = array();
 		foreach($boundParams as $col => $val) {
 			$columns[] = $this->quoteIdentifier($col);
-			//Se temos uma instancia de Db_Expression, ela é inserida na query, sem placeholders intermediários
-			if($val instanceof Db_Expression) {
+			//Se temos uma instancia de Hydra_Db_Expression, ela é inserida na query, sem placeholders intermediários
+			if($val instanceof Hydra_Db_Expression) {
 				$values[] = $val->__toString();
 				unset($boundParams[$col]);
 			} else {
@@ -256,7 +256,7 @@ abstract class Db_Adapter_Abstract {
 					$values[] = ':' . $col;
 					unset($boundParams[$col]);
 				} else {
-					throw new Db_Adapter_Exception(sprintf('%s não suporta assossiação posicional ou nominal de parâmetros', get_class($this)));
+					throw new Hydra_Db_Adapter_Exception(sprintf('%s não suporta assossiação posicional ou nominal de parâmetros', get_class($this)));
 				}
 			}
 		}
@@ -308,14 +308,14 @@ abstract class Db_Adapter_Abstract {
 	 * será gerada a seguinte cláusula:
 	 * 			WHERE campo1 = 'bla' AND campo2 = 1
 	 *
-	 * @throws Db_Adapter_Exception
+	 * @throws Hydra_Db_Adapter_Exception
 	 * @return integer : o número de linhas afetadas
 	 */
 	public function update($table, array $boundParams, $where){
 		$set = array();
 		foreach($boundParams as $col => $val) {
-			//Se temos uma instancia de Db_Expression, ela é inserida na query, sem placeholders intermediários
-			if($val instanceof Db_Expression) {
+			//Se temos uma instancia de Hydra_Db_Expression, ela é inserida na query, sem placeholders intermediários
+			if($val instanceof Hydra_Db_Expression) {
 				$val = $val->__toString();
 				unset($boundParams[$col]);
 			} else {
@@ -327,7 +327,7 @@ abstract class Db_Adapter_Abstract {
 					$val = ':' . $col;
 					unset($boundParams[$col]);
 				} else {
-					throw new Db_Adapter_Exception(sprintf('%s não suporta assossiação posicional ou nominal de parâmetros', get_class($this)));
+					throw new Hydra_Db_Adapter_Exception(sprintf('%s não suporta assossiação posicional ou nominal de parâmetros', get_class($this)));
 				}
 			}
 			$set[] = $this->quoteIdentifier($col) . ' = ' . $val;
@@ -350,7 +350,7 @@ abstract class Db_Adapter_Abstract {
 	/**
 	 * Remove dados da tabela $table obedecendo as condição(ões) $where
 	 * @param string $table : o nome da tabela
-	 * @param mixed $where : as condições para atualização. Ver método Db_Adapter_Abstract::_whereExpression();
+	 * @param mixed $where : as condições para atualização. Ver método Hydra_Db_Adapter_Abstract::_whereExpression();
 	 * @return integer : o número de linhas afetadas
 	 */
 	public function delete($table, $where) {
@@ -381,7 +381,7 @@ abstract class Db_Adapter_Abstract {
 	 * 			-> 'WHERE (campo1 = valor1) AND (campo2 = valor2 OR campo3 = valor3)'
 	 *
 	 * array de pares condicional => parâmetro associado:
-	 * 		Funciona da mesma maneira que o array de strings. Internamente, será usado o método Db_Adapter_Abstract::quoteInto()
+	 * 		Funciona da mesma maneira que o array de strings. Internamente, será usado o método Hydra_Db_Adapter_Abstract::quoteInto()
 	 * 		Exemplo:
 	 * 			$where = array(
 	 * 						'campo1 = ?' => 'x'
@@ -403,8 +403,8 @@ abstract class Db_Adapter_Abstract {
 		foreach($where as $key => &$value) {
 			//Se $key é uma chave inteira, ou seja, não guarda uma condição...
 			if(is_int($key)) {
-				//Se $value for do tipo Db_Expression, convertemo-lo para string
-				if($value instanceof Db_Expression) {
+				//Se $value for do tipo Hydra_Db_Expression, convertemo-lo para string
+				if($value instanceof Hydra_Db_Expression) {
 					$value = $value->__toString();
 				}
 				//... se não, $key guarda uma condição e $value um parâmetro a ser associado
@@ -419,11 +419,11 @@ abstract class Db_Adapter_Abstract {
 	}
 
 	/**
-	 * Cria um novo objeto Db_Select para este Adapter
-	 * @return Db_Select
+	 * Cria um novo objeto Hydra_Db_Select para este Adapter
+	 * @return Hydra_Db_Select
 	 */
 	public function select() {
-		return new Db_Select($this);
+		return new Hydra_Db_Select($this);
 	}
 
 	/**
@@ -437,7 +437,7 @@ abstract class Db_Adapter_Abstract {
 
 	/**
 	 * Retorna o modo de fetch deste Adapter
-	 * @return CONST Db::FETCH_*
+	 * @return CONST Hydra_Db::FETCH_*
 	 */
 	public function getFetchMode() {
 		return $this->_fetchMode;
@@ -445,28 +445,28 @@ abstract class Db_Adapter_Abstract {
 
 	/**
 	 * Seta o modo de fetch deste Adapter
-	 * @param CONST Db::FETCH_* $mode : o novo modo de fetch
+	 * @param CONST Hydra_Db::FETCH_* $mode : o novo modo de fetch
 	 * @return void
 	 */
 	public function setFetchMode($mode) {
 		switch($mode) {
-			case Db::FETCH_ARRAY:
-			case Db::FETCH_ASSOC:
-			case Db::FETCH_COLUMN:
-			case Db::FETCH_NUM:
-			case Db::FETCH_OBJ:
+			case Hydra_Db::FETCH_ARRAY:
+			case Hydra_Db::FETCH_ASSOC:
+			case Hydra_Db::FETCH_COLUMN:
+			case Hydra_Db::FETCH_NUM:
+			case Hydra_Db::FETCH_OBJ:
 				$this->_fetchMode = $mode;
 			default:
-				throw new Db_Adapter_Exception('Modo de fetch inválido');
+				throw new Hydra_Db_Adapter_Exception('Modo de fetch inválido');
 		}
 	}
 
 	/**
 	 * Busca todas as linhas de retorno da consulta como um array sequencial
-	 * @param string|Db_Select $sql : um SQL Select Statement
+	 * @param string|Hydra_Db_Select $sql : um SQL Select Statement
 	 * @param strint|array $boundParams : parâmetros para substituir os placeholders
-	 * @param CONST Db::FETCH_* $fetchMode : se diferente de null, sobrescreve o modo de fetch do Adapter
-	 * @param string|int $col : a coluna de projeção, caso $fetchMode == Db::FETCH_COLUMN
+	 * @param CONST Hydra_Db::FETCH_* $fetchMode : se diferente de null, sobrescreve o modo de fetch do Adapter
+	 * @param string|int $col : a coluna de projeção, caso $fetchMode == Hydra_Db::FETCH_COLUMN
 	 * @return array
 	 */
 	public function fetchAll($sql, $boundParams = array(), $fetchMode = null, $col = null) {
@@ -480,10 +480,10 @@ abstract class Db_Adapter_Abstract {
 
 	/**
 	 * Busca a primeira linha de retorno da consulta
-	 * @param string|Db_Select $sql : um SQL Select Statement
+	 * @param string|Hydra_Db_Select $sql : um SQL Select Statement
 	 * @param strint|array $boundParams : parâmetros para substituir os placeholders
-	 * @param CONST Db::FETCH_* $fetchMode : se diferente de null, sobrescreve o modo de fetch do Adapter
-	 * @param string |int $col : a coluna de projeção, caso $fetchMode == Db::FETCH_COL
+	 * @param CONST Hydra_Db::FETCH_* $fetchMode : se diferente de null, sobrescreve o modo de fetch do Adapter
+	 * @param string |int $col : a coluna de projeção, caso $fetchMode == Hydra_Db::FETCH_COL
 	 * @return array|string
 	 */
 	public function fetchOne($sql, $boundParams = array(), $fetchMode = null, $col = null) {
@@ -497,30 +497,30 @@ abstract class Db_Adapter_Abstract {
 	
 	/**
 	 * Busca e retorna a coluna especificada (projeção) de cada linha do resultado
-	 * @param string|Db_Select $sql
+	 * @param string|Hydra_Db_Select $sql
 	 * @param string|int $column
 	 * @param mixed $bounParams
 	 * @return array
 	 */
 	public function fetchAllColumns($sql, $column, $boundParams = array()) {
-		return $this->fetchAll($sql, $boundParams, Db::FETCH_COLUMN, $column);
+		return $this->fetchAll($sql, $boundParams, Hydra_Db::FETCH_COLUMN, $column);
 	}
 	
 	/**
 	 * Retorna a projeção da coluna especificada na primeira linha do resultado
-	 * @param string|Db_Select $sql
+	 * @param string|Hydra_Db_Select $sql
 	 * @param string|int $column
 	 * @param mixed $bounParams
 	 * @return array|string
 	 */
 	public function fetchColumn($sql, $column, $boundParams = array()) {
-		return $this->fetchOne($sql, $boundParams, Db::FETCH_COLUMN, $column);
+		return $this->fetchOne($sql, $boundParams, Hydra_Db::FETCH_COLUMN, $column);
 	}
 	
 
 	/**
 	 * Checa se o adapter suporta parâmetros posicionais ou nominais
-	 * @param Db_Adapter_Abstract::*_PARAMETERS $type : o tipo de parâmetro suportado
+	 * @param Hydra_Db_Adapter_Abstract::*_PARAMETERS $type : o tipo de parâmetro suportado
 	 * @return boolean
 	 */
 	abstract public function supportsParameters($type);
@@ -562,19 +562,19 @@ abstract class Db_Adapter_Abstract {
 	/**
 	 * Quota um valor para ser usado dentro de um SQL Statement
 	 * @param mixed $value : o valor a ser quotado
-	 * @param constant Db::*_TYPE $type [OPCIONAL] : caso seja necessário forçar o tipo de quoting. Ex.: inserir "2" em um campo text
+	 * @param constant Hydra_Db::*_TYPE $type [OPCIONAL] : caso seja necessário forçar o tipo de quoting. Ex.: inserir "2" em um campo text
 	 */
 	public function quote($value, $type = null) {
 		//Inicia a conexão (caso não esteja iniciada ainda)...
 		$this->_connect();
 
 		//Caso hajam subquerys
-		if($value instanceof Db_Select) {
+		if($value instanceof Hydra_Db_Select) {
 			return '(' . $value->assemble() . ')';
 		}
 
 		//Expressões do tipo CURDATE(), CAST(campo AS tipo)
-		if($value instanceof Db_Expression) {
+		if($value instanceof Hydra_Db_Expression) {
 			//Compatibilidade com versões < 5.2.4
 			return $value->__toString();
 		}
@@ -589,11 +589,11 @@ abstract class Db_Adapter_Abstract {
 		if($type !== null && array_key_exists($type, $this->_numericDataTypes)){
 			$quotedVal = '0';
 			switch($this->_numericDataTypes[$type]) {
-				case Db::INT_TYPE:
+				case Hydra_Db::INT_TYPE:
 					$quotedVal = (string) intval($value);
 					break;
 					// Inteiro de 64 bits (by Zend Framework)
-				case Db::BIGINT_TYPE:
+				case Hydra_Db::BIGINT_TYPE:
 					// ANSI SQL-style hex literals (e.g. x'[\dA-F]+')
 					// are not supported here, because these are string
 					// literals, not numeric literals.
@@ -608,7 +608,7 @@ abstract class Db_Adapter_Abstract {
 					(string) $value, $matches)) {
 						$quotedValue = $matches[1];
 					}
-				case Db::FLOAT_TYPE:
+				case Hydra_Db::FLOAT_TYPE:
 					$quotedVal = sprintf('%F', $value);
 			}
 			return $quotedVal;
@@ -638,7 +638,7 @@ abstract class Db_Adapter_Abstract {
 	 * Ex.: $this->quoteInto('WHERE id = ?', 4);
 	 * @param string $text : A string contendo a ser retornada, ainda contendo o(s) placeholder(s)
 	 * @param mixed $value : O valor a ser inserido na string
-	 * @param constant Db::*_TYPE $type [OPCIONAL] : o tipo de quoting
+	 * @param constant Hydra_Db::*_TYPE $type [OPCIONAL] : o tipo de quoting
 	 * @param integer $count : a quantidade de vezes que $value será substituí­do em $text, se houver placeholders suficientes
 	 */
 	public function quoteInto($text, $value, $type = null, $count = 1) {
@@ -651,7 +651,7 @@ abstract class Db_Adapter_Abstract {
 
 	/**
 	 * Quota um identificador
-	 * @param string|array|Db_Expression $identifier : o identificador a ser quotado
+	 * @param string|array|Hydra_Db_Expression $identifier : o identificador a ser quotado
 	 * @param boolean $forced [OPCIONAL] : indica se o quotamento deve ser forçado, mesmo que _autoQuoteIdentifiers seja false
 	 * @return string : o identificador quotado
 	 */
@@ -661,7 +661,7 @@ abstract class Db_Adapter_Abstract {
 
 	/**
 	 * Quota um identificador de coluna e seu apelido (alias)
-	 * @param string|array|Db_Expression $column : o identificador da coluna
+	 * @param string|array|Hydra_Db_Expression $column : o identificador da coluna
 	 * @param string $alias : um apelido para a coluna
 	 * @param boolean $forced [OPCIONAL] : indica se o quotamento deve ser forçado, mesmo que _autoQuoteIdentifiers seja false
 	 * @return string : o identificador quotado
@@ -683,15 +683,15 @@ abstract class Db_Adapter_Abstract {
 
 	/**
 	 * Efetivamente faz o quotamento de um identificador complexo
-	 * @param string|array|Db_Expression $identifier
+	 * @param string|array|Hydra_Db_Expression $identifier
 	 * @param string $alias : o apelido para o identificador
 	 * @param boolean $forced [OPCIONAL] : indica se o quotamento deve ser forçado, mesmo que _autoQuoteIdentifiers seja false
 	 * @param string $as [OPCIONAL] : o token de apelidamento
 	 */
 	protected function _doQuoteIdentifierAs($identifier, $alias, $forced = false, $as = 'AS') {
-		if($identifier instanceof Db_Expression) {
+		if($identifier instanceof Hydra_Db_Expression) {
 			$quoted = $identifier->__toString();
-		} else if($identifier instanceof Db_Select) {
+		} else if($identifier instanceof Hydra_Db_Select) {
 			$quoted = '(' . $identifier->assemble() . ')';
 		} else {
 			if(is_string($identifier)) {
@@ -701,7 +701,7 @@ abstract class Db_Adapter_Abstract {
 			if(is_array($identifier)) {
 				$segments = array();
 				foreach($identifier as $piece) {
-					if($piece instanceof Db_Expression) {
+					if($piece instanceof Hydra_Db_Expression) {
 						$segments[] = $piece->__toString();
 					} else {
 						$segments[] = $this->_doQuoteIdentifier($piece, $forced);

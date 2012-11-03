@@ -1,5 +1,5 @@
 <?php
-class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
+class Hydra_Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	/**
 	 * Os dados originais para cada linha.
 	 * @var array
@@ -7,8 +7,8 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	protected $_data = array();
 
 	/**
-	 * Instância de Db_Table pai deste objeto
-	 * @var Db_Table
+	 * Instância de Hydra_Db_Table pai deste objeto
+	 * @var Hydra_Db_Table
 	 */
 	protected $_table;
 	
@@ -19,7 +19,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	protected $_tableName;
 	
 	/**
-	 * É TRUE se temos uma referência a um objeto Db_Table ativo.
+	 * É TRUE se temos uma referência a um objeto Hydra_Db_Table ativo.
 	 * @var boolean
 	 */
 	protected $_connected = true;
@@ -28,7 +28,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	 * Nome de classe que representa uma linha da tabela.
 	 * @var string
 	 */
-	protected $_rowClass = 'Db_Table_Row';
+	protected $_rowClass = 'Hydra_Db_Table_Row';
 	
 	/**
 	 * Ponteiro para o iterador.
@@ -43,7 +43,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	protected $_count = 0;
 	
 	/**
-	 * Coleção de instâncias de Db_Table_Row ou classes derivadas.
+	 * Coleção de instâncias de Hydra_Db_Table_Row ou classes derivadas.
 	 * @var array
 	 */
 	protected $_rows = array();
@@ -64,8 +64,8 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	 * Construtor.
 	 * 
 	 * Parâmetros de configuração possíveis:
-	 * - table 		: [Db_Table] a tabela ao qual este objeto está vinculado
-	 * - rowClass	: [string] a classe para um objeto Db_Table_Row  
+	 * - table 		: [Hydra_Db_Table] a tabela ao qual este objeto está vinculado
+	 * - rowClass	: [string] a classe para um objeto Hydra_Db_Table_Row  
 	 * - data		: [array] os dados para armazenamento neste objeto
 	 * - readOnly	: [boolean] se os dados são somente-leitura
 	 * - stored		: [boolean] se os dados são provindos do banco de dados ou não
@@ -73,7 +73,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	 * @param array $config : os parâmetros de configuração
 	 */
 	public function __construct(array $config) {
-		if(isset($config['table']) && $config['table'] instanceof Db_Table) {
+		if(isset($config['table']) && $config['table'] instanceof Hydra_Db_Table) {
 			$this->_table = $config['table'];
 			$this->_tableName = $this->_table->getName();
 		}
@@ -142,7 +142,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	/**
 	 * Retorna a objeto-tabela ou null se o rowset estiver desconectado.
 	 * 
-	 * @return Db_Table|null
+	 * @return Hydra_Db_Table|null
 	 */
 	public function getTable() {
 		return $this->_table;
@@ -152,11 +152,11 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	 * Seta o objeto-tabela para restabelecer a conexão com o
 	 * banco de dados para o rowset que tenha sido desserializado.
 	 * 
-	 * @param Db_Table $table
+	 * @param Hydra_Db_Table $table
 	 */
-	public function setTable(Db_Table $table) {
+	public function setTable(Hydra_Db_Table $table) {
 		if($table->getName() !== $this->_tableName) {
-			throw new Db_Table_Rowset_Exception(sprintf(
+			throw new Hydra_Db_Table_Rowset_Exception(sprintf(
 														'O objeto rowset pertence à tabela "%s", 
 														houve uma tentativa de associá-la a tabela "%s"', 
 														$this->_tableName,
@@ -207,7 +207,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	 * Similar à função current() para arrays em PHP.
 	 * Requerido pela interface Iterator.
 	 * 
-	 * @return Db_Table_Row
+	 * @return Hydra_Db_Table_Row
 	 * @see SeekableIterator::current()
 	 */
 	public function current() {
@@ -268,7 +268,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	 * Requerido pela interface SeekableIterator.
 	 * 
 	 * @param int $position : a posição de destino
-	 * @return Db_Table_Rowset : fluent interface
+	 * @return Hydra_Db_Table_Rowset : fluent interface
 	 * @throws OutOfBoundsException
 	 * @see SeekableIterator::seek()
 	 */
@@ -299,7 +299,7 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	 * Requerido pela interface ArrayAccess.
 	 * 
 	 * @param string $offset
-	 * @return Db_Table_Row
+	 * @return Hydra_Db_Table_Row
 	 * @throws OutOfBoundsException
 	 * @see ArrayAccess::offsetGet()
 	 */
@@ -317,19 +317,19 @@ class Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess {
 	 * Seta uma linha na posição $offset
 	 * 
 	 * @param string $offset : esperado int
-	 * @param mixed $value : esperado Db_Table_Row
+	 * @param mixed $value : esperado Hydra_Db_Table_Row
 	 * @return void
 	 * @throws OutOfBoundsException
 	 * @see ArrayAccess::offsetSet()
 	 */
 	public function offsetSet($offset, $value) {
-		if(!$value instanceof Db_Table_Row) {
+		if(!$value instanceof Hydra_Db_Table_Row) {
 			$type = gettype($value);
 			if($type == 'object') {
 				$type = get_class($value);
 			}
-			throw new Db_Table_Rowset_Exception('Objetos Db_Table_Rowset devem conter apenas 
-												objetos do tipo Db_Table_Row. Tipo informado: ' . $type);
+			throw new Hydra_Db_Table_Rowset_Exception('Objetos Hydra_Db_Table_Rowset devem conter apenas 
+												objetos do tipo Hydra_Db_Table_Row. Tipo informado: ' . $type);
 		}
 		
 		// Lança uma exceção se a posição não for válida ou não existir

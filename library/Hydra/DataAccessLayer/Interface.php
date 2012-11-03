@@ -7,7 +7,7 @@
  * @version 0.1
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-interface DataAccessLayer_Interface {
+interface Hydra_DataAccessLayer_Interface {
 	/**
 	 * Insere dados na base persistente.
 	 * 
@@ -74,7 +74,7 @@ interface DataAccessLayer_Interface {
 	 * 
 	 * @param string $identifier : o nome do identificador
 	 * @return boolean
-	 * @throws DataAccessLayer_Exception : caso o identificador não exista na estrutura de
+	 * @throws Hydra_DataAccessLayer_Exception : caso o identificador não exista na estrutura de
 	 * 									   armazenamento.
 	 */
 	public function isIdentity($identifier);

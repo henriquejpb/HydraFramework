@@ -3,7 +3,7 @@
  * Conexão com SGBD's
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-abstract class Db {
+abstract class Hydra_Db {
 	const INT_TYPE    = 0;
     const BIGINT_TYPE = 1;
     const FLOAT_TYPE  = 2;
@@ -39,17 +39,17 @@ abstract class Db {
 	const FETCH_COLUMN = 104;
 
 	/**
-	 * Retorna um Db_Adapter para conexão com o banco de dados
+	 * Retorna um Hydra_Db_Adapter para conexão com o banco de dados
 	 * @param string $adapter : o nome do Adapter
 	 * @param array $config : as configurações do novo Adapter
-	 * @throws Db_Exception
+	 * @throws Hydra_Db_Exception
 	 */
 	public static function factory($adapter, array $config){
-		$className = 'Db_Adapter_'.ucfirst($adapter);
+		$className = 'Hydra_Db_Adapter_'.ucfirst($adapter);
 		if(class_exists($className)){
 			return new $className($config);
 		} else {
-			throw new Db_Exception(sprintf('Adapter "%s" inexistente!'));
+			throw new Hydra_Db_Exception(sprintf('Adapter "%s" inexistente!', $adapter));
 		}
 	}
 }

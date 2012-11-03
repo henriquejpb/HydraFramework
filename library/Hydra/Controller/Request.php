@@ -3,7 +3,7 @@
  * Representa uma requisição.
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-class Controller_Request {
+class Hydra_Controller_Request {
 	/**
 	 * Scheme para http
 	 */
@@ -90,7 +90,7 @@ class Controller_Request {
 	
 	/**
 	 * O User Agent da requisição
-	 * @var Http_UserAgent
+	 * @var Hydra_Http_UserAgent
 	 */
 	private $_userAgent;
 	
@@ -130,7 +130,7 @@ class Controller_Request {
 	 */
 	public function __construct($uri = null, $useSuperGlobals = array('get', 'post', 'files', 'cookies')) {
 		$this->setUri($uri);
-		$this->_userAgent = new Http_UserAgent();
+		$this->_userAgent = new Hydra_Http_UserAgent();
 		
 		$parseEnvironment = is_array($useSuperGlobals) && !empty($useSuperGlobals);
 		
@@ -256,7 +256,7 @@ class Controller_Request {
 			return $this;
 		}
 		
-		$uri = new Uri($reqUri);
+		$uri = new Hydra_Uri($reqUri);
 		$this->_get = array_merge($this->_get, $uri->query());
 		$this->_uri = $uri->path();
 		
@@ -702,7 +702,7 @@ class Controller_Request {
 	 * @return string|null
 	 */
 	public function getServer($varName) {
-		return Environment::getVar($varName);
+		return Hydra_Environment::getVar($varName);
 	}
 	
 	/**
@@ -764,8 +764,8 @@ class Controller_Request {
 	public function getReferer() {
 		static $ref;
 		if(empty($ref)) {
-			$ref = Environment::getVar('Controller_REFERER');
-			$forwarded = Environment::getVar('Controller_X_FORWARDED_HOST');
+			$ref = Hydra_Environment::getVar('Controller_REFERER');
+			$forwarded = Hydra_Environment::getVar('Controller_X_FORWARDED_HOST');
 			if($forwarded) {
 				$ref = $forwarded;
 			}

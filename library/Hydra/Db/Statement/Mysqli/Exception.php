@@ -1,3 +1,3 @@
 <?php
-class Db_Statement_Mysqli_Exception extends Db_Exception {
+class Hydra_Db_Statement_Mysqli_Exception extends Hydra_Db_Exception {
 }

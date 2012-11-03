@@ -3,7 +3,7 @@
  * Geração de SQL SELECTS
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-class Db_Select {
+class Hydra_Db_Select {
 	const DISTINCT 		 = 'distinct';
 	const COLUMNS 		 = 'columns';
 	const FROM 			 = 'from';
@@ -48,7 +48,7 @@ class Db_Select {
 	protected $_boundParams = array();
 
 	/**
-	 * @var Db_Adapter_Abstract
+	 * @var Hydra_Db_Adapter_Abstract
 	 */
 	protected $_adapter;
 
@@ -106,9 +106,9 @@ class Db_Select {
 
 	/**
 	 * Construtor
-	 * @param Db_Adapter_Abstract $adapter
+	 * @param Hydra_Db_Adapter_Abstract $adapter
 	 */
-	public function __construct(Db_Adapter_Abstract $adapter) {
+	public function __construct(Hydra_Db_Adapter_Abstract $adapter) {
 		$this->_adapter = $adapter;
 		$this->_parts = self::$_partsInit;
 	}
@@ -133,7 +133,7 @@ class Db_Select {
 	/**
 	 * Faz a query selecionar apenas linhas distintas
 	 * @param boolean $opt
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function distinct($opt = true) {
 		$this->_parts[self::DISTINCT] = (bool) $opt;
@@ -143,7 +143,7 @@ class Db_Select {
 	/**
 	 * Adiciona uma ou mais tabelas e as colunas desejadas a uma query
 	 * @param array|string $tableName : string ou array da forma array('alias' => 'table')
-	 * @param array|string|Db_Expression $tableCols
+	 * @param array|string|Hydra_Db_Expression $tableCols
 	 * @param string $schema
 	 */
 	public function from($tableName, $tableCols = array(), $schema = null) {
@@ -152,9 +152,9 @@ class Db_Select {
 
 	/**
 	 * Seleciona as colunas a serem retornadas na query
-	 * @param array|string|Db_Expression $columns
+	 * @param array|string|Hydra_Db_Expression $columns
 	 * @param string $tableName : o nome ou alias da tabela a qual os campos partencem
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function columns($columns = array(), $tableName = null) {
 		if($tableName === null && !empty($this->_parts[self::FROM])) {
@@ -165,7 +165,7 @@ class Db_Select {
 		}
 
 		if(!array_key_exists($tableName, $this->_parts[self::FROM])) {
-			throw new Db_Select_Exception('Nenhuma tabela especificada para a cláusula FROM');
+			throw new Hydra_Db_Select_Exception('Nenhuma tabela especificada para a cláusula FROM');
 		}
 
 		$this->_tableCols($tableName, $columns);
@@ -174,20 +174,20 @@ class Db_Select {
 
 	/**
 	 * Adiciona uma cláusula UNION à query
-	 * @param array $selects : array de objetos Db_Select ou de strings sql
-	 * @param Db_Select::SQL_UNION_* $type : o tipo de union (UNION ou UNION ALL)
-	 * @throws Db_Select_Exception
-	 * @return Db_Select : Fluent Interface
+	 * @param array $selects : array de objetos Hydra_Db_Select ou de strings sql
+	 * @param Hydra_Db_Select::SQL_UNION_* $type : o tipo de union (UNION ou UNION ALL)
+	 * @throws Hydra_Db_Select_Exception
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function union(array $selects, $type = self::SQL_UNION) {
 		if(!is_array($selects)) {
-			throw new Db_Select_Exception(
-				'union() aceita somente arrays de objetos Db_Select ou de sentenças sql (string)'
+			throw new Hydra_Db_Select_Exception(
+				'union() aceita somente arrays de objetos Hydra_Db_Select ou de sentenças sql (string)'
 			);
 		}
 
 		if(!in_array($type, self::$_unionTypes)) {
-			throw new Db_Select_Exception('Tipo de união inválido: ' . $type);
+			throw new Hydra_Db_Select_Exception('Tipo de união inválido: ' . $type);
 		}
 
 		foreach($selects as $each) {
@@ -200,8 +200,8 @@ class Db_Select {
 	/**
 	 * Adiciona uma cláusua UNION ALL à query
 	 * @param array $selects
-	 * @see Db_Select::union()
-	 * @return Db_Select : Fluent Interface
+	 * @see Hydra_Db_Select::union()
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function unionAll(array $selects) {
 		return $this->union($selects, self::SQL_UNION_ALL);
@@ -214,7 +214,7 @@ class Db_Select {
 	 * @param string $joinCond : a condição de junção (ON)
 	 * @param array|string $columns : a(s) coluna(s) necessária(s) e/ou expressões da tabela
 	 * @param string $schema : o nome do schema
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function join($tableName, $joinCond, $columns = array(), $schema = null) {
 		return $this->innerJoin($tableName, $joinCond, $columns, $schema);
@@ -226,7 +226,7 @@ class Db_Select {
 	 * @param string $joinCond : a condição de junção (ON)
 	 * @param array|string $columns : a(s) coluna(s) necessária(s) e/ou expressões da tabela
 	 * @param string $schema : o nome do schema
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function innerJoin($tableName, $joinCond, $columns = array(), $schema = null) {
 		return $this->_join(self::INNER_JOIN, $tableName, $joinCond, $columns, $schema);
@@ -239,7 +239,7 @@ class Db_Select {
 	 * @param string $joinCond : a condição de junção (ON)
 	 * @param array|string $columns : a(s) coluna(s) necessária(s) e/ou expressões da tabela
 	 * @param string $schema : o nome do schema
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function leftJoin($tableName, $joinCond, $columns = self::SQL_WILDCARD, $schema = null) {
 		return $this->_join(self::LEFT_JOIN, $tableName, $joinCond, $columns, $schema);
@@ -251,7 +251,7 @@ class Db_Select {
 	 * @param string $joinCond : a condição de junção (ON)
 	 * @param array|string $columns : a(s) coluna(s) necessária(s) e/ou expressões da tabela
 	 * @param string $schema : o nome do schema
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function rightJoin($tableName, $joinCond, $columns = self::SQL_WILDCARD, $schema = null) {
 		return $this->_join(self::RIGHT_JOIN, $tableName, $joinCond, $columns, $schema);
@@ -263,7 +263,7 @@ class Db_Select {
 	 * @param string $joinCond : a condição de junção (ON)
 	 * @param array|string $columns : a(s) coluna(s) necessária(s) e/ou expressões da tabela
 	 * @param string $schema : o nome do schema
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function fullJoin($tableName, $joinCond, $columns = self::SQL_WILDCARD, $schema = null) {
 		return $this->_join(self::FULL_JOIN, $tableName, $joinCond, $columns, $schema);
@@ -274,7 +274,7 @@ class Db_Select {
 	 * @param string $tableName : o nome da tabelaORDER
 	 * @param array|string $columns : a(s) coluna(s) necessária(s) e/ou expressões da tabela
 	 * @param string $schema : o nome do schema
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function crossJoin($tableName, $columns = self::SQL_WILDCARD, $schema = null) {
 		return $this->_join(self::CROSS_JOIN, $tableName, null, $columns, $schema);
@@ -285,7 +285,7 @@ class Db_Select {
 	 * @param string $tableName : o nome da tabela
 	 * @param array|string $columns : a(s) coluna(s) necessária(s) e/ou expressões da tabela
 	 * @param string $schema : o nome do schema
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function naturalJoin($tableName, $columns = self::SQL_WILDCARD, $schema = null) {
 		return $this->_join(self::CROSS_JOIN, $tableName, null, $columns, $schema);
@@ -294,20 +294,20 @@ class Db_Select {
 	/**
 	 * Faz o trabalho sujo das operações JOIN e FROM
 	 * @param string $type : o tipo de join
-	 * @param string|array|Db_Select|Db_Expression $name : o nome da tabela
+	 * @param string|array|Hydra_Db_Select|Hydra_Db_Expression $name : o nome da tabela
 	 * @param string $cond : a condição de junção
 	 * @param array|string $cols : as colunas da tabela para selecionar
 	 * @param string $schema : o nome do schema da tabela
-	 * @throws Db_Select_Exception
-	 * @return Db_Select : Fluent Interface
+	 * @throws Hydra_Db_Select_Exception
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	protected function _join($type, $name, $cond, $cols, $schema = null) {
 		if(!in_array($type, self::$_joinTypes) && !$type = self::FROM) {
-			throw new Db_Select_Exception(sprintf('"%s" não é um tipo de JOIN válido!', $type));
+			throw new Hydra_Db_Select_Exception(sprintf('"%s" não é um tipo de JOIN válido!', $type));
 		}
 		
 		if(count($this->_parts[self::UNION])) {
-			throw new Db_Select_Exception('Uso inadequado de JOIN e UNION na mesma query!');
+			throw new Hydra_Db_Select_Exception('Uso inadequado de JOIN e UNION na mesma query!');
 		}
 
 		if(empty($name)) {
@@ -323,7 +323,7 @@ class Db_Select {
 				$tableName = $_tableName;
 				$alias = $this->_getUniqueAlias($tableName);
 			}
-		} else if($name instanceof Db_Expression || $name instanceof Db_Select) {
+		} else if($name instanceof Hydra_Db_Expression || $name instanceof Hydra_Db_Select) {
 			$tableName = $name;
 			$alias = $this->_getUniqueAlias('t');
 		} else if(preg_match('#(\w+)(?:\s' . self::SQL_AS . ')\s(\w+)#i', $name, $matches)){
@@ -341,7 +341,7 @@ class Db_Select {
 		$lastFromAlias = null;
 		if(!empty($alias)) {
 			if(array_key_exists($alias, $this->_parts[self::FROM])) {
-				throw new Db_Select_Exception(sprintf('Você não pode definir "%s" mais de uma vez', $alias));
+				throw new Hydra_Db_Select_Exception(sprintf('Você não pode definir "%s" mais de uma vez', $alias));
 			}
 
 			$tmpFromParts = array();
@@ -395,7 +395,7 @@ class Db_Select {
 	 * @param string $cond : a condicional
 	 * @param mixed $boundValue : o valor ou array de valores para substituir os placeholder em $cond
 	 * @param int $type [OPCIONAL] : o tipo do(s) valor(es) em $boundValue
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function where($cond, $boundValue = null, $type = null) {
 		$this->_parts[self::WHERE][] = $this->_where($cond, $boundValue, $type, true);
@@ -406,15 +406,15 @@ class Db_Select {
 	 * Cria uma cláusula WHERE
 	 * @param string $cond
 	 * @param mixed $boundValue [OPCIONAL]
-	 * @param Db::*_TYPE $type
+	 * @param Hydra_Db::*_TYPE $type
 	 * @param bool $conjunction : se true, temos uma conjunção, ou seja, cláusulas concatenadas por AND
 	 * 							  se false, temos uma disjunção, cláusulas concatenadas por OR
-	 * @throws Db_Select_Exception
+	 * @throws Hydra_Db_Select_Exception
 	 * @return string
 	 */
 	protected function _where($cond, $boundValue = null, $type = null, $conjunction = true) {
 		if(!empty($this->_parts[self::UNION])) {
-			throw new Db_Select_Exception(sprintf('Uso inválido da cláusula WHERE com %s', self::SQL_UNION));
+			throw new Hydra_Db_Select_Exception(sprintf('Uso inválido da cláusula WHERE com %s', self::SQL_UNION));
 		}
 
 		if($boundValue !== null) {
@@ -440,7 +440,7 @@ class Db_Select {
 	 * @param string $cond : a condicional
 	 * @param mixed $boundValue : o valor ou array de valores para substituir os placeholder em $cond
 	 * @param int $type [OPCIONAL] : o tipo do(s) valor(es) em $boundValue
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function orWhere($cond, $boundValue = null, $type = null) {
 		$this->_parts[self::WHERE][] = $this->_where($cond, $boundValue, $type, false);
@@ -450,12 +450,12 @@ class Db_Select {
 	/**
 	 * Adiciona uma cláusula GROUP à query
 	 * É possível passar quantos parâmetros quisermos, sendo que apenas um é obrigatório:
-	 * Db_Select::group($col1, [$col2, [...]])
+	 * Hydra_Db_Select::group($col1, [$col2, [...]])
 	 *  
 	 * @param array|string $expr : a coluna ou expressão pela qual agrupar ou um array delas
 	 * @param array|string $_ [OPCIONAL] : idêntico a $expr
-	 * @return Db_Select : Fluent Interface
-	 * @throws Db_Select_Exception
+	 * @return Hydra_Db_Select : Fluent Interface
+	 * @throws Hydra_Db_Select_Exception
 	 */
 	public function group($expr, $_ = null) {
 		$by = array();
@@ -471,16 +471,16 @@ class Db_Select {
 		foreach($by as $each) {
 			if(is_string($each)) {
 				if (preg_match('/\(.*\)/', $each)) {
-					$each = new Db_Expression($each);
+					$each = new Hydra_Db_Expression($each);
 				}
 			}
 				
-			if($each instanceof Db_Expression) {
+			if($each instanceof Hydra_Db_Expression) {
 				$this->_parts[self::GROUP][] = $each->__toString();
 			} else if(is_string($each)) {
 				$this->_parts[self::GROUP][] = $each;
 			} else {
-				throw new Db_Select_Exception(sprintf('Expressão de agrupamento "%s" inválida!', $each));
+				throw new Hydra_Db_Select_Exception(sprintf('Expressão de agrupamento "%s" inválida!', $each));
 			}
 		}
 		return $this;
@@ -491,12 +491,12 @@ class Db_Select {
 	 * concatena através do operador AND
 	 *
 	 * Os parâmetros seguem a mesma lógica do método where()
-	 * @see Db_Select::where()
+	 * @see Hydra_Db_Select::where()
 	 *
 	 * @param string $cond
 	 * @param mixed $boundParam
 	 * @param int $type
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function having($cond, $boundParam = null, $type = null) {
 		return $this->_having($cond, self::SQL_AND, $boundParam, $type);
@@ -506,12 +506,12 @@ class Db_Select {
 	 * Semelhante a having(), com a diferença que a concatenação
 	 * é feita através do operador OR, caso já haja alguma cláusula
 	 *
-	 * @see Db_Select::having()
+	 * @see Hydra_Db_Select::having()
 	 *
 	 * @param string $cond
 	 * @param mixed $boundParam
 	 * @param int $type
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function orHaving($cond, $boundParam = null, $type = null) {
 		return $this->_having($cond, self::SQL_OR, $boundParam, $type);
@@ -524,7 +524,7 @@ class Db_Select {
 	 * @param string $cond
 	 * @param mixed $boundParam
 	 * @param int $type
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	protected function _having($cond, $concat, $boundParam = null, $type = null) {
 		if($boundParam !== null) {
@@ -544,11 +544,11 @@ class Db_Select {
 	 * Adiciona uma cláusula ORDER BY à query
 	 * 
 	 * É possível passar quantos parâmetros quisermos, sendo que apenas um é obrigatório:
-	 * Db_Select::order($col1, [$col2, [...]])
+	 * Hydra_Db_Select::order($col1, [$col2, [...]])
 	 * 
-	 * @param array|string|Db_Expression $expr : coluna ou expressão para ordenação, ou um array delass
-	 * @param array|string|Db_Expression $_ [OPCIONAL] : idêntico a $expr
-	 * @return Db_Select : Fluent Interface
+	 * @param array|string|Hydra_Db_Expression $expr : coluna ou expressão para ordenação, ou um array delass
+	 * @param array|string|Hydra_Db_Expression $_ [OPCIONAL] : idêntico a $expr
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function order($expr, $_ = null) {
 		$by = array();
@@ -563,7 +563,7 @@ class Db_Select {
 		
 
 		foreach($by as $order) {
-			if($order instanceof Db_Expression) {
+			if($order instanceof Hydra_Db_Expression) {
 				$expr = $order->__toString();
 				if(!empty($expr)) {
 					$this->_parts[self::ORDER] = $order;
@@ -577,7 +577,7 @@ class Db_Select {
 				}
 
 				if(preg_match('#\(.*\)#', $order)) {
-					$order = new Db_Expression($order);
+					$order = new Hydra_Db_Expression($order);
 				}
 
 				$this->_parts[self::ORDER][] = array('order' => $order, 'sort' => $sort);
@@ -590,7 +590,7 @@ class Db_Select {
 	 * Adiciona uma cláusula LIMIT à query
 	 * @param int $count : quantidade máxima de linhas retornadas
 	 * @param int $offset : linha inicial a ser retornada (a primeira é 0)
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function limit($count, $offset = 0) {
 		$this->_parts[self::LIMIT_COUNT]  = (int) $count;
@@ -602,7 +602,7 @@ class Db_Select {
 	 * Seta uma cláusula LIMIT para paginação
 	 * @param int $page : a página a ser buscada
 	 * @param int $rowCount : o número de linhas na página
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function limitPage($page, $rowCount) {
 		$page = (int) $page > 0 ? (int) $page : 1;
@@ -617,7 +617,7 @@ class Db_Select {
 	 * Faz da query uma sentença SELECT FOR UPDATE
 	 * @param boolean $opt [OPCIONAL] : se true, faz com que a query SELECT FOR UPDATE,
 	 * 									se false, cancela este efeito
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function forUpdate($opt = true) {
 		$this->_parts[self::FOR_UPDATE] = (bool) $opt;
@@ -627,12 +627,12 @@ class Db_Select {
 	/**
 	 * Retorna uma parte do statement
 	 * @param string $part : o nome da parte desejada
-	 * @throws Db_Select_Exception
+	 * @throws Hydra_Db_Select_Exception
 	 * @return mixed
 	 */
 	public function getPart($part) {
 		if(!array_key_exists($part, $this->_parts)) {
-			throw new Db_Select_Exception(sprintf('Parte "%s" inexistente em Db_Select', $part));
+			throw new Hydra_Db_Select_Exception(sprintf('Parte "%s" inexistente em Hydra_Db_Select', $part));
 		}
 		return $this->_parts[$part];
 	}
@@ -640,8 +640,8 @@ class Db_Select {
 	/**
 	 * Executa a query com o statement deste objeto
 	 * @param array $boundParams : parâmetros associados (prepared statements)
-	 * @param Db::FETCH_* $fetchMode : modo de fetch
-	 * @return Db_Statement_Abstract
+	 * @param Hydra_Db::FETCH_* $fetchMode : modo de fetch
+	 * @return Hydra_Db_Statement_Abstract
 	 */
 	public function query(array $boundParams = array(), $fetchMode = null) {
 		if(!empty($boundParams)) {
@@ -674,7 +674,7 @@ class Db_Select {
 	/**
 	 * Reseta o statement ou parte dele
 	 * @param string $part : o nome da parte para resetar, se não informado, reseta todas as partes
-	 * @return Db_Select : Fluent Interface
+	 * @return Hydra_Db_Select : Fluent Interface
 	 */
 	public function reset($part = null) {
 		if($part === null) {
@@ -685,7 +685,7 @@ class Db_Select {
 				$this->getPart($part);
 				$this->_parts[$part] = self::$_partsInit[$part];
 				return $this;
-			} catch(Db_Select_Exception $e) {
+			} catch(Hydra_Db_Select_Exception $e) {
 				return $this;
 			}
 		}
@@ -693,7 +693,7 @@ class Db_Select {
 
 	/**
 	 * Retorna o adapter relacionado a este objeto
-	 * @return Db_Adapter_Abstract
+	 * @return Hydra_Db_Adapter_Abstract
 	 */
 	public function getAdapter() {
 		return $this->_adapter;
@@ -747,7 +747,7 @@ class Db_Select {
 				}
 
 				if(preg_match('#\(.+\)#', $col)) {
-					$col = new Db_Expression($col);
+					$col = new Hydra_Db_Expression($col);
 				} else if(preg_match('#(\w+)\.(\w+)#', $col, $matches)) {
 					$currentTableAlias = $matches[1];
 					$col = $matches[2];
@@ -856,11 +856,11 @@ class Db_Select {
 			$column = $colEntry['colName'];
 			$colAlias = $colEntry['colAlias'];
 			
-			if($column instanceof Db_Expression) {
+			if($column instanceof Hydra_Db_Expression) {
 				$arrayColumns[] = $this->_adapter->quoteColumnAs($column, $colAlias);
 			} else {
 				if($column == self::SQL_WILDCARD) {
-					$column = new Db_Expression(self::SQL_WILDCARD);
+					$column = new Hydra_Db_Expression(self::SQL_WILDCARD);
 					$colAlias = null;
 				}
 				if(empty($tableAlias)) {
@@ -924,7 +924,7 @@ class Db_Select {
 			foreach($this->_parts[self::UNION] as $i => $union) {
 				$target = $union['target'];
 				$type = $union['unionType'];
-				if($target instanceof Db_Select) {
+				if($target instanceof Hydra_Db_Select) {
 					$target = $target->assemble();
 				}
 				$sql .= $target;
@@ -1043,7 +1043,7 @@ class Db_Select {
 	}
 	
 	/**
-	 * Método mágico para transformação de um objeto Db_Select em string
+	 * Método mágico para transformação de um objeto Hydra_Db_Select em string
 	 * @return string
 	 */
 	public function __toString() {

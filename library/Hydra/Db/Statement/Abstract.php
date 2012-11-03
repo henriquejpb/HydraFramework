@@ -3,7 +3,7 @@
  * Representa um statement SQL
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-abstract class Db_Statement_Abstract implements Db_Statement_Interface {
+abstract class Hydra_Db_Statement_Abstract implements Hydra_Db_Statement_Interface {
 
 	/**
 	 * O statement a ní­vel de driver
@@ -13,15 +13,15 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 
 	/**
 	 * O adapter ao qual o statement se refere
-	 * @var Db_Adapter_Abstract
+	 * @var Hydra_Db_Adapter_Abstract
 	 */
 	protected $_adapter;
 
 	/**
-	 * O modo de busca no banco de dados (parão = Db::FETCH_ASSOC)
-	 * @var Db::FETCH_*
+	 * O modo de busca no banco de dados (parão = Hydra_Db::FETCH_ASSOC)
+	 * @var Hydra_Db::FETCH_*
 	 */
-	protected $_fetchMode = Db::FETCH_ASSOC;
+	protected $_fetchMode = Hydra_Db::FETCH_ASSOC;
 
 	/**
 	 * Associações í s colunas do resultado
@@ -50,12 +50,12 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	/**
 	 * Construtor
 	 *
-	 * @param Db_Adapter_Abstract $adapter : o adapter relacionado a este statement
-	 * @param string|Db_Select $sql : a sentença SQL
+	 * @param Hydra_Db_Adapter_Abstract $adapter : o adapter relacionado a este statement
+	 * @param string|Hydra_Db_Select $sql : a sentença SQL
 	 */
-	public function __construct(Db_Adapter_Abstract $adapter, $sql) {
+	public function __construct(Hydra_Db_Adapter_Abstract $adapter, $sql) {
 		$this->_adapter = $adapter;
-		if($sql instanceof Db_Select) {
+		if($sql instanceof Hydra_Db_Select) {
 			$sql = $sql->assemble();
 		}
 
@@ -67,14 +67,14 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	 * Prepara uma sentença SQL a ní­vel de driver
 	 * @param string $sql
 	 * @return void
-	 * @throws Db_Statement_Exception
+	 * @throws Hydra_Db_Statement_Exception
 	 */
 	abstract protected function _prepare($sql);
 
 	/**
 	 * Faz o parse dos parâmetros embutidos na sentença SQL
 	 * @param string $sql
-	 * @throws Db_Statement_Exception
+	 * @throws Hydra_Db_Statement_Exception
 	 * @return void
 	 */
 	protected function _parseParameters($sql) {
@@ -105,11 +105,11 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 
 		foreach($this->_sqlSplit as $key => $each) {
 			if($each == '?' &&
-				!$this->_adapter->supportsParameters(Db_Adapter_Abstract::POSITIONAL_PARAMETERS)) {
-				throw new Db_Statement_Exception(sprintf('A variável de associação "%s" é inválida', $each));
+				!$this->_adapter->supportsParameters(Hydra_Db_Adapter_Abstract::POSITIONAL_PARAMETERS)) {
+				throw new Hydra_Db_Statement_Exception(sprintf('A variável de associação "%s" é inválida', $each));
 			} else if($each[0] == ':' &&
-				!$this->_adapter->supportsParameters(Db_Adapter_Abstract::NAMED_PARAMETERS)) {
-				throw new Db_Statement_Exception(sprintf('A variável de associação "%s" é inválida', $each));
+				!$this->_adapter->supportsParameters(Hydra_Db_Adapter_Abstract::NAMED_PARAMETERS)) {
+				throw new Hydra_Db_Statement_Exception(sprintf('A variável de associação "%s" é inválida', $each));
 			}
 			$this->_sqlParams[] = $each;
 		}
@@ -141,7 +141,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 
 	/**
-	 * @see Db_Statement_Interface::bindColumn()
+	 * @see Hydra_Db_Statement_Interface::bindColumn()
 	 */
 	public function bindColumn($column, &$param, $type = null) {
 		$this->_boundColumns[(string) $column] = &$param;
@@ -149,19 +149,19 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 
 	/**
-	 * @see Db_Statement_Interface::bindParam()
+	 * @see Hydra_Db_Statement_Interface::bindParam()
 	 */
 	public function bindParam($parameter, &$variable, $type = null, $length = null) {
 		if(!is_int($parameter) || !is_string($parameter)) {
-			throw new Db_Statement_Exception(sprintf('Posição de associação "%s" inválida', $parameter));
+			throw new Hydra_Db_Statement_Exception(sprintf('Posição de associação "%s" inválida', $parameter));
 		}
 
 		$position = null;
 		if(($intVal = (int) $parameter) > 0 &&
-			$this->_adapter->supportsParameters(Db_Adapter_Abstract::POSITIONAL_PARAMETERS) &&
+			$this->_adapter->supportsParameters(Hydra_Db_Adapter_Abstract::POSITIONAL_PARAMETERS) &&
 			$intVal <= count($this->_sqlParams)) {
 			$position = $intVal;
-		} else if($this->_adapter->supportsParameters(Db_Adapter_Abstract::NAMED_PARAMETERS)) {
+		} else if($this->_adapter->supportsParameters(Hydra_Db_Adapter_Abstract::NAMED_PARAMETERS)) {
 			if($parameter[0] != ':') {
 				$parameter = ':' . $parameter;
 			}
@@ -171,7 +171,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 		}
 
 		if($position === null) {
-			throw new Db_Statement_Exception(sprintf('Posição de associação "%s" inválida', $parameter));
+			throw new Hydra_Db_Statement_Exception(sprintf('Posição de associação "%s" inválida', $parameter));
 		}
 
 		$this->_boundParams[$position] =& $variable;
@@ -179,21 +179,21 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 
 	/**
-	 * @see Db_Statement_Interface::bindValue()
+	 * @see Hydra_Db_Statement_Interface::bindValue()
 	 */
 	public function bindValue($paramter, $value, $type = null) {
 		return $this->bindParam($parameter, $value, $type);
 	}
 
 	/**
-	 * @see Db_Statement_Interface::fetchOne()
+	 * @see Hydra_Db_Statement_Interface::fetchOne()
 	 */
 	public function fetchOne($mode = null, $col = null) {
-		if($mode == Db::FETCH_COLUMN && $col === null) {
+		if($mode == Hydra_Db::FETCH_COLUMN && $col === null) {
 			$col = 0;
 		}
 
-		if($mode == Db::FETCH_COLUMN) {
+		if($mode == Hydra_Db::FETCH_COLUMN) {
 			$row = $this->fetchColumn($col);
 		} else {
 			$row = $this->_doFetch($mode);
@@ -203,15 +203,15 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 
 	/**
-	 * @see Db_Statement_Interface::fetchAll()
+	 * @see Hydra_Db_Statement_Interface::fetchAll()
 	 */
 	public function fetchAll($mode = null, $col = null) {
-		if($mode == Db::FETCH_COLUMN && $col === null) {
+		if($mode == Hydra_Db::FETCH_COLUMN && $col === null) {
 			$col = 0;
 		}
 
 		$data = array();
-		if($mode != Db::FETCH_COLUMN) {
+		if($mode != Hydra_Db::FETCH_COLUMN) {
 			while($row = $this->_doFetch($mode)) {
 				$data[] = $row;
 			}
@@ -224,16 +224,16 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 
 	/**
-	 * @see Db_Statement_Interface::fetchColumn()
+	 * @see Hydra_Db_Statement_Interface::fetchColumn()
 	 */
 	public function fetchColumn($col = 0) {
 		$data = array();
 
 		if(is_string($col)) {
-			$row = $this->_doFetch(Db::FETCH_ASSOC);
+			$row = $this->_doFetch(Hydra_Db::FETCH_ASSOC);
 		} else {
 			$col = (int) $col;
-			$row = $this->_doFetch(Db::FETCH_NUM);
+			$row = $this->_doFetch(Hydra_Db::FETCH_NUM);
 		}
 
 		if(!is_array($row) && !isset($row[$col])) {
@@ -244,7 +244,7 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 	}
 
 	/**
-	 * @see Db_Statement_Interface::fetchObject()
+	 * @see Hydra_Db_Statement_Interface::fetchObject()
 	 */
 	public function fetchObject($class = 'stdClass', array $config = array()) {
 		if(!class_exists($class)){
@@ -253,12 +253,12 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 
 		$obj = new $class($config);
 		if(! $obj instanceof stdClass ||
-			! $obj instanceof Db_Fetchable) {
-			throw new Db_Adapter_Exception('A classe para o método fetchObject deve ser
-				stdClass ou implementar a inteface Db_Fetchable_Interface');
+			! $obj instanceof Hydra_Db_Fetchable) {
+			throw new Hydra_Db_Adapter_Exception('A classe para o método fetchObject deve ser
+				stdClass ou implementar a inteface Hydra_Db_Fetchable_Interface');
 		}
 
-		$row = $this->_doFetch(Db::FETCH_ASSOC);
+		$row = $this->_doFetch(Hydra_Db::FETCH_ASSOC);
 		if(!is_array($row)){
 			return null;
 		}
@@ -272,31 +272,31 @@ abstract class Db_Statement_Abstract implements Db_Statement_Interface {
 
 	/**
 	 * Faz a busca de uma linha ou coluna no banco de dados
-	 * @param Db::FETCH_* $mode : o modo de busca
+	 * @param Hydra_Db::FETCH_* $mode : o modo de busca
 	 */
 	abstract protected function _doFetch($mode = null);
 
 	/**
-	 * @see Db_Statement_Interface::setFetchMode()
+	 * @see Hydra_Db_Statement_Interface::setFetchMode()
 	 */
 	public function setFetchMode($mode) {
 		switch($mode) {
-			case Db::FETCH_ARRAY:
-			case Db::FETCH_ASSOC:
-			case Db::FETCH_NUM:
-			case Db::FETCH_OBJ:
+			case Hydra_Db::FETCH_ARRAY:
+			case Hydra_Db::FETCH_ASSOC:
+			case Hydra_Db::FETCH_NUM:
+			case Hydra_Db::FETCH_OBJ:
 				$this->_fetchMode = $mode;
 				break;
 
 			default:
 				$this->closeCursor();
-				throw new Db_Statement_Exception('Mode de fetch inválido');
+				throw new Hydra_Db_Statement_Exception('Mode de fetch inválido');
 		}
 	}
 
 	/**
 	 * Retorna o adapter deste objeto
-	 * @return Db_Adapter_Abstract
+	 * @return Hydra_Db_Adapter_Abstract
 	 */
 	public function getAdapter() {
 		return $this->adapter;

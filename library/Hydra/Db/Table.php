@@ -5,7 +5,7 @@
  * Modificado em: 07/03/2012
  * <h2>Modificações</h2>
  * <ul>
- * 	<li>Implementação da inteface DataAccessLayer_Interface
+ * 	<li>Implementação da inteface Hydra_DataAccessLayer_Interface
  * 		<ul>
  * 			<li>Adição do método <em>fetchOne</em></li>
  * 			<li>Adição do método <em>createEntry</em></li>
@@ -15,7 +15,7 @@
  *
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-class Db_Table implements DataAccessLayer_Interface {
+class Hydra_Db_Table implements Hydra_DataAccessLayer_Interface {
 	const ADAPTER			= 'db';
 	const SCHEMA			= 'schema';
 	const NAME				= 'name';
@@ -51,14 +51,14 @@ class Db_Table implements DataAccessLayer_Interface {
 	const TABLE_CACHE_DIR	= 'table_metadata';
 
 	/**
-	 * Armazena um Db_Adapter padrão para os objetos Db_Table
-	 * @var Db_Adapter_Abstract
+	 * Armazena um Hydra_Db_Adapter padrão para os objetos Hydra_Db_Table
+	 * @var Hydra_Db_Adapter_Abstract
 	 */
 	private static $_defaultAdapter;
 
 	/**
-	 * Armazena um Db_Adapter para o objeto
-	 * @var Db_Adapter_Abstract
+	 * Armazena um Hydra_Db_Adapter para o objeto
+	 * @var Hydra_Db_Adapter_Abstract
 	 */
 	private $_adapter;
 
@@ -76,7 +76,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * Armazena as colunas da tabela, obtidas a
-	 * partir do método Db_Adapter::describeTable()
+	 * partir do método Hydra_Db_Adapter::describeTable()
 	 * @var array
 	 */
 	private $_cols;
@@ -120,13 +120,13 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * Nome da classe TableRow
 	 * @var string
 	 */
-	private $_rowClass = 'Db_Table_Row';
+	private $_rowClass = 'Hydra_Db_Table_Row';
 
 	/**
 	 * Nome da classe TableRowset
 	 * @var string
 	 */
-	private $_rowsetClass = 'Db_Table_Rowset';
+	private $_rowsetClass = 'Hydra_Db_Table_Rowset';
 
 	/**
 	 * Array associativo contendo informações sobre regras de integridade.
@@ -179,27 +179,27 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * A definição da tabela.
-	 * @var Db_Table_Definition
+	 * @var Hydra_Db_Table_Definition
 	 */
 	private $_definition;
 
 	/**
-	 * A definição padrão para os objetos Db_Table
-	 * @var Db_Table_Definition
+	 * A definição padrão para os objetos Hydra_Db_Table
+	 * @var Hydra_Db_Table_Definition
 	 */
 	private static $_defaultDefinition;
 
 	/**
-	 * O manipulador de cache que irá auxiliar o objeto Db_Table.
+	 * O manipulador de cache que irá auxiliar o objeto Hydra_Db_Table.
 
-	 * @var Cache_Facade_Abstract
+	 * @var Hydra_Cache_Facade_Abstract
 	 */
 	private $_cacheHandler;
 
 	/**
-	 * O manipulador padrão de cache que irá auxiliar o objeto Db_Table.
+	 * O manipulador padrão de cache que irá auxiliar o objeto Hydra_Db_Table.
 	 *
-	 * @var Cache_Facade_Abstract
+	 * @var Hydra_Cache_Facade_Abstract
 	 */
 	private static $_defaultCacheHandler;
 
@@ -207,7 +207,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * Construtor.
 	 *
 	 * Parâmetros de configuração:
-	 * - db				 =>	instância de Db_Adapter
+	 * - db				 =>	instância de Hydra_Db_Adapter
 	 * - name			 =>	o nome da tabela
 	 * - schema			 =>	o schema da tabela
 	 * - primary		 =>	a chave primária da tabela (string | array)
@@ -219,10 +219,10 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * - integrityCheck	 => se o objeto deve ou não verificar a integridade
 	 * 						da tabela em remoções e atualizações.
 	 *
-	 * @param mixed $config : array de configurações, nome da tabela ou somente um Db_Adapter
+	 * @param mixed $config : array de configurações, nome da tabela ou somente um Hydra_Db_Adapter
 	 */
 	public function __construct($config = array()) {
-		if($config instanceof Db_Adapter_Abstract) {
+		if($config instanceof Hydra_Db_Adapter_Abstract) {
 			$config = array(self::ADAPTER => $config);
 		} else if(is_string($config)) {
 			$config = array(self::NAME => $config);
@@ -239,7 +239,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Seta opções de configuração da tabela
 	 * @param array $options
-	 * @return Db_Table : fluent interface
+	 * @return Hydra_Db_Table : fluent interface
 	 */
 	public function setOptions(array $options) {
 		foreach($options as $key => $value) {
@@ -308,7 +308,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * @param  string $classname
-	 * @return Db_Table: fluent interface
+	 * @return Hydra_Db_Table: fluent interface
 	 */
 	public function setRowClass($classname)	{
 		$this->_rowClass = (string) $classname;
@@ -324,7 +324,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 	/**
 	 * @param  string $classname
-	 * @return Db_Table: fluent interface
+	 * @return Hydra_Db_Table: fluent interface
 	 */
 	public function setRowsetClass($classname)	{
 		$this->_rowClass = (string) $classname;
@@ -347,7 +347,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * @param string|array $refColumns
 	 * @param string $onDelete
 	 * @param string $onUpdate
-	 * @return Db_Table : fluent interface
+	 * @return Hydra_Db_Table : fluent interface
 	 */
 	public function addReference($ruleKey, $columns, $refTable, $refColumns, $onDelete = null, $onUpdate = null) {
 		$reference = array(
@@ -388,17 +388,17 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * @param string $table
 	 * @param string $ruleKey
 	 * @return array
-	 * @throws Db_Table_Exception
+	 * @throws Hydra_Db_Table_Exception
 	 */
 	public function getReference($table, $ruleKey = null) {
 		$refMap = $this->_getReferenceMapNormalized();
 
 		if($ruleKey !== null) {
 			if(!isset($refMap[$ruleKey])) {
-				throw new Db_Table_Exception(sprintf('Nenhuma referência sob o nome "%s" da tabela "%s" para a tabela "%s".', $ruleKey, $this->_name, $table));
+				throw new Hydra_Db_Table_Exception(sprintf('Nenhuma referência sob o nome "%s" da tabela "%s" para a tabela "%s".', $ruleKey, $this->_name, $table));
 			}
 			if($refMap[$ruleKey][self::REF_TABLE] != $table) {
-				throw new Db_Table_Exception(sprintf('A regra de referência "%s" não referencia a tabela "%s".', $ruleKey, $table));
+				throw new Hydra_Db_Table_Exception(sprintf('A regra de referência "%s" não referencia a tabela "%s".', $ruleKey, $table));
 			}
 			return $refMap[$ruleKey];
 		}
@@ -408,14 +408,14 @@ class Db_Table implements DataAccessLayer_Interface {
 				return $reference;
 			}
 		}
-		throw new Db_Table_Exception(sprintf('Não há referência da tabela "%s" para a tabela "%s".', $this->_name, $table));
+		throw new Hydra_Db_Table_Exception(sprintf('Não há referência da tabela "%s" para a tabela "%s".', $this->_name, $table));
 	}
 
 	/**
 	 * Adiciona uma tabela dependente desta.
 	 *
 	 * @param string $table : o nome da tabela dependente
-	 * @return Db_Table : fluent interface
+	 * @return Hydra_Db_Table : fluent interface
 	 */
 	public function addDependentTable($table) {
 		if(!in_array($table, $this->_dependentTables)) {
@@ -443,7 +443,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * Seta a fonte de valores-padrão para as colunas da tabela.
 	 *
 	 * @param string $source
-	 * @return Db_Table : fluent interface
+	 * @return Hydra_Db_Table : fluent interface
 	 */
 	public function setDefaultSource($source) {
 		switch($source) {
@@ -463,7 +463,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * Seta os valores-padrão para as colunas da tabela.
 	 *
 	 * @param array $defaultValues
-	 * @return Db_Table : fluent interface
+	 * @return Hydra_Db_Table : fluent interface
 	 */
 	public function setDefaultValues(array $defaultValues) {
 		foreach($defaultValues as $name => $value) {
@@ -487,7 +487,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * Seta a checagem de integridade de dependências.
 	 *
 	 * @param boolean $opt
-	 * @return Db_Table : fluent interface
+	 * @return Hydra_Db_Table : fluent interface
 	 */
 	public function setIntegrityCheck($opt) {
 		$this->_integrityCheck = (bool) $opt;
@@ -504,19 +504,19 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Seta um adapter padrão para todos os objetos Db_Table.
+	 * Seta um adapter padrão para todos os objetos Hydra_Db_Table.
 	 *
-	 * @param Db_Adapter_Abstract $adapter : o adapter
+	 * @param Hydra_Db_Adapter_Abstract $adapter : o adapter
 	 * @return void
 	 */
-	public static function setDefaultAdapter(Db_Adapter_Abstract $adapter) {
+	public static function setDefaultAdapter(Hydra_Db_Adapter_Abstract $adapter) {
 		self::$_defaultAdapter = $adapter;
 	}
 
 	/**
-	 * Retorna o adapter padrão para todos os objetos Db_Table.
+	 * Retorna o adapter padrão para todos os objetos Hydra_Db_Table.
 	 *
-	 * @return Db_Adapter_Abstract
+	 * @return Hydra_Db_Adapter_Abstract
 	 */
 	public static function getDefaultAdapter() {
 		return self::$_defaultAdapter;
@@ -525,10 +525,10 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Seta um adapter para este objeto.
 	 *
-	 * @param mixed $adapter : string ou Db_AdapterAbstract
-	 * @return Db_Table : fluent interface
+	 * @param mixed $adapter : string ou Hydra_Db_AdapterAbstract
+	 * @return Hydra_Db_Table : fluent interface
 	 */
-	public function setAdapter(Db_Adapter_Abstract $adapter) {
+	public function setAdapter(Hydra_Db_Adapter_Abstract $adapter) {
 		$this->_adapter = $adapter;
 		return $this;
 	}
@@ -536,7 +536,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Retorna o adapter deste objeto.
 	 *
-	 * @return Db_Adapter_Abstract
+	 * @return Hydra_Db_Adapter_Abstract
 	 */
 	public function getAdapter() {
 		return $this->_adapter;
@@ -545,10 +545,10 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Seta a definição da tabela.
 	 *
-	 * @param Db_Table_Definition $definition
-	 * @return Db_Table : fluent interface
+	 * @param Hydra_Db_Table_Definition $definition
+	 * @return Hydra_Db_Table : fluent interface
 	 */
-	public function setDefinition(Db_Table_Definition $definition) {
+	public function setDefinition(Hydra_Db_Table_Definition $definition) {
 		$this->_definition = $definition;
 		return $this;
 	}
@@ -556,27 +556,27 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Retorna a definição da tabela.
 	 *
-	 * @return Db_Table_Definition
+	 * @return Hydra_Db_Table_Definition
 	 */
 	public function getDefinition() {
 		return $this->_definition;
 	}
 
 	/**
-	 * Seta uma definição padrão para todos os objetos Db_Table.
-	 * Cada objeto Db_Table_Definition pode armazenar definições de várias tabelas.
+	 * Seta uma definição padrão para todos os objetos Hydra_Db_Table.
+	 * Cada objeto Hydra_Db_Table_Definition pode armazenar definições de várias tabelas.
 	 *
-	 * @param Db_Table_Definition $definition
+	 * @param Hydra_Db_Table_Definition $definition
 	 * @return void
 	 */
-	public static function setDefaultDefinition(Db_Table_Definition $definition){
+	public static function setDefaultDefinition(Hydra_Db_Table_Definition $definition){
 		self::$_defaultDefinition = $definition;
 	}
 
 	/**
-	 * Retorna a definição padrão dos objetos Db_Table.
+	 * Retorna a definição padrão dos objetos Hydra_Db_Table.
 	 *
-	 * @return Db_Table_Definition
+	 * @return Hydra_Db_Table_Definition
 	 */
 	public static function getDefaultDefinition() {
 		return self::$_defaultDefinition;
@@ -614,13 +614,13 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * Inicializa o adapter de conexão com o banco de dados.
 	 *
 	 * @return void
-	 * @throws Db_Table_Exception
+	 * @throws Hydra_Db_Table_Exception
 	 */
 	private function _setupDatabaseAdapter() {
 		if(!$this->_adapter) {
 			$this->_adapter = self::getDefaultAdapter();
-			if(!$this->_adapter instanceof Db_Adapter_Abstract) {
-				throw new Db_Table_Exception('Nenhum adapter encontrado para ' . get_class($this));
+			if(!$this->_adapter instanceof Hydra_Db_Adapter_Abstract) {
+				throw new Hydra_Db_Table_Exception('Nenhum adapter encontrado para ' . get_class($this));
 			}
 		}
 	}
@@ -648,7 +648,7 @@ class Db_Table implements DataAccessLayer_Interface {
 			$this->_definition = self::getDefaultDefinition();
 		}
 
-		if($this->_definition instanceof Db_Table_Definition) {
+		if($this->_definition instanceof Hydra_Db_Table_Definition) {
 			$options = $this->_definition->getTableDefinition($this->_name);
 			if(is_array($options)) {
 				$this->setOptions($options);
@@ -664,7 +664,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * Retorna true se e somente se os metadados forem carregados do cache
 	 *
 	 * @return boolean
-	 * @throws Db_Table_Exception
+	 * @throws Hydra_Db_Table_Exception
 	 */
 	private function _setupMetadata() {
 		if($this->isMetadataCacheInClass() && (count($this->_metadata) > 0)) {
@@ -674,7 +674,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		$cacheName = $this->_getCacheName();
 
 		$cacheContents = null;
-		if($this->_cacheHandler instanceof Cache_Facade_Abstract) {
+		if($this->_cacheHandler instanceof Hydra_Cache_Facade_Abstract) {
 			try {
 				$cacheContents = $this->_cacheHandler->get(self::TABLE_CACHE_DIR, $cacheName);
 			} catch (Exception $e) {
@@ -686,18 +686,18 @@ class Db_Table implements DataAccessLayer_Interface {
 			$isMetadataFromCache = false;
 			$this->_metadata = $this->_adapter->describeTable($this->_name);
 			if(empty($this->_metadata)) {
-				throw new Db_Table_Exception('Impossível obter a descrição da tabela "' . $this->_name . '".
+				throw new Hydra_Db_Table_Exception('Impossível obter a descrição da tabela "' . $this->_name . '".
 						 Verifique se tal tabela existe.');
 			}
-			if($this->_cacheHandler instanceof Cache_Facade_Abstract) {
+			if($this->_cacheHandler instanceof Hydra_Cache_Facade_Abstract) {
 				try {
 					$this->_cacheHandler->set(self::TABLE_CACHE_DIR, $cacheName, $this->_metadata, '+ 1 YEAR');
-				} catch(Cache_WriteException $e) {
-					// Essa exceção será lançada quando o Cache estiver habilitado, mas não puder ser escrito
+				} catch(Hydra_Cache_WriteException $e) {
+					// Essa exceção será lançada quando o Hydra_Cache estiver habilitado, mas não puder ser escrito
 					trigger_error(sprintf('Impossível salvar o arquivo de cache de metadados da tabela  "%s"',
 						$this->_name), E_USER_NOTICE);
-				} catch(Cache_DisabledException $e) {
-					// Essa exceção será lançada caso o Cache não esteja habilitado
+				} catch(Hydra_Cache_DisabledException $e) {
+					// Essa exceção será lançada caso o Hydra_Cache não esteja habilitado
 				}
 			}
 		} else {
@@ -722,7 +722,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 		// schema.table@host-port
 		$class = get_class($this->_adapter);
-		$cacheName = str_replace('Db_Adapter_', '', $class) . '/' .$dbConfig['dbname'] . '.'
+		$cacheName = str_replace('Hydra_Db_Adapter_', '', $class) . '/' .$dbConfig['dbname'] . '.'
 			. $this->_getTableSpec()
 			. '@' . $dbConfig['host'];
 		if(isset($dbConfig['port'])) {
@@ -758,7 +758,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * Busca e configura a chave primária da tabela.
 	 *
 	 * @return void
-	 * @throws Db_Table_Exception
+	 * @throws Hydra_Db_Table_Exception
 	 */
 	private function _setupPrimaryKey() {
 		if(!$this->_primary) {
@@ -774,7 +774,7 @@ class Db_Table implements DataAccessLayer_Interface {
 			}
 
 			if(empty($this->_primary)) {
-				throw new Db_Table_Exception(sprintf('Uma tabela deve conter uma chave primária, mas nenhuma foi encontrada em "%s"', $this->_name));
+				throw new Hydra_Db_Table_Exception(sprintf('Uma tabela deve conter uma chave primária, mas nenhuma foi encontrada em "%s"', $this->_name));
 			}
 		} else if(!is_array($this->_primary)) {
 			$this->_primary = array(1 => $this->_primary);
@@ -785,7 +785,7 @@ class Db_Table implements DataAccessLayer_Interface {
 
 		$cols = $this->_getCols();
 		if(!array_intersect((array) $this->_primary, $cols) == (array) $this->_primary) {
-			throw new Db_Table_Exception("As chaves primárias ("
+			throw new Hydra_Db_Table_Exception("As chaves primárias ("
 			. implode(',', (array) $this->_primary)
 			. ") não são colunas na tabela " . $this->_name . "("
 			. implode(',', $cols)
@@ -793,7 +793,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		}
 
 		try {
-			if(class_exists('Db_Adapter_Pdo_Pgsql')) {
+			if(class_exists('Hydra_Db_Adapter_Pdo_Pgsql')) {
 				$primary = (array) $this->_primary;
 				$pkIdentity = $primary[(int) $this->_identity];
 
@@ -801,7 +801,7 @@ class Db_Table implements DataAccessLayer_Interface {
 				 * Caso especial para PostgreSQL: uma chave SERIAL implícita usa
 				 * um objeto-sequência cujo nome é "<table>_<column>_seq".
 				 */
-				if ($this->_sequence === true && $this->_adapter instanceof Db_Adapter_Pdo_Pgsql) {
+				if ($this->_sequence === true && $this->_adapter instanceof Hydra_Db_Adapter_Pdo_Pgsql) {
 					$this->_sequence = $this->_adapter->quoteIdentifier("{$this->_name}_{$pkIdentity}_seq");
 					if ($this->_schema) {
 						$this->_sequence = $this->_adapter->quoteIdentifier($this->_schema) . '.' . $this->_sequence;
@@ -883,12 +883,12 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Cria e retorna uma instâncida de Db_Select
+	 * Cria e retorna uma instâncida de Hydra_Db_Select
 	 * @param mixed $cols : array ou string
-	 * @return Db_Select
+	 * @return Hydra_Db_Select
 	 */
 	public function select($cols = array()) {
-		$select = new Db_Select($this->getAdapter());
+		$select = new Hydra_Db_Select($this->getAdapter());
 		$cols = is_array($cols) ? $cols : array($cols);
 		if(empty($cols)) {
 			$cols = $this->_getCols();
@@ -951,7 +951,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	public function isIdentity($column) {
 		$this->_setupPrimaryKey();
 		if(!isset($this->_metadata[$column])) {
-			throw new Db_Table_Exception(sprintf('Coluna "%s" não encontrada na tabela "%s".', $column, $this->_name));
+			throw new Hydra_Db_Table_Exception(sprintf('Coluna "%s" não encontrada na tabela "%s".', $column, $this->_name));
 		}
 
 		return (bool) $this->_metadata[$column]['IDENTITY'];
@@ -969,8 +969,8 @@ class Db_Table implements DataAccessLayer_Interface {
 		$tableSpec = $this->_getTableSpec();
 
 		if($this->_integrityCheck === true && !empty($this->_dependentTables)) {
-			$select = new Db_Select($this);
-			$oldData = (array) $this->_adapter->fetchAll($select, array(), Db::FETCH_ASSOC);
+			$select = new Hydra_Db_Select($this);
+			$oldData = (array) $this->_adapter->fetchAll($select, array(), Hydra_Db::FETCH_ASSOC);
 			$pk = $this->info('PRIMARY');
 
 			$oldPkData = array_intersect($oldData, array_flip($pk));
@@ -1045,8 +1045,8 @@ class Db_Table implements DataAccessLayer_Interface {
 		$tableSpec = $this->_getTableSpec();
 
 		if($this->_integrityCheck === true && !empty($this->_dependentTables)) {
-			$select = new Db_Select($this);
-			$data = (array) $this->_adapter->fetchAll($select, array(), Db::FETCH_ASSOC);
+			$select = new Hydra_Db_Select($this);
+			$data = (array) $this->_adapter->fetchAll($select, array(), Hydra_Db::FETCH_ASSOC);
 			$pk = $this->info('PRIMARY');
 
 			$pkData = array_intersect($data, array_flip($pk));
@@ -1117,7 +1117,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	 * contendo o mesmo número de elementos que a chave e na mesma ordem.
 	 *
 	 * @param mixed $pk : a chave primária do registro a ser buscado
-	 * @return Db_Table_Row
+	 * @return Hydra_Db_Table_Row
 	 */
 	public function getById($pk) {
 		$this->_setupPrimaryKey();
@@ -1128,7 +1128,7 @@ class Db_Table implements DataAccessLayer_Interface {
 		}
 
 		if(($n = count($pk)) != ($m = count($keyNames))) {
-			throw new Db_Table_Exception(sprintf('A chave primária da tabela "%s" é composta por %d colunas.
+			throw new Hydra_Db_Table_Exception(sprintf('A chave primária da tabela "%s" é composta por %d colunas.
 														Foram passados %d valores para buscar.', $this->_name, $m, $n));
 		}
 
@@ -1152,14 +1152,14 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Busca todas as linhas da tabela que satisfaçam os critérios.
 	 *
-	 * @param string|array|Db_Select $where
+	 * @param string|array|Hydra_Db_Select $where
 	 * @param string|array $order
 	 * @param int $count
 	 * @param int $offset
-	 * @return Db_Table_Rowset
+	 * @return Hydra_Db_Table_Rowset
 	 */
 	public function fetchAll($where = null, $order = null, $count = null, $offset = null) {
-		if($where instanceof Db_Select) {
+		if($where instanceof Hydra_Db_Select) {
 			$select = $where;
 		} else {
 			$select = $this->select();
@@ -1195,14 +1195,14 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Busca uma linha na tabela que satisfaçãm os critérios.
 	 *
-	 * @param string|array|Db_Select $where
+	 * @param string|array|Hydra_Db_Select $where
 	 * @param string|array $order
 	 * @param int $offset
-	 * @return Db_Table_Row|null : retorna a linha da tabela ou null caso não haja nenhuma.
+	 * @return Hydra_Db_Table_Row|null : retorna a linha da tabela ou null caso não haja nenhuma.
 	 */
 	public function fetchOne($where = null, $order = null, $offset = null) {
-		if($where instanceof Db_Select) {
-			$select = $where->limit(1, $where->getPart(Db_Select::LIMIT_OFFSET));
+		if($where instanceof Hydra_Db_Select) {
+			$select = $where->limit(1, $where->getPart(Hydra_Db_Select::LIMIT_OFFSET));
 		} else {
 			$select = $this->select();
 
@@ -1235,13 +1235,13 @@ class Db_Table implements DataAccessLayer_Interface {
 	}
 
 	/**
-	 * Define se um Db_Select é somente-leitura.
+	 * Define se um Hydra_Db_Select é somente-leitura.
 	 *
-	 * @param Db_Select $select
+	 * @param Hydra_Db_Select $select
 	 * @return bool
 	 */
-	final protected function _isReadOnly(Db_Select $select) {
-		$cols = $select->getPart(Db_Table::COLUMNS);
+	final protected function _isReadOnly(Hydra_Db_Select $select) {
+		$cols = $select->getPart(Hydra_Db_Table::COLUMNS);
 		$tableFields = $this->info(self::COLS);
 
 		foreach($cols as $colEntry) {
@@ -1252,9 +1252,9 @@ class Db_Table implements DataAccessLayer_Interface {
 				$column = $alias;
 			}
 
-			if(($column !== Db_Select::SQL_WILDCARD
+			if(($column !== Hydra_Db_Select::SQL_WILDCARD
 					&& !in_array($column, $tableFields))
-					|| $column instanceof Db_Expression) {
+					|| $column instanceof Hydra_Db_Expression) {
 				return true;
 			}
 		}
@@ -1264,7 +1264,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Alias para fetchOne.
 	 *
-	 * @see Db_Table::fetchOne()
+	 * @see Hydra_Db_Table::fetchOne()
 	 */
 	public function fetchRow($where = null, $order = null, $offset = null) {
 		return $this->fetchOne($where, $order, $offset);
@@ -1318,7 +1318,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Alias para createEntry.
 	 *
-	 * @see Db_Table::createEntry()
+	 * @see Hydra_Db_Table::createEntry()
 	 */
 	public function createRow(array $data = array(), $defaultSource = null) {
 		return $this->createEntry($data, $defaultSource);
@@ -1327,11 +1327,11 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Gera uma cláusula WHERE a partir de um array ou string.
 	 *
-	 * @param Db_Select $select
+	 * @param Hydra_Db_Select $select
 	 * @param string|array $where
-	 * @return Db_Select
+	 * @return Hydra_Db_Select
 	 */
-	private function _where(Db_Select $select, $where) {
+	private function _where(Hydra_Db_Select $select, $where) {
 		$where = (array) $where;
 
 		foreach($where as $key => $val) {
@@ -1351,11 +1351,11 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Gera uma cláusula ORDER a partir de um array ou string.
 	 *
-	 * @param Db_Select $select
+	 * @param Hydra_Db_Select $select
 	 * @param array|string $order
-	 * @return Db_Select
+	 * @return Hydra_Db_Select
 	 */
-	private function _order(Db_Select $select, $order) {
+	private function _order(Hydra_Db_Select $select, $order) {
 		$order = (array) $order;
 
 		foreach($order as $val) {
@@ -1368,12 +1368,12 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Método de apoio para busca de linhas.
 	 *
-	 * @param Db_Select $select
+	 * @param Hydra_Db_Select $select
 	 * @return array
 	 */
-	private function _fetch(Db_Select $select) {
+	private function _fetch(Hydra_Db_Select $select) {
 		$stmt = $this->_adapter->query($select);
-		$data = $stmt->fetchAll(Db::FETCH_ASSOC);
+		$data = $stmt->fetchAll(Hydra_Db::FETCH_ASSOC);
 		return $data;
 	}
 
@@ -1389,7 +1389,7 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Retorna o manipulador de cache da classe.
 	 *
-	 * @return Cache_Facade_Abstract
+	 * @return Hydra_Cache_Facade_Abstract
 	 */
 	public static function getdefaultCacheHandler()
 	{
@@ -1399,27 +1399,27 @@ class Db_Table implements DataAccessLayer_Interface {
 	/**
 	 * Seta o manipulador de cache da classe.
 	 *
-	 * @param Cache_Facade_Abstract $_defaultCacheHandler
+	 * @param Hydra_Cache_Facade_Abstract $_defaultCacheHandler
 	 */
-	public static function setDefaultCacheHandler(Cache_Facade_Abstract $defaultCacheHandler){
+	public static function setDefaultCacheHandler(Hydra_Cache_Facade_Abstract $defaultCacheHandler){
 	    self::$_defaultCacheHandler = $defaultCacheHandler;
 	}
 
 	/**
-	 * Retorna o manipulador de cache para o objeto Db_Table.
+	 * Retorna o manipulador de cache para o objeto Hydra_Db_Table.
 	 *
-	 * @return Cache_Facade_Abstract
+	 * @return Hydra_Cache_Facade_Abstract
 	 */
 	public function getCacheHandler() {
 	    return $this->_cacheHandler;
 	}
 
 	/**
-	 * Seta o manipulador de cache para o objeto Db_Table.
+	 * Seta o manipulador de cache para o objeto Hydra_Db_Table.
 	 *
-	 * @param Cache_Facade_Abstract $cacheHandler
+	 * @param Hydra_Cache_Facade_Abstract $cacheHandler
 	 */
-	public function setCacheHandler(Cache_Facade_Abstract $cacheHandler) {
+	public function setCacheHandler(Hydra_Cache_Facade_Abstract $cacheHandler) {
 	    $this->_cacheHandler = $cacheHandler;
 	}
 }

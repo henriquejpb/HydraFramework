@@ -1,5 +1,5 @@
 <?php
-class View extends View_Abstract {
+class Hydra_View extends Hydra_View_Abstract {
 	
 	/**
 	 * Factory Method.
@@ -7,18 +7,18 @@ class View extends View_Abstract {
 	 * @param string $spec
 	 * @param array $vars
 	 * @param array $opt
-	 * @see View_Abstract::__construct
+	 * @see Hydra_View_Abstract::__construct
 	 */
 	public static function factory($spec, array $vars = array(), array $opt = array()) {
 		return new self($spec, $vars, $opt);
 	}
 	
 	/**
-	 * @see View_Abstract::_run()
+	 * @see Hydra_View_Abstract::_run()
 	 */
 	protected function _run() {
 		foreach($this->_vars as $key => &$each) {
-			if($each instanceof View_Abstract) {
+			if($each instanceof Hydra_View_Abstract) {
 				$each = $each->render();
 			}
 		}

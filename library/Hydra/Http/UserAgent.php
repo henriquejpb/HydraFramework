@@ -3,7 +3,7 @@
  * Armazena informações sobre o USER AGENT da requisição.
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-class Http_UserAgent {
+class Hydra_Http_UserAgent {
 	/**
 	 * Armazena as informações sobre o USER AGENT da requisição
 	 * @var array
@@ -22,7 +22,7 @@ class Http_UserAgent {
 	public function __construct() {
 		try {
 			if(empty(self::$data)) {
-				self::$data = include Core::getInstance()->getDefFile('user_agents');
+				self::$data = include Hydra_Core::getInstance()->getDefFile('user_agents');
 			}
 		} catch (Exception $e) {
 				
@@ -43,10 +43,10 @@ class Http_UserAgent {
 	 * Se nenhum valor for informado, serão retornados todos os possíveis.
 	 *
 	 * @return string|array
-	 * @uses Core::getDefFile
+	 * @uses Hydra_Core::getDefFile
 	 */
 	public function getInfo($value = null) {
-		$userAgent = Environment::getVar('HTTP_USER_AGENT');
+		$userAgent = Hydra_Environment::getVar('HTTP_USER_AGENT');
 		if($value == 'raw' || empty(self::$data)) {
 			return $userAgent;
 		}

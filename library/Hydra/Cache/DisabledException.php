@@ -1,2 +1,2 @@
 <?php
-class Cache_DisabledException extends Exception { }
+class Hydra_Cache_DisabledException extends Exception { }

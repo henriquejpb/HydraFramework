@@ -3,7 +3,7 @@
  * Representa uma expressão SQL 
  * @author <a href="mailto:rick.hjpbacelos@gmail.com">Henrique Barcelos</a>
  */
-class Db_Expression {
+class Hydra_Db_Expression {
 	
 	/**
 	 * Armazena a expressão SQL

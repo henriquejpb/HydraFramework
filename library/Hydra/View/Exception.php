@@ -1,30 +1,30 @@
 <?php
 /**
- * @package View
+ * @package Hydra_View
  * @author <a href="rick.hjpbarcelos@gmail.com">Henrique Barcelos</a>
  *
  */
-class View_Exception extends Exception {
+class Hydra_View_Exception extends Exception {
 	/**
-	 * Armazena a instância da View responsável pelo lançamento da exceção.
+	 * Armazena a instância da Hydra_View responsável pelo lançamento da exceção.
 	 * 
-	 * @var View_Abstract
+	 * @var Hydra_View_Abstract
 	 */
 	private $_view;
 	
 	/**
-	 * Seta a View responsável pelo lançamento da exceção.
+	 * Seta a Hydra_View responsável pelo lançamento da exceção.
 	 * 
-	 * @param View_Abstract $view
+	 * @param Hydra_View_Abstract $view
 	 */
-	public function setView(View_Abstract $view) {
+	public function setView(Hydra_View_Abstract $view) {
 		$this->_view = $view;
 	}
 	
 	/**
-	 * Retorna a View responsável pelo lançamento da exceção.
+	 * Retorna a Hydra_View responsável pelo lançamento da exceção.
 	 * 
-	 * @return View_Abstract
+	 * @return Hydra_View_Abstract
 	 */
 	public function getView() {
 		return $this->_view;

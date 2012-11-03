@@ -1,5 +1,5 @@
 <?php
-class Db_Table_Definition {
+class Hydra_Db_Table_Definition {
 	/**
 	 * Coleção de definições de tabela.
 	 * 
@@ -14,7 +14,7 @@ class Db_Table_Definition {
 	 * - nomeDaTabela	=>	opções
 	 * 
 	 * Para ver as definições possíveis, veja
-	 * @see Db_Table::__construct
+	 * @see Hydra_Db_Table::__construct
 	 * 
 	 * @param array|null $definitions
 	 */
@@ -31,12 +31,12 @@ class Db_Table_Definition {
 	 * 
 	 * @param string $tableName
 	 * @param array $tableDef
-	 * @return Db_Table_Definition : fluent interface
+	 * @return Hydra_Db_Table_Definition : fluent interface
 	 */
 	public function setTableDefinition($tableName, array $tableDef) {
-		$tableDef[Db_Table::DEFINITION] = $this;
-		if(!isset($tableDef[Db_Table::NAME])) {
-			$tableDef[Db_Table::NAME] = $tableName;
+		$tableDef[Hydra_Db_Table::DEFINITION] = $this;
+		if(!isset($tableDef[Hydra_Db_Table::NAME])) {
+			$tableDef[Hydra_Db_Table::NAME] = $tableName;
 		}
 		
 		$this->_tableDefs[$tableName] = $tableDef;

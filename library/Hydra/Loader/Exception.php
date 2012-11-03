@@ -1,2 +1,2 @@
 <?php
-class Loader_Exception extends Exception {}
+class Hydra_Loader_Exception extends Exception {}

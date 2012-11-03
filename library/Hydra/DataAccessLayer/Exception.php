@@ -1,2 +1,2 @@
 <?php
-class DataAccessLayer_Exception extends Exception { }
+class Hydra_DataAccessLayer_Exception extends Exception { }

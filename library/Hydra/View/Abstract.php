@@ -3,9 +3,9 @@
  * @author henrique
  * @version 0.1 beta
  * 
- * Implementação da base de uma View Engine
+ * Implementação da base de uma Hydra_View Engine
  */
-abstract class View_Abstract {
+abstract class Hydra_View_Abstract {
 	/**
 	 * Armazena as variáveis que serão passadas ao template.
 	 * 
@@ -117,8 +117,8 @@ abstract class View_Abstract {
 	public function setTemplate($spec) {
 		$this->_template = (string) $spec;
 		$tplPath = $this->_path . $this->_normalizeTemplateName($spec) . '.' . $this->_templateExtension;
-		if(!FileSystem_File::isFile($tplPath)) {
-			$e = new View_Exception(sprintf('O template %s não é um arquivo válido!', $tplPath));
+		if(!Hydra_FileSystem_File::isFile($tplPath)) {
+			$e = new Hydra_View_Exception(sprintf('O template %s não é um arquivo válido!', $tplPath));
 			$e->setView($this);
 			throw $e;
 		}
@@ -134,7 +134,7 @@ abstract class View_Abstract {
 	 * @return string
 	 */
 	protected function _normalizeTemplateName($spec) {
-		return str_replace('.', FileSystem::SEPARATOR, $spec);
+		return str_replace('.', Hydra_FileSystem::SEPARATOR, $spec);
 	}
 	
 	/**
@@ -150,12 +150,12 @@ abstract class View_Abstract {
 	 * Seta o caminho para o template.
 	 * 
 	 * @param string $path
-	 * @return View_Abstract : fluent interface
-	 * @throws View_Exception : caso $path não aponte para um diretório
+	 * @return Hydra_View_Abstract : fluent interface
+	 * @throws Hydra_View_Exception : caso $path não aponte para um diretório
 	 */
 	public function setPath($path) {
 		self::_verifyPath($path);
-		$this->_path = (string) new FileSystem_Directory($path);
+		$this->_path = (string) new Hydra_FileSystem_Directory($path);
 		return $this;
 	}
 	
@@ -172,7 +172,7 @@ abstract class View_Abstract {
 	 * Seta a extensão para o template.
 	 * 
 	 * @param unknown_type $ext
-	 * @return View_Abstract
+	 * @return Hydra_View_Abstract
 	 */
 	public function setTemplateExtension($ext) {
 		$this->_templateExtension = (string) $ext;
@@ -210,14 +210,14 @@ abstract class View_Abstract {
 	 * 
 	 * @param string $var
 	 * @return mixed
-	 * @throws View_Exception : caso a variável não exista e strictVars seja TRUE
+	 * @throws Hydra_View_Exception : caso a variável não exista e strictVars seja TRUE
 	 */
 	public function getVar($var) {
 		$var = (string) $var;
 		if(isset($this->_vars[$var])) {
 			return $this->_vars[$var];
 		} else if($this->_strictVars === true) {
-			throw new View_Exception(sprintf('A variável "%s" 
+			throw new Hydra_View_Exception(sprintf('A variável "%s" 
 					não existe para este template', $var));
 		} else {
 			return null;
@@ -245,7 +245,7 @@ abstract class View_Abstract {
 	/**
 	 * Limpa as variáveis de template.
 	 * 
-	 * @return View_Abstract : fluent interface
+	 * @return Hydra_View_Abstract : fluent interface
 	 */
 	public function clearVars() {
 		unsert($this->_vars);
@@ -265,7 +265,7 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Executa a View.
+	 * Executa a Hydra_View.
 	 * 
 	 * @return void
 	 */
@@ -276,22 +276,22 @@ abstract class View_Abstract {
 	 *
 	 * @param string $path
 	 * @return void
-	 * @throws View_Exception
+	 * @throws Hydra_View_Exception
 	 */
 	public static function setDefaultPath($path) {
 		self::_verifyPath($path);
-		self::$_defaultPath = (string) new FileSystem_Directory($path);
+		self::$_defaultPath = (string) new Hydra_FileSystem_Directory($path);
 	}
 	
 	/**
 	 * Verifica o caminho para os templates, lançando uma exceção se não for válido.
 	 *
 	 * @param string $path
-	 * @throws View_Exception
+	 * @throws Hydra_View_Exception
 	 */
 	protected static function _verifyPath($path) {
-		if(!FileSystem_Directory::isDir($path)) {
-			$e = new View_Exception('O diretório para de templates não é válido');
+		if(!Hydra_FileSystem_Directory::isDir($path)) {
+			$e = new Hydra_View_Exception('O diretório para de templates não é válido');
 			$e->setView($this);
 			throw $e;
 		}
@@ -327,7 +327,7 @@ abstract class View_Abstract {
 	}
 	
 	/**
-	 * Renderiza a View.
+	 * Renderiza a Hydra_View.
 	 * 
 	 * @return string
 	 */

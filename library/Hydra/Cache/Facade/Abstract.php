@@ -1,12 +1,12 @@
 <?php
-abstract class Cache_Facade_Abstract {
+abstract class Hydra_Cache_Facade_Abstract {
 	/**
 	 * Retorna se o caching está habilitado.
 	 *
 	 * @return boolean
 	 */
 	public static function isCacheEnabled() {
-		return Core::getInstance()->isCaching();
+		return Hydra_Core::getInstance()->isCaching();
 	}
 
 	/**
@@ -15,11 +15,11 @@ abstract class Cache_Facade_Abstract {
 	 * @param string $fileName : o nome do arquivo a ser salvo (sem extensão)
 	 * @param mixed $contents : o conteúdo a ser incluí­do no arquivo de cache
 	 * @param mixed $expires [OPTIONAL] : um timestamp ou tempo relativo para expiração	do arquivo de cache.
-	 * 		Se NULL, será utilizado o tempo padrão definido por Cache_File::DEFAULT_EXPIRATION
+	 * 		Se NULL, será utilizado o tempo padrão definido por Hydra_Cache_File::DEFAULT_EXPIRATION
 	 * @param int $flag [OPTIONAL] : adicionar o conteúdo ao arquivo ou sobrescrevê-lo
-	 * 					Cache::FILE_APPEND ou Cache::FILE_OVERWRITE
+	 * 					Hydra_Cache::FILE_APPEND ou Hydra_Cache::FILE_OVERWRITE
 	 * @return int : o número de bytes escritos
-	 * @throws Cache_WriteException caso a criação do arquivo de cache falhe
+	 * @throws Hydra_Cache_WriteException caso a criação do arquivo de cache falhe
 	 * @throws Exception caso o cache esteja desabilitado na aplicação,
 	 */
 	abstract public function set($directory, $fileName, $contents, $expires = null, $flag = null);
@@ -47,7 +47,7 @@ abstract class Cache_Facade_Abstract {
 	 * @param string $directory : o subdiretório do arquivo
 	 * @param string $fileName : o nome do arquivo
 	 * @return mixed : null ou o conteúdo do arquivo
-	 * @throws Cache_WriteException : caso a criação do arquivo de cache falhe
+	 * @throws Hydra_Cache_WriteException : caso a criação do arquivo de cache falhe
 	 * @throws Exception : caso o cache esteja desabilitado na aplicação
 	 */
 	abstract public function get($directory, $fileName);

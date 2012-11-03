@@ -1,4 +1,4 @@
 <?php
-class FileSystem_File_Exception extends Exception {
+class Hydra_FileSystem_File_Exception extends Exception {
 	
 }

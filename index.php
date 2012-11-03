@@ -1,14 +1,15 @@
 <?php
 require_once 'library/Hydra/Core.php';
 
-$core = Core::getInstance(array(Core::ROOT => dirname(__FILE__)))
+$core = Hydra_Core::getInstance(array(Hydra_Core::ROOT => dirname(__FILE__)))
 	->setLocalization(
-		new Localization(
+		new Hydra_Localization(
 			'America/Campo_Grande',
 			array('pt_BR', 'pt_BR.iso-8859-1', 'pt_BR.utf-8', 'portuguese')
 	)
 );
 
+// $core->setEnvironment(Hydra_Core::PRODUCTION);
 require $core->getConfigFile('error_handling');
 
 /* O arquivo db_config.php deve ser um array da forma:
@@ -22,26 +23,38 @@ require $core->getConfigFile('error_handling');
  *	)
  *);
  */
-$dbConf = $core->getIni('db_config');
-Db_Table::setDefaultAdapter(
-	Db::factory(
-		'Pgsql',
-		$dbConf['pgsql']
-	)
-);
+$adapter = new Hydra_Util_DottalNotation_Adapter();
+$array = [
+	'a' => [
+		'b' => [
+			'c' => 1,
+			'd' => 2
+		]
+	]
+];
+$adapter->set($array, 'a.b.c.d.f', 1);
+$adapter->set($array, 'a.b.c.d.e', 1);
+var_dump($array);
+// $dbConf = $core->getIni('db_config');
+// Hydra_Db_Table::setDefaultAdapter(
+// 	Hydra_Db::factory(
+// 		'Mysqli',
+// 		$dbConf['Mysqli']
+// 	)
+// );
 
-Db_Table::setDefaultCacheHandler(new Cache_Facade());
+// Hydra_Db_Table::setDefaultCacheHandler(new Hydra_Cache_Facade());
 
-// Db_Table::setDefaultDefinition(
-// 	new Db_Table_Definition(
+// Hydra_Db_Table::setDefaultDefinition(
+// 	new Hydra_Db_Table_Definition(
 // 		$core->getIni('table_def')
 // 	)
 // );
 
-$table = new Db_Table('mesa');
-// $table = new Db_Table('comments');
+// $table = new Hydra_Db_Table('mesa');
+// $table = new Hydra_Db_Table('comments');
 
-print_r($table->fetchAll()->toArray());
+// print_r($table->fetchAll()->toArray());
 // $row = $table->fetchOne($select);
 // var_dump($row->isReadOnly());
 // $row['status'] = 0;
@@ -49,11 +62,11 @@ print_r($table->fetchAll()->toArray());
 // print_r($table->getById(4)->toArray());
 
 
-// View::setDefaultPath(Core::getInstance()->getAppRoot() . 'view/');
+// Hydra_View::setDefaultPath(Hydra_Core::getInstance()->getAppRoot() . 'view/');
 
-// $homeView = new View('home');
-// $headView = new View('head');
-// $contentView = new View('content');
+// $homeView = new Hydra_View('home');
+// $headView = new Hydra_View('head');
+// $contentView = new Hydra_View('content');
 
 // $homeView->head = $headView;
 // $homeView->content = $contentView;
