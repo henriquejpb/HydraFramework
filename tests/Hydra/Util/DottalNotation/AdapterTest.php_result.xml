@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Hydra_Util_DottalNotation_AdapterTest" file="/home/henrique/public/HydraFramework/tests/Hydra/Util/DottalNotation/AdapterTest.php" fullPackage="Hydra.Util.DottalNotation" tests="8" assertions="8" failures="0" errors="0" time="0.136278">
+    <testcase name="testSetFromEmptyDepth1Ok" class="Hydra_Util_DottalNotation_AdapterTest" file="/home/henrique/public/HydraFramework/tests/Hydra/Util/DottalNotation/AdapterTest.php" line="13" assertions="1" time="0.111345"/>
+    <testcase name="testSetFromEmptyDepth2Ok" class="Hydra_Util_DottalNotation_AdapterTest" file="/home/henrique/public/HydraFramework/tests/Hydra/Util/DottalNotation/AdapterTest.php" line="19" assertions="1" time="0.001444"/>
+    <testcase name="testSetFromEmptyDepth5Ok" class="Hydra_Util_DottalNotation_AdapterTest" file="/home/henrique/public/HydraFramework/tests/Hydra/Util/DottalNotation/AdapterTest.php" line="25" assertions="1" time="0.010149"/>
+    <testcase name="testSetFromExistentDepth1Ok" class="Hydra_Util_DottalNotation_AdapterTest" file="/home/henrique/public/HydraFramework/tests/Hydra/Util/DottalNotation/AdapterTest.php" line="43" assertions="1" time="0.004582"/>
+    <testcase name="testSetFromExistentDepth2Ok" class="Hydra_Util_DottalNotation_AdapterTest" file="/home/henrique/public/HydraFramework/tests/Hydra/Util/DottalNotation/AdapterTest.php" line="57" assertions="1" time="0.002009"/>
+    <testcase name="testRemoveDepth1Ok" class="Hydra_Util_DottalNotation_AdapterTest" file="/home/henrique/public/HydraFramework/tests/Hydra/Util/DottalNotation/AdapterTest.php" line="74" assertions="1" time="0.001734"/>
+    <testcase name="testRemoveDepth2Ok" class="Hydra_Util_DottalNotation_AdapterTest" file="/home/henrique/public/HydraFramework/tests/Hydra/Util/DottalNotation/AdapterTest.php" line="91" assertions="1" time="0.001588"/>
+    <testcase name="testGetWithInvalidKey" class="Hydra_Util_DottalNotation_AdapterTest" file="/home/henrique/public/HydraFramework/tests/Hydra/Util/DottalNotation/AdapterTest.php" line="107" assertions="1" time="0.003427"/>
+  </testsuite>
+</testsuites>

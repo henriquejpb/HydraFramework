@@ -9,34 +9,20 @@ abstract class Hydra_Db_Adapter_Abstract {
 	 * @var string
 	 */
 	const NAMED_PARAMETERS 		= 'named';
-	
-	
-	const SCHEMA_NAME 		= 'SCHEMA_NAME';
-	
-	const TABLE_NAME		= 'TABLE_NAME';
-	
-	const COLUMN_NAME 		= 'COLUMN_NAME';
-	
-	const COLUMN_POSITION 	= 'COLUMN_POSITION';
-	
-	const DATA_TYPE			= 'DATA_TYPE';
-	
-	const DEFAULT_VALUE		= 'DEFAULT';
-	
-	const NULLABLE			= 'NULLABLE';
-	
-	const LENGHT			= 'LENGHT';
 
+	const SCHEMA_NAME 		= 'SCHEMA_NAME';
+	const TABLE_NAME		= 'TABLE_NAME';
+	const COLUMN_NAME 		= 'COLUMN_NAME';
+	const COLUMN_POSITION 	= 'COLUMN_POSITION';
+	const DATA_TYPE			= 'DATA_TYPE';
+	const DEFAULT_VALUE		= 'DEFAULT';
+	const NULLABLE			= 'NULLABLE';
+	const LENGHT			= 'LENGHT';
 	const SCALE				= 'SCALE';
-	
 	const PRECISION			= 'PRECISION';
-	
 	const UNSIGNED			= 'UNSIGNED';
-	
 	const PRIMARY			= 'PRIMARY';
-	
 	const PRIMARY_POSITION 	= 'PRIMARY_POSITION';
-	
 	const IDENTITY			= 'IDENTITY';
 
 	/**
@@ -239,6 +225,7 @@ abstract class Hydra_Db_Adapter_Abstract {
 	public function insert($table, array $boundParams) {
 		$columns = array();
 		$values = array();
+		
 		foreach($boundParams as $col => $val) {
 			$columns[] = $this->quoteIdentifier($col);
 			//Se temos uma instancia de Hydra_Db_Expression, ela é inserida na query, sem placeholders intermediários
@@ -275,24 +262,58 @@ abstract class Hydra_Db_Adapter_Abstract {
 	}
 
 	/**
-	 * Retorna o ID do último elemento inserido
-	 * @param string $table [OPCIONAL] : o nome da tabela
-	 * @param string $pk [OPCIONAL] : o nome da chave primária
+	 * Retorna o ID do último elemento inserido.
+	 *
+	 * Caso não se conheça o nome da tabela, este valor deve ser null.
+	 * Caso não se conheça o nome da sequência, o adapter tentará
+	 * obter seu nome através dos metadados da tabela.
+	 *
+	 * @param string $tableName [OPCIONAL] : o nome da tabela
+	 * @param string $seqName [OPCIONAL] : o nome da sequencia
+	 * @return integer|null
 	 */
-	abstract public function lastInsertId($table = null, $pk = null);
-	
+	abstract public function lastInsertId($tableName = null, $seqName = null);
+
 	/**
-	 * Gera um novo valor para uma sequência específica 
+	 * Retorna o próximo ID a ser inserido em uma tabela.
+	 *
+	 * Caso não se conheça o nome da tabela, este valor deve ser null.
+	 * Caso não se conheça o nome da sequência, o adapter tentará
+	 * obter seu nome através dos metadados da tabela.
+	 *
+	 * @param string $tableName
+	 * @param string $seqName
+	 */
+	public function nextInsertId($tableName = null, $seqName = null) {
+		return null;
+	}
+
+	/**
+	 * Gera um novo valor para uma sequência específica
 	 * no banco de dados e a retorna.
-	 * 
+	 *
 	 * Isto é suportado apenas por alguns SGBDs,
 	 * como Oracle, PostgreSQL, DB2, etc.
-	 * Outros SGBDs retornam null
+	 * Outros SGBDs retornam null.
+	 *
 	 * @param string $sequenceName
 	 * @return int|null
 	 */
 	public function nextSequenceId($sequenceName) {
 		return null;
+	}
+
+	/**
+	 * Retorna o nome de uma sequência para um campo serial de uma tabela
+	 *
+	 * @param string $tableName [OPCIONAL] : o nome da tabela
+	 * @param string $seqName [OPCIONAL] : o nome da sequência
+	 * @param array $metadata [OPCIONAL] : os metadados da tabela, caso já tenham sido obtidos
+	 * @return boolean|string
+	 */
+	public function getSequenceName($tableName = null, $seqName = null, 
+			array $identityMetadata = array()) {
+		return true;
 	}
 
 	/**
@@ -494,7 +515,7 @@ abstract class Hydra_Db_Adapter_Abstract {
 		$stmt = $this->query($sql, $boundParams);
 		return $stmt->fetchOne($fetchMode, $col);
 	}
-	
+
 	/**
 	 * Busca e retorna a coluna especificada (projeção) de cada linha do resultado
 	 * @param string|Hydra_Db_Select $sql
@@ -505,7 +526,7 @@ abstract class Hydra_Db_Adapter_Abstract {
 	public function fetchAllColumns($sql, $column, $boundParams = array()) {
 		return $this->fetchAll($sql, $boundParams, Hydra_Db::FETCH_COLUMN, $column);
 	}
-	
+
 	/**
 	 * Retorna a projeção da coluna especificada na primeira linha do resultado
 	 * @param string|Hydra_Db_Select $sql
@@ -516,7 +537,7 @@ abstract class Hydra_Db_Adapter_Abstract {
 	public function fetchColumn($sql, $column, $boundParams = array()) {
 		return $this->fetchOne($sql, $boundParams, Hydra_Db::FETCH_COLUMN, $column);
 	}
-	
+
 
 	/**
 	 * Checa se o adapter suporta parâmetros posicionais ou nominais

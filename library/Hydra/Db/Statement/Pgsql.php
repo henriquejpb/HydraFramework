@@ -1,40 +1,40 @@
 <?php
 class Hydra_Db_Statement_Pgsql extends Hydra_Db_Statement_Abstract {
-	
+
 	/**
 	 * No PostgreSQL, cada prepared statement precisa ter um nome.
 	 * Para executá-lo, informamos apenas o nome do mesmo.
 	 * @var string
 	 */
 	private $_name;
-	
-	
+
+
 	/**
 	 * Armazena o último resultado de uma query.
 	 * @var resource
 	 */
 	private $_lastResult = null;
-	
+
 	public function __construct(Hydra_Db_Adapter_Abstract $adapter, $sql) {
 		// Dando um nome único para cada statement
 		$this->_name = uniqid('stmt');
 		parent::__construct($adapter, $sql);
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Statement_Abstract::_prepare()
 	 */
 	protected function _prepare($sql) {
 		$conn = $this->_adapter->getConnection();
 		// No PostgreSQL, os placeholders para parâmetros são da forma '$n', não '?'
-		$sql = preg_replace_callback('/\?/', 
+		$sql = preg_replace_callback('/\?/',
 			create_function(
-				'$matches', 
+				'$matches',
 				'static $count = 0;
 				 return "\$" . ++$count;'
 			), $sql, -1, $count);
-		
-		/* Infelizmente não há outro jeito de suprimir os warnings gerados pela 
+
+		/* Infelizmente não há outro jeito de suprimir os warnings gerados pela
 		 * função pg_prepare, se não o uso do '@'.
 		 */
 		$this->_stmt = @pg_prepare($conn, $this->_name, $sql);
@@ -43,7 +43,7 @@ class Hydra_Db_Statement_Pgsql extends Hydra_Db_Statement_Abstract {
 			throw new Hydra_Db_Statement_Pgsql_Exception('Erro PostgreSQL:' . $error);
 		}
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Statement_Interface::closeCursor()
 	 */
@@ -53,15 +53,15 @@ class Hydra_Db_Statement_Pgsql extends Hydra_Db_Statement_Abstract {
 		}
 		return $this;
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Statement_Interface::columnCount()
 	 */
 	public function columnCount() {
 		// TODO: verificar como retornar o número de colunas retornadas de uma query
-		return null; 
+		return null;
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Statement_Interface::execute()
 	 */
@@ -69,10 +69,10 @@ class Hydra_Db_Statement_Pgsql extends Hydra_Db_Statement_Abstract {
 		if($this->_stmt === null) {
 			return null;
 		}
-		
+
 		$conn = $this->_adapter->getConnection();
-		
-		/* Infelizmente não há outro jeito de suprimir os warnings gerados pela
+
+		/* Não há outro jeito de suprimir os warnings gerados pela
 		 * função pg_prepare, se não o uso do '@'.
 		 */
 		$this->_lastResult = @pg_execute($conn, $this->_name, $params);
@@ -80,7 +80,7 @@ class Hydra_Db_Statement_Pgsql extends Hydra_Db_Statement_Abstract {
 			throw new Hydra_Db_Statement_Pgsql_Exception('Erro PgSQL: ' . pg_last_error($conn));
 		}
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Statement_Abstract::_doFetch()
 	 */
@@ -88,11 +88,11 @@ class Hydra_Db_Statement_Pgsql extends Hydra_Db_Statement_Abstract {
 		if($this->_stmt === null) {
 			return null;
 		}
-		
+
 		if($mode === null) {
 			$mode = $this->_fetchMode;
 		}
-		
+
 		switch($mode) {
 			case Hydra_Db::FETCH_NUM:
 				return pg_fetch_row($this->_lastResult);
@@ -106,14 +106,14 @@ class Hydra_Db_Statement_Pgsql extends Hydra_Db_Statement_Abstract {
 				throw new Hydra_Db_Statement_Pgsql_Exception('Modo de fetch inválido!');
 		}
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Statement_Interface::nextRowset()
 	 */
 	public function nextRowset() {
 		throw new Hydra_Db_Statement_Pgsql_Exception('PostgreSQL não suporta esta operação: ' . __FUNCTION__ . '()');
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Statement_Interface::rowCount()
 	 */
@@ -121,10 +121,10 @@ class Hydra_Db_Statement_Pgsql extends Hydra_Db_Statement_Abstract {
 		if($this->_adapter === null || $this->_lastResult === null) {
 			return null;
 		}
-	
+
 		return pg_affected_rows($this->_lastResult);
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Statement_Interface::errorCode()
 	 */
@@ -133,12 +133,12 @@ class Hydra_Db_Statement_Pgsql extends Hydra_Db_Statement_Abstract {
 		if($info == null) {
 			return null;
 		}
-		
+
 		if(preg_match('/^ERROR:\s+(\d+):/', $info, $matches)) {
 			return (int) $matches[1];
 		}
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Statement_Interface::errorInfo()
 	 */

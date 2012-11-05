@@ -32,7 +32,7 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 	 * @var className
 	 */
 	protected $_statementClass = 'Hydra_Db_Statement_Mysqli';
-	
+
 	/**
 	 * @see Hydra_Db_Adapter_Abstract::_connect()
 	 */
@@ -40,17 +40,17 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 		if($this->isConnected()){
 			return;
 		}
-		
+
 		if(!extension_loaded('mysqli')){
 			throw new Hydra_Db_Adapter_Mysqli_Exception('A extensão mysqli não foi carregada!');
 		}
-		
+
 		if(isset($this->_config['port'])){
 			$this->_config['port'] = (int) $this->_config['port'];
 		} else {
 			$this->_config['port'] = 3306;
 		}
-		
+
 		try {
 			$this->_connection = new mysqli(
 											$this->_config['host'],
@@ -63,19 +63,22 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 			$this->disconnect();
 			throw new Hydra_Db_Adapter_Mysqli_Exception($e->getMessage());
 		}
-		
+
 		if(isset($this->_config['charset'])){
-			$this->_connection->set_charset($this->_config['charset']);
+			// $this->_connection->set_charset($this->_config['charset']);
+			// Aparentemente o método acima não mostra erro quando o charset é válido
+
+			$this->query("SET NAMES '{$this->_config['charset']}'");
 		}
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Adapter_Abstract::isConnected()
 	 */
 	public function isConnected() {
 		return (bool) ($this->_connection instanceof mysqli);
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Adapter_Abstract::disconnect()
 	 */
@@ -85,7 +88,7 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 		}
 		$this->_connection = null;
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Adapter_Abstract::prepare()
 	 */
@@ -94,23 +97,23 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 		if($this->_statement) {
 			$this->_statement->close();
 		}
-		
+
 		$stmtClass = $this->_statementClass;
-		
+
 		$newStmt = new $stmtClass($this, $sql);
 		$newStmt->setFetchMode($this->_fetchMode);
-		
+
 		$this->_statement = $newStmt;
 		return $this->_statement;
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Adapter_Abstract::lastInsertId()
 	 */
 	public function lastInsertId($table = null, $pk = null) {
 		return $this->getConnection()->insert_id;
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Adapter_Abstract::beginTransaction()
 	 */
@@ -118,7 +121,7 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 		$this->getConnection()->autocommit(false);
 		$this->query('BEGIN');
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Adapter_Abstract::commitTransaction()
 	 */
@@ -127,7 +130,7 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 		$connection->commit();
 		$connection->autocommit(true);
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Adapter_Abstract::rollBackTransaction()
 	 */
@@ -136,7 +139,7 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 		$connection->rollback();
 		$connection->autocommit(true);
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Adapter_Abstract::limit()
 	 */
@@ -145,20 +148,20 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 		if($count <= 0) {
 			throw new Hydra_Db_Adapter_Mysqli_Exception(sprintf('O argumento $count=%s para a cláusula LIMIT não é valido', $count));
 		}
-		
+
 		$offset = (int) $offset;
 		if($offset < 0) {
 			throw new Hydra_Db_Adapter_Mysqli_Exception(sprintf('O argumento $offset=%s para a cláusula LIMIT não é valido', $count));
 		}
-		
+
 		$sql .= "\nLIMIT " . $count;
 		if($offset > 0) {
 			$sql .= ' OFFSET ' . $offset;
 		}
-		
+
 		return $sql;
 	}
-	
+
 	/**
 	 * @see Hydra_Db_Adapter_Abstract::supportsParameters()
 	 */
@@ -227,7 +230,7 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 			} else if (preg_match('/^((?:big|medium|small|tiny)?int)\((\d+)\)/', $row['Type'], $matches)) {
 				$row['Type'] = $matches[1];
 			}
-				
+
 			if (strtoupper($row['Key']) == 'PRI') {
 				$row['Primary'] = true;
 				$row['PrimaryPosition'] = $p;
@@ -238,9 +241,9 @@ final class Hydra_Db_Adapter_Mysqli extends Hydra_Db_Adapter_Abstract {
 				}
 				++$p;
 			}
-			
+
 			$desc[$row['Field']] = array(
-			                self::SCHEMA_NAME		=> $schemaName, 
+			                self::SCHEMA_NAME		=> $schemaName,
 			                self::TABLE_NAME		=> $tableName,
 			                self::COLUMN_NAME		=> $row['Field'],
 			                self::COLUMN_POSITION	=> $i,

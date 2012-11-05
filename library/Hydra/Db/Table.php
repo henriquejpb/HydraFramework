@@ -91,10 +91,14 @@ class Hydra_Db_Table implements Hydra_DataAccessLayer_Interface {
 	 * Se a chave primária é composta e uma das colunas
 	 * usa auto-incremnto ou sequência-gerada, setamos
 	 * $identity para o índice ordinal do campo no
-	 * array $_primary. O array $_primary começa em 1.
-	 * @var integer
+	 * array $_primary (o array $_primary começa em 1).
+	 *
+	 * Caso a chave primária seja uma chave natural,
+	 * seu valor é NULL.
+	 *
+	 * @var integer|null
 	 */
-	private $_identity = 1;
+	private $_identity = null;
 
 
 	/**
@@ -102,7 +106,7 @@ class Hydra_Db_Table implements Hydra_DataAccessLayer_Interface {
 	 * primária. Pode ser uma string ou booleano.
 	 * @var mixed
 	 */
-	private $_sequence = true;
+	private $_sequence = null;
 
 	/**
 	 * Informação fornecida pelo método describeTable() do Adapter
@@ -764,17 +768,46 @@ class Hydra_Db_Table implements Hydra_DataAccessLayer_Interface {
 		if(!$this->_primary) {
 			$this->_setupMetadata();
 			$this->_primary = array();
+			
 			foreach($this->_metadata as $col) {
-				if($col['PRIMARY']) {
-					$this->_primary[$col['PRIMARY_POSITION']] = $col['COLUMN_NAME'];
-					if($col['IDENTITY']) {
-						$this->_identity = $col['PRIMARY_POSITION'];
+				if($col[Hydra_Db_Adapter_Abstract::PRIMARY]) {
+					$colName = $col[Hydra_Db_Adapter_Abstract::COLUMN_NAME];
+					$this->_primary[$col[Hydra_Db_Adapter_Abstract::PRIMARY_POSITION]] = $colName;
+					if($col[Hydra_Db_Adapter_Abstract::IDENTITY]) {
+						$this->_identity = $col[Hydra_Db_Adapter_Abstract::PRIMARY_POSITION];
+						if($this->_sequence === null) {
+							try {
+								$this->_sequence = $this->_adapter->getSequenceName($this->_name, null, $col);
+							} catch(Hydra_Db_Adapter_Exception $e) {
+								throw new Hydra_Db_Table_Exception("Não foi possível determinar o nome da sequência para o 
+									campo '{$colName}', identidade em '{$this->_name}'! Você deverá setá-lo manualmente
+									através do método Hydra_Db_Table::setSequence.");
+							}
+						}
 					}
 				}
 			}
-
+			
+			
+			if($this->_sequence === null) {
+				/* 
+			 	* Se não há um campo identidade, significa que estamos utilizando uma chave natural,
+			 	* logo, não existe uma sequence correspondente ao campo que é chave primária
+			 	*/
+				if($this->_identity === null) {
+					$this->_sequence = false;
+				}
+				/*
+			 	* Neste caso, trata-se de um SGBD que não utiliza sequências, como o MySQL
+			 	*/ 
+				elseif($this->_sequence === null) {
+					$this->_sequence = true;	
+				}
+			}
+			
 			if(empty($this->_primary)) {
-				throw new Hydra_Db_Table_Exception(sprintf('Uma tabela deve conter uma chave primária, mas nenhuma foi encontrada em "%s"', $this->_name));
+				throw new Hydra_Db_Table_Exception(sprintf('Uma tabela deve conter uma chave primária,
+						mas nenhuma foi encontrada em "%s"', $this->_name));
 			}
 		} else if(!is_array($this->_primary)) {
 			$this->_primary = array(1 => $this->_primary);
@@ -792,25 +825,25 @@ class Hydra_Db_Table implements Hydra_DataAccessLayer_Interface {
 			. ")");
 		}
 
-		try {
-			if(class_exists('Hydra_Db_Adapter_Pdo_Pgsql')) {
-				$primary = (array) $this->_primary;
-				$pkIdentity = $primary[(int) $this->_identity];
+// 		try {
+// 			if(class_exists('Hydra_Db_Adapter_Pdo_Pgsql')) {
+// 				$primary = (array) $this->_primary;
+// 				$pkIdentity = $primary[(int) $this->_identity];
 
-				/**
-				 * Caso especial para PostgreSQL: uma chave SERIAL implícita usa
-				 * um objeto-sequência cujo nome é "<table>_<column>_seq".
-				 */
-				if ($this->_sequence === true && $this->_adapter instanceof Hydra_Db_Adapter_Pdo_Pgsql) {
-					$this->_sequence = $this->_adapter->quoteIdentifier("{$this->_name}_{$pkIdentity}_seq");
-					if ($this->_schema) {
-						$this->_sequence = $this->_adapter->quoteIdentifier($this->_schema) . '.' . $this->_sequence;
-					}
-				}
-			}
-		} catch(Exception $e) {
+// 				/**
+// 				 * Caso especial para PostgreSQL: uma chave SERIAL implícita usa
+// 				 * um objeto-sequência cujo nome é "<table>_<column>_seq".
+// 				 */
+// 				if ($this->_sequence === true && $this->_adapter instanceof Hydra_Db_Adapter_Pdo_Pgsql) {
+// 					$this->_sequence = $this->_adapter->quoteIdentifier("{$this->_name}_{$pkIdentity}_seq");
+// 					if ($this->_schema) {
+// 						$this->_sequence = $this->_adapter->quoteIdentifier($this->_schema) . '.' . $this->_sequence;
+// 					}
+// 				}
+// 			}
+// 		} catch(Exception $e) {
 
-		}
+// 		}
 	}
 
 	/**
@@ -907,21 +940,31 @@ class Hydra_Db_Table implements Hydra_DataAccessLayer_Interface {
 		$this->_setupPrimaryKey();
 
 		$primary = (array) $this->_primary;
-		$pkIdentity = $primary[(int) $this->_identity == 0 ? 1 : $this->_identity];
-
-		$pkSuppliedBySequence = false;
-		if(is_string($this->_sequence) && !isset($data[$pkIdentity])) {
-			$data[$pkIdentity] = $this->_adapter->nextSequenceId();
-			$pkSuppliedBySequence = true;
-		}
-
-		if($pkSuppliedBySequence === false && isset($data[$pkIdentity])) {
-			$pkValue = $data[$pkIdentity];
-			if(empty($pkValue) || is_bool($pkValue)) {
-				unset($data[$pkIdentity]);
+		
+		/* 
+		 * Se a tabela tem uma identidade (campo auto increment ou associado a uma sequência),
+		 * é preciso garantir que o dado correspondente àquela coluna esteja certo.
+		 */
+		 
+		if($this->_identity !== null) {
+			$pkIdentity = $primary[(int) $this->_identity == 0 ? 1 : $this->_identity];
+			$pkSuppliedBySequence = false;
+			
+			// Caso do PostgreSQL, Oracle, etc...
+			if(is_string($this->_sequence) && !isset($data[$pkIdentity])) {
+				$data[$pkIdentity] = $this->_adapter->nextSequenceId($this->_sequence);
+				$pkSuppliedBySequence = true;
 			}
+			
+			// Caso do MySQL...
+			if($pkSuppliedBySequence === false && isset($data[$pkIdentity])) {
+				$pkValue = $data[$pkIdentity];
+				if(empty($pkValue) || is_bool($pkValue)) {
+					unset($data[$pkIdentity]);
+				}
+			}	
 		}
-
+		
 		$tableSpec = $this->_getTableSpec();
 		$this->_adapter->insert($tableSpec, $data);
 
@@ -929,14 +972,14 @@ class Hydra_Db_Table implements Hydra_DataAccessLayer_Interface {
 		// auto-incremento, a menos que seja especificado um valor
 		// sobrescrevendo o valor do auto-incremento
 		if($this->_sequence === true && !isset($data[$pkIdentity])) {
-			$data[$pkIdentity] = $this->_adapter->lastInsertId();
+			$data[$pkIdentity] = $this->_adapter->lastInsertId($this->_name);
 		}
 
 		$pkData = array_intersect($data, array_flip($primary));
 
 		//Se a chave primária não é composta, retorna o próprio valor
 		if(count($pkData) == 1) {
-			reset;($pkData);
+			reset($pkData);
 			return current($pkData);
 		}
 
