@@ -25,31 +25,75 @@ class Hydra_Loader {
 	 * Armazena o caminho para o diretório base para autoload
 	 * @var array
 	 */
-	private $_path;
+	private $_path = array();
 
 	/**
-	 *
-	 * @param string $path
+	 * @param string|array $path : caminho base para o autoloading ou um array de paths
 	 */
 	public function __construct($path) {
-		if(!is_dir($path)) {
-			throw new Exception('Diretório inválido para autoload!');
+		$this->addPath($path);
+	}
+	
+	/**
+	 * Adiciona um caminho ao objeto Loader.
+	 * 
+	 * @param string|array $path : string com um caminho válido ou ou um array de caminhos
+	 * @return Loader : fluent interface
+	 * @throws InvalidArgumentException
+	 */
+	public function addPath($path) {
+		if(is_array($path)) {
+			foreach($path as $p) {
+				$this->addPath($p);
+			}
+		} else if(is_string($path) && !in_array($path, $this->_path)) {
+			$realPath = realpath($path);
+			if(!is_dir($realPath)) {
+				throw new Exception('Diretório ' . $path . ' inválido para autoload!');
+			}
+			$this->_path[] = $path;
+		} else {
+			throw new InvalidArgumentException('Paths devem ser strings ou arrays de strings');	
 		}
-		$this->_path = $path;
-		spl_autoload_register(array($this, 'autoload'));
+		return $this;
+	}
+	
+	/**
+	 * Remove um caminho ou um array de caminhos do objeto Loader.
+	 * 
+	 * @param string|array $path
+	 * @return Hydra_Loader : fluent interface
+	 */
+	public function removePath($path) {
+		$this->_path = array_diff($this->_path, (array) $path);
+		return $this;
+	}
+	
+	/**
+	 * Registra o objeto Loader na pilha SPLAutoload.
+	 * @returns Hydra_Loader : fluent interface
+	 * @throws Exception caso o registro falhe
+	 */
+	public function register() {
+		spl_autoload_register(array($this, 'autoload'), true);
+		return $this;
 	}
 
 	/**
 	 * Responsável pelo autoloading.
 	 * @param string $className
+	 * @return void
 	 */
 	public function autoload($className) {
+		var_dump($className);
 		$file = str_replace('_', self::DS, $className);
-
-		$path = realpath($this->_path ) . self::DS . $file . '.php';
-		if(is_file($path)) {
-			require $path;
-			return;
+		
+		foreach($this->_path as $path) { 
+			$filePath = realpath($path) . self::DS . $file . '.php';
+			if(is_file($filePath)) {
+				require $filePath;
+				return;
+			}
 		}
 	}
 }

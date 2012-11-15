@@ -251,6 +251,7 @@ class Hydra_Core {
 
 	private function _setupAutoload() {
 		$this->_loader = new Hydra_Loader($this->_libraryDir);
+		$this->_loader->register();
 	}
 
 	/**

@@ -1,5 +1,4 @@
 <?php
-
 require_once 'library/Hydra/Core.php';
 
 $core = Hydra_Core::getInstance(array(Hydra_Core::ROOT => dirname(__FILE__)))
@@ -13,7 +12,7 @@ $core = Hydra_Core::getInstance(array(Hydra_Core::ROOT => dirname(__FILE__)))
 // $core->setEnvironment(Hydra_Core::PRODUCTION);
 require $core->getConfigFile('error_handling');
 
-$db = 'Pgsql';
+$db = 'Mysqli';
 $dbConf = $core->getIni('db_config');
 Hydra_Db_Table::setDefaultAdapter(
 	Hydra_Db::factory(
@@ -30,15 +29,10 @@ Hydra_Db_Table::setDefaultDefinition(
 	)
 );
 
-$table = new Hydra_Db_Table('mesa');
-$select = new Hydra_Db_Select($table->getAdapter());
-$select->from($table);
-
-$table2 = new Hydra_Db_Table('teste');
-$table2->insert(array(
-	//'id' => 1,
-	'name' => 'blabla'
-));
+$table = new Hydra_Db_Table('usuario');
+$select = $table->select(array('nome_completo'));
+$result = $table->fetchAll($select)->toArray();
+var_dump($result);
 // Hydra_View::setDefaultPath(Hydra_Core::getInstance()->getAppRoot() . 'view/');
 
 // $homeView = new Hydra_View('home');

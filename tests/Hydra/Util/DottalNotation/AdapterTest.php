@@ -1,8 +1,4 @@
 <?php
-require_once 'PHPUnit/Autoload.php';
-require_once '/home/henrique/public/HydraFramework/library/Hydra/Loader.php';
-$loader = new Hydra_Loader('/home/henrique/public/HydraFramework/library/');
-
 class Hydra_Util_DottalNotation_AdapterTest extends PHPUnit_Framework_TestCase {
 	private $adapter;
 
